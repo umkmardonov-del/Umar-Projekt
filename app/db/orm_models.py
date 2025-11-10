@@ -15,7 +15,9 @@ class Base(DeclarativeBase, AsyncAttrs):
 class Laptop(Base):
     __tablename__ = "laptops"
 
-    id: Mapped[int] = mapped_column(primary_key=True,
+    laptop_id: Mapped[int] = mapped_column(primary_key=True,
                                     autoincrement=True)
     laptop_name: Mapped[str] = mapped_column(String(200),
                                              nullable=False)
+    laptop_price: Mapped[int] = mapped_column(Integer,
+                                       nullable=False)
