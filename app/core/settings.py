@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     APP_NAME: str = "fastapi-app"
     API_PREFIX: str = ""
     HOST: str = "0.0.0.0"
-    PORT: int = 8000    
+    PORT: int = 8000
     RELOAD: bool = True
 
     # --- Logging ---
