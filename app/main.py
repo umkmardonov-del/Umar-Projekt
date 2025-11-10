@@ -1,3 +1,6 @@
+# --- Main Datei zum Ausführen des Programmes ---
+# --- path: /app/main.py
+
 from __future__ import annotations
 
 from fastapi import FastAPI
