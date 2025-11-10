@@ -1,5 +1,6 @@
 # --- Pydantic-Settings ---
 # --- path: /app/core/settings.py ---
+
 from __future__ import annotations
 
 from typing import Literal
