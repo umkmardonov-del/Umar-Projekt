@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from sqlalchemy import String, Integer, ForeignKey, UniqueConstraint, CheckConstraint, Float
+from sqlalchemy import String, Integer, ForeignKey, UniqueConstraint, CheckConstraint, Float, Boolean
 from sqlalchemy.dialects.postgresql import UUID as PGUUID, ENUM as PGENUM
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -57,7 +57,7 @@ class Monitor(Product):
                                               nullable=False)
     power_usage: Mapped[float] = mapped_column(Float,
                                                nullable=False)
-    screen_size: Mapped[int] = mapped_column(Integer,
+    screen_size: Mapped[str] = mapped_column(String(20),
                                              nullable=False)
     connectors: Mapped[str] = mapped_column(String(200),
                                             nullable=False)
@@ -68,20 +68,34 @@ class Monitor(Product):
 class Laptop(Product):
     __tablename__ = "laptops"
 
-    resolution: Mapped[int] = mapped_column(Integer,
-                                            nullable=False)
-    latency: Mapped[int] = mapped_column(Integer,
-                                         nullable=False)
-    refresh_rate: Mapped[int] = mapped_column(Integer,
-                                              nullable=False)
-    power_usage: Mapped[float] = mapped_column(Float,
-                                               nullable=False)
+    processor: Mapped[str] = mapped_column(String(50),
+                                           nullable=False)
+    operating_system: Mapped[str] = mapped_column(String(50),
+                                                  nullable=False)
+    memory: Mapped[str] = mapped_column(String(50),
+                                        nullable=False)
+    disc_memory: Mapped[str] = mapped_column(String(50),
+                                             nullable=False)
     screen_size: Mapped[int] = mapped_column(Integer,
                                              nullable=False)
-    connectors: Mapped[str] = mapped_column(String(200),
+    resolution: Mapped[str] = mapped_column(String(20),
                                             nullable=False)
+    refresh_rate: Mapped[int] = mapped_column(Integer,
+                                              nullable=False)
+    graphics_card: Mapped[str] = mapped_column(String(50))
+    camera: Mapped[str] = mapped_column(String(50),
+                                        nullable=False)
 
     __mapper_args__ = {"polymorphic_identity": "laptop"}
+
+
+class Desk(Product):
+    height_adjustable: Mapped[bool] = mapped_column(Boolean,
+                                            nullable=False)
+    dimensions: Mapped[str] = mapped_column(String(20),
+                                            nullable=False)
+    description: Mapped[str] = mapped_column(String(200),
+                                             nullable=False)
 
 
 # --- Tabelle für die einzelnen Abteilungen ---
@@ -105,8 +119,8 @@ class Department(Base):
 
 class Tier(str, Enum):
     BASIC = "basic"
-    PRO = "pro"
-    MAX = "max"
+    PREMIUM = "premium"
+    ULTRA = "ultra"
 
 
 class Package(Base):
