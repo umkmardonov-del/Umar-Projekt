@@ -4,8 +4,9 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from pydantic import BaseModel, Field, ConfigDict, StringConstraints, field_validator
-from typing import Annotated, Literal, Union
+from enum import Enum
+from pydantic import BaseModel, Field, ConfigDict, StringConstraints, field_validator, PositiveInt
+from typing import Annotated, Literal, Union, List
 from uuid import UUID
 
 
@@ -190,3 +191,49 @@ class DeskOut(BaseProductOut):
 
 
 ProductOut = Annotated[Union[LaptopOut, MonitorOut, DeskOut], Field(discriminator="type")]
+
+
+# ------- Eingabe-Schemata für Pakete -------
+
+# --- Paketklassen als ENUM ---
+
+class Tier(str, Enum):
+    BASIC = "basic"
+    PREMIUM = "premium"
+    ULTRA = "ultra"
+
+
+class PackageItemIn(BaseModel):
+    product_id: UUID = Field(..., description="Datenbank Produkt-ID.")
+
+    quantity: PositiveInt = Field(..., description="Produktmenge als Zahl(wichtig).")
+
+
+class PackageCreate(BaseModel):
+    department_id: UUID = Field(..., description="Datenbank Produkt-ID.")
+
+    tier: Tier = Field(..., description="'basic', 'premium' oder 'ultra'")
+
+    products: List[PackageItemIn] = Field(default_factory=list, description="Inhalt des Paketes nach PackageItemIn-Schema.")
+
+
+# ------- Ausgabeschemata für Pakete -------
+
+class PackageItemOut(BaseModel):
+    id: UUID = Field(..., description="Datenbank PackageItem-ID.")
+
+    quantity: PositiveInt = Field(..., description="Produktmenge als Zahl(wichtig).")
+
+    product: ProductOut
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PackageOut(BaseModel):
+    id: UUID = Field(..., description="Datenbank Paket-ID.")
+
+    department_id: UUID = Field(..., description="Datenbank Produkt-ID.")
+
+    tier: Tier = Field(..., description="'basic', 'premium' oder 'ultra'")
+
+    products: List[PackageItemOut] = Field(..., description="Inhalt des Paketes nach PackageItemIn-Schema.")
