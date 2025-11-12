@@ -3,8 +3,9 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
 from enum import Enum
-from sqlalchemy import String, Integer, ForeignKey, UniqueConstraint, CheckConstraint, Float, Boolean
+from sqlalchemy import String, Integer, ForeignKey, UniqueConstraint, CheckConstraint, Numeric, Boolean
 from sqlalchemy.dialects.postgresql import UUID as PGUUID, ENUM as PGENUM
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -27,15 +28,12 @@ class Product(Base):
                                               default=uuid4)
     name: Mapped[str] = mapped_column(String(200),
                                       nullable=False)
-    price: Mapped[float]  = mapped_column(Float,
-                                          nullable=False,
-                                          default=0)
-
+    price: Mapped[Decimal]  = mapped_column(Numeric(7,2),
+                                          nullable=False,)
     # Discriminator für Polymorphie (String → flexibel für neue Typen)
     product_type: Mapped[str] = mapped_column(String(50),
                                               nullable=False,
                                               index=True)
-
     # Beziehung zurück zu PackageItem (Association-Object)
     package_items: Mapped[List["PackageItem"]] = relationship(back_populates="product")
 
@@ -44,20 +42,25 @@ class Product(Base):
         "polymorphic_identity": "product",  # Basistyp
     }
 
+
 # --- Einzelne Produkte und deren Spezifikationen ---
 
 class Monitor(Product):
     __tablename__ = "monitors"
 
-    resolution: Mapped[int] = mapped_column(Integer,
-                                            nullable=False)
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                          primary_key=True)
+    resolution_height: Mapped[int] = mapped_column(Integer,
+                                                   nullable=False)
+    resolution_width: Mapped[int] = mapped_column(Integer,
+                                                  nullable=False)
     latency: Mapped[int] = mapped_column(Integer,
                                          nullable=False)
     refresh_rate: Mapped[int] = mapped_column(Integer,
                                               nullable=False)
-    power_usage: Mapped[float] = mapped_column(Float,
+    power_usage: Mapped[Decimal] = mapped_column(Numeric(6,3),
                                                nullable=False)
-    screen_size: Mapped[str] = mapped_column(String(20),
+    screen_size: Mapped[int] = mapped_column(Integer,
                                              nullable=False)
     connectors: Mapped[str] = mapped_column(String(200),
                                             nullable=False)
@@ -68,6 +71,8 @@ class Monitor(Product):
 class Laptop(Product):
     __tablename__ = "laptops"
 
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                     primary_key=True)
     processor: Mapped[str] = mapped_column(String(50),
                                            nullable=False)
     operating_system: Mapped[str] = mapped_column(String(50),
@@ -78,24 +83,34 @@ class Laptop(Product):
                                              nullable=False)
     screen_size: Mapped[int] = mapped_column(Integer,
                                              nullable=False)
-    resolution: Mapped[str] = mapped_column(String(20),
+    resolution_height: Mapped[int] = mapped_column(Integer,
+                                                  nullable=False)
+    resolution_width: Mapped[int] = mapped_column(Integer,
                                             nullable=False)
     refresh_rate: Mapped[int] = mapped_column(Integer,
                                               nullable=False)
-    graphics_card: Mapped[str] = mapped_column(String(50))
-    camera: Mapped[str] = mapped_column(String(50),
+    graphics_card: Mapped[str] = mapped_column(String(100),
+                                               nullable=False,
+                                               default="Integrierte Grafikkarte.")
+    camera: Mapped[str] = mapped_column(String(100),
                                         nullable=False)
 
     __mapper_args__ = {"polymorphic_identity": "laptop"}
 
 
 class Desk(Product):
+    __tablename__ = "desks"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                     primary_key=True)
     height_adjustable: Mapped[bool] = mapped_column(Boolean,
                                             nullable=False)
     dimensions: Mapped[str] = mapped_column(String(20),
                                             nullable=False)
     description: Mapped[str] = mapped_column(String(200),
                                              nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "desk"}
 
 
 # --- Tabelle für die einzelnen Abteilungen ---
@@ -132,9 +147,9 @@ class Package(Base):
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True),
                                      primary_key=True,
                                      default=uuid4)
-    department_id: Mapped[UUID] = mapped_column(ForeignKey("department.id", ondelete="CASCADE"),
+    department_id: Mapped[UUID] = mapped_column(ForeignKey("departments.id", ondelete="CASCADE"),
                                               nullable=False)
-    tier: Mapped[Tier] = mapped_column(PGENUM(Tier, name="tier", create_type=True),
+    tier: Mapped[Tier] = mapped_column(PGENUM(Tier, name="tier", create_type=False, validate_strings=True),
                                        nullable=False)
 
     department: Mapped["Department"] = relationship(back_populates="packages")
