@@ -6,6 +6,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from uvicorn import run
 
+from app.api.api_admin import router as admin_router
 from app.core.lifespan import lifespan
 from app.core.settings import settings
 
@@ -16,6 +17,8 @@ app = FastAPI(debug=True,
               docs_url=f"{settings.API_PREFIX}/docs",
               redoc_url=f"{settings.API_PREFIX}/redoc",
               lifespan=lifespan)
+
+app.include_router(admin_router)
 
 if __name__ == "__main__":
     run("app.main:app", host=settings.HOST, port=settings.PORT, reload=settings.RELOAD, log_level=settings.LOG_LEVEL.lower())
