@@ -193,8 +193,6 @@ class DeskOut(BaseProductOut):
 ProductOut = Annotated[Union[LaptopOut, MonitorOut, DeskOut], Field(discriminator="type")]
 
 
-# ------- Eingabe-Schemata für Pakete -------
-
 # --- Paketklassen als ENUM ---
 
 class Tier(str, Enum):
@@ -203,26 +201,39 @@ class Tier(str, Enum):
     ULTRA = "ultra"
 
 
+#------- Eingabe-Schemata für Pakete -------
+
 class PackageItemIn(BaseModel):
-    product_id: UUID = Field(..., description="Datenbank Produkt-ID.")
+    product_id: UUID = Field(...,
+                             description="Datenbank Produkt-ID.")
 
-    quantity: PositiveInt = Field(..., description="Produktmenge als Zahl(wichtig).")
+    quantity: PositiveInt = Field(...,
+                                  description="Produktmenge als positive Zahl(wichtig).")
+
+    model_config = ConfigDict(extra="forbid")
 
 
-class PackageCreate(BaseModel):
-    department_id: UUID = Field(..., description="Datenbank Produkt-ID.")
+class PackageIn(BaseModel):
+    department_id: UUID = Field(...,
+                                description="Datenbank Department-ID.")
 
-    tier: Tier = Field(..., description="'basic', 'premium' oder 'ultra'")
+    tier: Tier = Field(...,
+                       description="'basic', 'premium' oder 'ultra'")
 
-    products: List[PackageItemIn] = Field(default_factory=list, description="Inhalt des Paketes nach PackageItemIn-Schema.")
+    items: List[PackageItemIn] = Field(default_factory=list,
+                                          description="Inhalt des Paketes nach PackageItemIn-Schema.")
+
+    model_config = ConfigDict(extra="forbid")
 
 
 # ------- Ausgabeschemata für Pakete -------
 
 class PackageItemOut(BaseModel):
-    id: UUID = Field(..., description="Datenbank PackageItem-ID.")
+    id: UUID = Field(...,
+                    description="Datenbank PackageItem-ID.")
 
-    quantity: PositiveInt = Field(..., description="Produktmenge als Zahl(wichtig).")
+    quantity: PositiveInt = Field(...,
+                                  description="Produktmenge als Zahl(wichtig).")
 
     product: ProductOut
 
@@ -230,10 +241,40 @@ class PackageItemOut(BaseModel):
 
 
 class PackageOut(BaseModel):
-    id: UUID = Field(..., description="Datenbank Paket-ID.")
+    id: UUID = Field(...,
+                     description="Datenbank Paket-ID.")
 
-    department_id: UUID = Field(..., description="Datenbank Produkt-ID.")
+    department_id: UUID = Field(...,
+                                description="Datenbank Department-ID.")
 
-    tier: Tier = Field(..., description="'basic', 'premium' oder 'ultra'")
+    tier: Tier = Field(...,
+                       description="'basic', 'premium' oder 'ultra'")
 
-    products: List[PackageItemOut] = Field(..., description="Inhalt des Paketes nach PackageItemIn-Schema.")
+    items: List[PackageItemOut] = Field(default_factory=list,
+                                        description="Inhalt des Paketes nach PackageItemIn-Schema.")
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ------- Ein- und Ausgabeschema für Abteilungen -------
+
+DepartmentString = Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+                                  Field(..., description="Einmalig vergebbarer Name der Abteilung, höchstens 100 Zeichen.")]
+
+
+class DepartmentIn(BaseModel):
+    name: DepartmentString
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class DepartmentOut(BaseModel):
+    id: UUID = Field(...,
+                     description="Datenbank Department-ID.")
+
+    name: DepartmentString
+
+    packages: List[PackageOut] = Field(default_factory=list,
+                                       description="Gibt Liste von Paketen aus, deren Inhalt Liste aus Produkten ist.")
+
+    model_config = ConfigDict(from_attributes=True)
