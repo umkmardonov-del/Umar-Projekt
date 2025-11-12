@@ -6,7 +6,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from uvicorn import run
 
-from app.api.api_admin import router as admin_router
+from app.api.admin_api import router as admin_router
 from app.core.lifespan import lifespan
 from app.core.settings import settings
 
