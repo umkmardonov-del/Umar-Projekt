@@ -278,3 +278,4 @@ class DepartmentOut(BaseModel):
                                        description="Gibt Liste von Paketen aus, deren Inhalt Liste aus Produkten ist.")
 
     model_config = ConfigDict(from_attributes=True)
+    
