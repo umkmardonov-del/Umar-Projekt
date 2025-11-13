@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
     )
     async with engine.connect() as conn:
         await conn.scalar(text("SELECT 1"))
-        print("PostgreSQL BD verbunden.")
+        print("PostgreSQL DB verbunden.")
     yield
     await engine.dispose()
     print("Verbindung zu PostgreSQL DB geschlossen.")
