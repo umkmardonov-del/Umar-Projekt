@@ -1,4 +1,4 @@
-# --- Pydantic-Models für api_admin.py ---
+# --- Pydantic-Models für admin_api.py ---
 # --- path: /app/models/admin_models ---
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ class BaseProductIn(BaseModel):
     def _comma_to_point(cls, var):
         return var.replace(",", ".") if isinstance(var, str) else var
 
-    model_config = ConfigDict(extra="forbid", from_attributes=True)
+    model_config = ConfigDict(extra="forbid")
 
 
 class LaptopIn(BaseProductIn):
@@ -237,7 +237,7 @@ class PackageItemOut(BaseModel):
 
     product: ProductOut
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(extra="forbid",from_attributes=True)
 
 
 class PackageOut(BaseModel):
@@ -253,7 +253,7 @@ class PackageOut(BaseModel):
     items: List[PackageItemOut] = Field(default_factory=list,
                                         description="Inhalt des Paketes nach PackageItemIn-Schema.")
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(extra="forbid",from_attributes=True)
 
 
 # ------- Ein- und Ausgabeschema für Abteilungen -------
@@ -277,5 +277,4 @@ class DepartmentOut(BaseModel):
     packages: List[PackageOut] = Field(default_factory=list,
                                        description="Gibt Liste von Paketen aus, deren Inhalt Liste aus Produkten ist.")
 
-    model_config = ConfigDict(from_attributes=True)
-    
+    model_config = ConfigDict(extra="forbid",from_attributes=True)
