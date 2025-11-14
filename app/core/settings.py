@@ -19,7 +19,8 @@ class Settings(BaseSettings):
     ENV: Literal["development", "staging", "production"] = "development"
     APP_NAME: str = "fastapi-app"
     API_PREFIX: str = ""
-    HOST: str = "0.0.0.0"
+    HOST_OPEN: str = "0.0.0.0"
+    HOST_LOCAL: str = "127.0.0.1"
     PORT: int = 8000
     RELOAD: bool = True
 
