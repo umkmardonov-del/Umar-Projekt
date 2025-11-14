@@ -34,7 +34,7 @@ class BaseProductIn(BaseModel):
 
 
 class LaptopIn(BaseProductIn):
-    type: Literal["laptop"]
+    product_type: Literal["laptop"]
 
     processor: str = Field(...,
                            max_length=50,
@@ -68,7 +68,7 @@ class LaptopIn(BaseProductIn):
 
 
 class MonitorIn(BaseProductIn):
-    type: Literal["monitor"]
+    product_type: Literal["monitor"]
 
     resolution_height: int = Field(...,
                                    description="Pixelhöhe als Zahl(wichtig)!")
@@ -94,7 +94,7 @@ class MonitorIn(BaseProductIn):
 
 
 class DeskIn(BaseProductIn):
-    type: Literal["desk"]
+    product_type: Literal["desk"]
 
     height_adjustable: bool = Field(...,
                                     description="Höhenverstellbar als bool: True oder False")
@@ -107,7 +107,64 @@ class DeskIn(BaseProductIn):
                              description="Sonstige Vorteile des Tisches, höchstens 200 Zeichen.")
 
 
-ProductIn = Annotated[Union[LaptopIn, MonitorIn, DeskIn], Field(discriminator="type")]
+class WorkstationIn(BaseProductIn):
+    product_type: Literal["workstation"]
+
+    processor: str = Field(...,
+                           max_length=50,
+                           description="Prozessor als String, höchstens 50 Zeichen.")
+    operating_system: str = Field(...,
+                                  max_length=50,
+                                  description="OS als String, höchstens 50 Zeichen.")
+    memory: str = Field(...,
+                        max_length=50,
+                        description="Arbeitsspeicher als String, höchstens 50 Zeichen.")
+    power_usage: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Stromverbrauch als Zahl(Kommastellen erlaubt).",
+                                 examples=["42,56", "100", 567.87])
+    disc_memory: str = Field(...,
+                             max_length=50,
+                             description="Festplatte als String, höchstens 50 Zeichen.")
+    screen_size: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Bildschirmdiagonale als Zahl(wichtig)!",
+                                 examples=["42,56", "100", 567.87])
+    resolution_height: int = Field(...,
+                                   description="Pixelhöhe als Zahl(wichtig)!")
+    resolution_width: int = Field(...,
+                                  description="Pixelbreite als Zahl(wichtig)!")
+    refresh_rate: int = Field(...,
+                              description="Bildschirmwiederholungsrate als Zahl(wichtig)!")
+    graphics_card: str = Field(...,
+                               max_length=100,
+                               description="Grafikkarte als String, höchstens 100 Zeichen. Wenn leer: default='Integrierte Grafikkarte.'")
+    camera: str = Field(...,
+                        max_length=100,
+                        description="Kamera als String, höchstens 100 Zeichen.")
+
+class ChairIn(BaseProductIn):
+    product_type: Literal["chair"]
+
+    height_min: int = Field(..., )
+    height_max: int = Field(..., )
+    max_weight: PositiveInt = Field(..., )
+    description: str = Field(...,
+                             max_length=200,
+                             description="Sonstige Vorteile des Stuhls, höchstens 200 Zeichen.")
+
+
+class KeyboardIn(BaseProductIn):
+    product_type: Literal["keyboard"]
+
+    connection_style: str = Field(..., )
+    layout: str = Field(..., )
+    weight: PositiveInt = Field(..., )
+    dimensions: str = Field(..., )
+    description: str = Field(...,
+                             max_length=200,
+                             description="Sonstige Vorteile der Tastatur, höchstens 200 Zeichen.")
+
+
+ProductIn = Annotated[Union[LaptopIn, MonitorIn, DeskIn, WorkstationIn, ChairIn, KeyboardIn], Field(discriminator="product_type")]
 
 # ------- Update-Schemata für Produkte -------
 
@@ -127,7 +184,7 @@ class BaseProductOut(BaseModel):
 
 
 class LaptopOut(BaseProductOut):
-    type: Literal["laptop"] = "laptop"
+    product_type: Literal["laptop"] = "laptop"
 
     processor: str = Field(...,
                            max_length=50,
@@ -161,7 +218,7 @@ class LaptopOut(BaseProductOut):
 
 
 class MonitorOut(BaseProductOut):
-    type: Literal["monitor"] = "monitor"
+    product_type: Literal["monitor"] = "monitor"
 
     resolution_height: int = Field(...,
                                    description="Pixelhöhe als Zahl(wichtig)!")
@@ -182,7 +239,7 @@ class MonitorOut(BaseProductOut):
 
 
 class DeskOut(BaseProductOut):
-    type: Literal["desk"] = "desk"
+    product_type: Literal["desk"] = "desk"
 
     height_adjustable: bool = Field(...,
                                     description="Höhenverstellbar als Boolean.",
@@ -196,7 +253,7 @@ class DeskOut(BaseProductOut):
                              description="Sonstige Vorteile des Tisches, höchstens 200 Zeichen.")
 
 
-ProductOut = Annotated[Union[LaptopOut, MonitorOut, DeskOut], Field(discriminator="type")]
+ProductOut = Annotated[Union[LaptopOut, MonitorOut, DeskOut], Field(discriminator="product_type")]
 
 
 # --- Paketklassen als ENUM ---
