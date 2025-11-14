@@ -15,7 +15,7 @@ from app.service.admin_service import create_product_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
-@router.post("/product", status_code=201, response_model=ProductIn, summary="Produkte anlegen.")
+@router.post("/product", status_code=201, response_model=ProductOut, summary="Produkte anlegen.")
 async def create_product_api(payload: ProductIn,
                              request: Request,
                              response: Response,
@@ -27,7 +27,7 @@ async def create_product_api(payload: ProductIn,
         location = str(request.url_for("get_product_by_id", ident=dto.id))
         response.headers["Location"] = location
 
-        return ProductOut(dto)
+        return dto
     except IntegrityError:
         raise HTTPException(status_code=409, detail="Conflict")
 
@@ -37,3 +37,8 @@ async def create_product_api(payload: ProductIn,
 async def get_product_by_id(ident: UUID,
                             session: AsyncSession = Depends(postgres_dep)):
     pass
+
+
+@router.get("/test")
+async def test_endpoint():
+    return "erfolgreich"
