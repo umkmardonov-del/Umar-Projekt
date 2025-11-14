@@ -183,6 +183,85 @@ class Keyboard(Product):
     __mapper_args__ = {"polymorphic_identity": "keyboard"}
 
 
+class Mouse(Product):
+    __tablename__ = "mouses"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                          primary_key=True)
+    dpi: Mapped[int] = mapped_column(Integer,
+                                     nullable=False)
+    connection_style: Mapped[str] = mapped_column(String(50),
+                                                  nullable=False)
+    weight: Mapped[int] = mapped_column(Integer,
+                                        nullable=False)
+    battery: Mapped[str] = mapped_column(String(50),
+                                         nullable=False)
+    description: Mapped[str] = mapped_column(String(200),
+                                             nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "mouse"}
+
+
+class DockingStation(Product):
+    __tablename__ = "docking_stations"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                     primary_key=True)
+    display_port: Mapped[int] = mapped_column(Integer,
+                                    nullable=False)
+    hdmi: Mapped[int] = mapped_column(Integer,
+                                    nullable=False)
+    usb: Mapped[str] = mapped_column(String(80),
+                                    nullable=False)
+    usb_c: Mapped[int] = mapped_column(Integer,
+                                       nullable=False)
+    thunderbolt: Mapped[int] = mapped_column(Integer,
+                                             nullable=False,
+                                             default=0)
+    ethernet: Mapped[int] = mapped_column(Integer,
+                                    nullable=False)
+    audio: Mapped[int] = mapped_column(Integer,
+                                    nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "docking_station"}
+
+
+class Webcam(Product):
+    __tablename__ = "webcams"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                          primary_key=True)
+    fps: Mapped[int] = mapped_column(Integer,
+                                     nullable=False)
+    resolution: Mapped[str] = mapped_column(String(30),
+                                            nullable=False)
+    dfov_adjustable: Mapped[bool] = mapped_column(Boolean,
+                                                  nullable=False)
+    connection_style: Mapped[str] = mapped_column(String(50),
+                                                  nullable=False)
+    description: Mapped[str] = mapped_column(String(200),
+                                             nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "webcam"}
+
+
+class Cable(Product):
+    __tablename__ = "cables"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                     primary_key=True)
+    hdmi: Mapped[str] = mapped_column(String(80),
+                                      nullable=False)
+    ethernet: Mapped[str] = mapped_column(String(80),
+                                          nullable=False)
+    usb_c: Mapped[str] = mapped_column(String(80),
+                                          nullable=False)
+    display_port: Mapped[str] = mapped_column(String(80),
+                                          nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "cable"}
+
+
 # --- Tabelle für die einzelnen Abteilungen ---
 
 class Department(Base):
