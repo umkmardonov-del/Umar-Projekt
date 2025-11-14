@@ -138,6 +138,9 @@ class LaptopOut(BaseProductOut):
     memory: str = Field(...,
                         max_length=50,
                         description="Arbeitsspeicher als String, höchstens 50 Zeichen.")
+    power_usage: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Stromverbrauch als Zahl(Kommastellen erlaubt).",
+                                 examples=["42,56", "100", 567.87])
     disc_memory: str = Field(...,
                              max_length=50,
                              description="Festplatte als String, höchstens 50 Zeichen.")
