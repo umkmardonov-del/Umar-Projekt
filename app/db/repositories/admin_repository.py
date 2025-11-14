@@ -11,7 +11,7 @@ from typing import Type
 from uuid import UUID
 
 from app.db.orm_models import (Product, Department, Package, PackageItem,
-                               Laptop, Monitor, Desk)
+                               Laptop, Monitor, Desk, Workstation, Keyboard, Chair)
 from app.pydantic_models.admin_models import BaseProductIn
 
 
@@ -21,6 +21,9 @@ TYPE_MAP: dict[str, Type[Product]] = {
     "laptop": Laptop,
     "monitor": Monitor,
     "desk": Desk,
+    "workstation": Workstation,
+    "chair": Chair,
+    "keyboard" : Keyboard
 }
 
 
@@ -29,7 +32,7 @@ TYPE_MAP: dict[str, Type[Product]] = {
 
 async def create_product(session: AsyncSession, payload: BaseProductIn) -> Product:
     data = payload.model_dump()
-    product_type = data.pop("type")
+    product_type = data.pop("product_type")
 
     base = {k: data.pop(k) for k in ("name", "price")}
     Model = TYPE_MAP[product_type]
