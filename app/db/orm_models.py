@@ -115,6 +115,39 @@ class Desk(Product):
     __mapper_args__ = {"polymorphic_identity": "desk"}
 
 
+class Workstation(Product):
+    __tablename__ = "workstations"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id",ondelete="CASCADE"),
+                                     nullable=True)
+    processor: Mapped[str] = mapped_column(String(50),
+                                           nullable=False)
+    operating_system: Mapped[str] = mapped_column(String(50),
+                                                  nullable=False)
+    memory: Mapped[str] = mapped_column(String(50),
+                                        nullable=False)
+    power_usage: Mapped[Decimal] = mapped_column(Numeric(6, 3),
+                                                 nullable=False)
+    disc_memory: Mapped[str] = mapped_column(String(50),
+                                             nullable=False)
+    screen_size: Mapped[Decimal] = mapped_column(Numeric(6,3),
+                                             nullable=False)
+    resolution_height: Mapped[int] = mapped_column(Integer,
+                                                   nullable=False)
+    resolution_width: Mapped[int] = mapped_column(Integer,
+                                                  nullable=False)
+    refresh_rate: Mapped[int] = mapped_column(Integer,
+                                              nullable=False)
+    graphics_card: Mapped[str] = mapped_column(String(100),
+                                               nullable=False,
+                                               default="Integrierte Grafikkarte.")
+    camera: Mapped[str] = mapped_column(String(100),
+                                        nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "workstation"}
+
+
+
 # --- Tabelle für die einzelnen Abteilungen ---
 
 class Department(Base):
