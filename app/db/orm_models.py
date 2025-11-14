@@ -119,7 +119,7 @@ class Workstation(Product):
     __tablename__ = "workstations"
 
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id",ondelete="CASCADE"),
-                                     nullable=True)
+                                     primary_key=True)
     processor: Mapped[str] = mapped_column(String(50),
                                            nullable=False)
     operating_system: Mapped[str] = mapped_column(String(50),
@@ -146,6 +146,41 @@ class Workstation(Product):
 
     __mapper_args__ = {"polymorphic_identity": "workstation"}
 
+
+class Chair(Product):
+    __tablename__ = "chairs"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id",ondelete="CASCADE"),
+                                     primary_key=True)
+    height_max: Mapped[int] = mapped_column(Integer,
+                                        nullable=False)
+    height_min: Mapped[int] = mapped_column(Integer,
+                                            nullable=False)
+    max_weight: Mapped[int] = mapped_column(Integer,
+                                            nullable=False)
+    description: Mapped[str] = mapped_column(String(200),
+                                             nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "chair"}
+
+
+class Keyboard(Product):
+    __tablename__ = "keyboards"
+
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
+                                          primary_key=True)
+    connection_style: Mapped[str] = mapped_column(String(50),
+                                                  nullable=False)
+    layout: Mapped[str] = mapped_column(String(100),
+                                        nullable=False)
+    weight: Mapped[int] = mapped_column(Integer,
+                                        nullable=False)
+    dimensions: Mapped[str] = mapped_column(String(20),
+                                            nullable=False)
+    description: Mapped[str] = mapped_column(String(200),
+                                             nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "keyboard"}
 
 
 # --- Tabelle für die einzelnen Abteilungen ---
