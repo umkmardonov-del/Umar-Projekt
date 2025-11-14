@@ -79,6 +79,8 @@ class Laptop(Product):
                                                   nullable=False)
     memory: Mapped[str] = mapped_column(String(50),
                                         nullable=False)
+    power_usage: Mapped[Decimal] = mapped_column(Numeric(6, 3),
+                                                 nullable=False)
     disc_memory: Mapped[str] = mapped_column(String(50),
                                              nullable=False)
     screen_size: Mapped[int] = mapped_column(Integer,
