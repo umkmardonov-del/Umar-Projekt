@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from pydantic import TypeAdapter
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
@@ -17,7 +18,7 @@ async def create_product_service(session:AsyncSession, payload: ProductIn) -> Pr
 
     await session.commit()
 
-    dto = ProductOut.model_validate(product_orm)
+    dto = TypeAdapter(ProductOut).validate_python(product_orm)
 
     return dto
 
