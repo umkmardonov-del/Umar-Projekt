@@ -419,7 +419,7 @@ class CableOut(BaseProductOut):
 
 
 ProductOut = Annotated[Union[
-    LaptopOut, MonitorOut, DeskOut, WorkstationOut, ChairOut, KeyboardOut],
+    LaptopOut, MonitorOut, DeskOut, WorkstationOut, ChairOut, KeyboardOut, MouseOut, DockingStationOut, WebcamOut, CableOut],
              Field(discriminator="product_type")]
 
 
