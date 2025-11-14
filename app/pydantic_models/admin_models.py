@@ -253,7 +253,66 @@ class DeskOut(BaseProductOut):
                              description="Sonstige Vorteile des Tisches, höchstens 200 Zeichen.")
 
 
-ProductOut = Annotated[Union[LaptopOut, MonitorOut, DeskOut], Field(discriminator="product_type")]
+class WorkstationOut(BaseProductOut):
+    product_type: Literal["workstation"] = "workstation"
+
+    processor: str = Field(...,
+                           max_length=50,
+                           description="Prozessor als String, höchstens 50 Zeichen.")
+    operating_system: str = Field(...,
+                                  max_length=50,
+                                  description="OS als String, höchstens 50 Zeichen.")
+    memory: str = Field(...,
+                        max_length=50,
+                        description="Arbeitsspeicher als String, höchstens 50 Zeichen.")
+    power_usage: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Stromverbrauch als Zahl(Kommastellen erlaubt).",
+                                 examples=["42,56", "100", 567.87])
+    disc_memory: str = Field(...,
+                             max_length=50,
+                             description="Festplatte als String, höchstens 50 Zeichen.")
+    screen_size: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Bildschirmdiagonale als Zahl(wichtig)!",
+                                 examples=["42,56", "100", 567.87])
+    resolution_height: int = Field(...,
+                                   description="Pixelhöhe als Zahl(wichtig)!")
+    resolution_width: int = Field(...,
+                                  description="Pixelbreite als Zahl(wichtig)!")
+    refresh_rate: int = Field(...,
+                              description="Bildschirmwiederholungsrate als Zahl(wichtig)!")
+    graphics_card: str = Field(...,
+                               max_length=100,
+                               description="Grafikkarte als String, höchstens 100 Zeichen. Wenn leer: default='Integrierte Grafikkarte.'")
+    camera: str = Field(...,
+                        max_length=100,
+                        description="Kamera als String, höchstens 100 Zeichen.")
+
+class ChairOut(BaseProductOut):
+    product_type: Literal["chair"] = "chair"
+
+    height_min: int = Field(..., )
+    height_max: int = Field(..., )
+    max_weight: PositiveInt = Field(..., )
+    description: str = Field(...,
+                             max_length=200,
+                             description="Sonstige Vorteile des Stuhls, höchstens 200 Zeichen.")
+
+
+class KeyboardOut(BaseProductOut):
+    product_type: Literal["keyboard"] = "keyboard"
+
+    connection_style: str = Field(..., )
+    layout: str = Field(..., )
+    weight: PositiveInt = Field(..., )
+    dimensions: str = Field(..., )
+    description: str = Field(...,
+                             max_length=200,
+                             description="Sonstige Vorteile der Tastatur, höchstens 200 Zeichen.")
+
+
+ProductOut = Annotated[Union[
+    LaptopOut, MonitorOut, DeskOut, WorkstationOut, ChairOut, KeyboardOut],
+             Field(discriminator="product_type")]
 
 
 # --- Paketklassen als ENUM ---
