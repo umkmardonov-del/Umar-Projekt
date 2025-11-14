@@ -366,6 +366,58 @@ class KeyboardOut(BaseProductOut):
                              description="Sonstige Vorteile der Tastatur, höchstens 200 Zeichen.")
 
 
+class MouseOut(BaseProductOut):
+    product_type: Literal["mouse"] = "mouse"
+
+    dpi: int = Field(..., )
+    connection_style: str = Field(...,
+                                  max_length=50)
+    weight: int = Field(..., )
+    battery: str = Field(...,
+                         max_length=50)
+    description: str = Field(...,
+                             max_length=200)
+
+
+class DockingStationOut(BaseProductOut):
+    product_type: Literal["docking_station"] = "docking_station"
+
+    display_port: int = Field(..., )
+    hdmi: int = Field(..., )
+    usb: str = Field(...,
+                     max_length=80)
+    usb_c: int = Field(..., )
+    thunderbolt: int = Field(..., )
+    ethernet: int = Field(..., )
+    audio: int = Field(..., )
+
+
+class WebcamOut(BaseProductOut):
+    product_type: Literal["webcam"] = "webcam"
+
+    fps: int = Field(..., )
+    resolution: str = Field(...,
+                            max_length=30)
+    dfov_adjustable: bool = Field(..., )
+    connection_style: str = Field(...,
+                                  max_length=50)
+    description: str = Field(...,
+                             max_length=200)
+
+
+class CableOut(BaseProductOut):
+    product_type: Literal["cable"] = "cable"
+
+    hdmi: str = Field(...,
+                      max_length=80)
+    ethernet: str = Field(...,
+                          max_length=80)
+    usb_c: str = Field(...,
+                       max_length=80)
+    display_port: str = Field(...,
+                              max_length=80)
+
+
 ProductOut = Annotated[Union[
     LaptopOut, MonitorOut, DeskOut, WorkstationOut, ChairOut, KeyboardOut],
              Field(discriminator="product_type")]
