@@ -164,7 +164,63 @@ class KeyboardIn(BaseProductIn):
                              description="Sonstige Vorteile der Tastatur, höchstens 200 Zeichen.")
 
 
-ProductIn = Annotated[Union[LaptopIn, MonitorIn, DeskIn, WorkstationIn, ChairIn, KeyboardIn], Field(discriminator="product_type")]
+class MouseIn(BaseProductIn):
+    product_type: Literal["mouse"]
+
+    dpi: int = Field(..., )
+    connection_style: str = Field(...,
+                                  max_length=50)
+    weight: int = Field(..., )
+    battery: str = Field(...,
+                             max_length=50)
+    description: str = Field(...,
+                                  max_length=200)
+
+
+class DockingStationIn(BaseProductIn):
+    product_type: Literal["docking_station"]
+
+    display_port: int = Field(..., )
+    hdmi: int = Field(..., )
+    usb: str = Field(...,
+                     max_length=80)
+    usb_c: int = Field(..., )
+    thunderbolt: int = Field(..., )
+    ethernet: int = Field(..., )
+    audio: int = Field(..., )
+
+
+
+class WebcamIn(BaseProductIn):
+    product_type: Literal["webcam"]
+
+    fps: int = Field(..., )
+    resolution: str = Field(...,
+                            max_length=30)
+    dfov_adjustable: bool = Field(..., )
+    connection_style: str = Field(...,
+                                  max_length=50)
+    description: str = Field(...,
+                             max_length=200)
+
+
+class CableIn(BaseProductIn):
+    product_type: Literal["cable"]
+
+    hdmi: str = Field(...,
+                      max_length=80)
+    ethernet: str = Field(...,
+                          max_length=80)
+    usb_c: str = Field(...,
+                       max_length=80)
+    display_port: str = Field(...,
+                              max_length=80)
+
+
+ProductIn = Annotated[Union[
+    LaptopIn, MonitorIn, DeskIn, WorkstationIn, ChairIn, KeyboardIn, MouseIn, DockingStationIn, WebcamIn, CableIn],
+            Field(discriminator="product_type")]
+
 
 # ------- Update-Schemata für Produkte -------
 
