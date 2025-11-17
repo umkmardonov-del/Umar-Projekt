@@ -216,8 +216,7 @@ class DockingStation(Product):
     usb_c: Mapped[int] = mapped_column(Integer,
                                        nullable=False)
     thunderbolt: Mapped[int] = mapped_column(Integer,
-                                             nullable=False,
-                                             default=0)
+                                             nullable=False)
     ethernet: Mapped[int] = mapped_column(Integer,
                                     nullable=False)
     audio: Mapped[int] = mapped_column(Integer,
