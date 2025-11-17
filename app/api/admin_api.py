@@ -9,9 +9,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
 from app.core.deps import postgres_dep
-from app.pydantic_models.admin_models import ProductIn, ProductOut
-from app.service.admin_service import create_product_service
-
+from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentOut, DepartmentIn, ProductListOut
+from app.service.admin_service import (create_product_service, get_product_by_id_service, create_department_service,
+                                       get_department_by_id_service, get_all_products_service,)
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -22,7 +22,7 @@ async def create_product_api(payload: ProductIn,
                              session: AsyncSession = Depends(postgres_dep),
                              ) -> ProductOut:
     try:
-        dto = await create_product_service(session, payload)
+        dto = await create_product_service(session, payload=payload)
 
         location = str(request.url_for("get_product_by_id", ident=dto.id))
         response.headers["Location"] = location
@@ -34,9 +34,63 @@ async def create_product_api(payload: ProductIn,
 
 @router.get("/product/{ident}", response_model=ProductOut, name="get_product_by_id",
             summary="Einzelnes Produkt anhand seiner ID abrufen.")
-async def get_product_by_id(ident: UUID,
-                            session: AsyncSession = Depends(postgres_dep)):
-    pass
+async def get_product_by_id_api(ident: UUID,
+                                session: AsyncSession = Depends(postgres_dep),
+                                ) -> ProductOut | None:
+    try:
+        dto = await get_product_by_id_service(session, ident=ident)
+
+        return dto
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Not Found")
+    except Exception:
+        HTTPException(status_code=500, detail="Internal Error")
+
+
+@router.get("/products", response_model=list[ProductListOut])
+async def get_all_products_api(session: AsyncSession = Depends(postgres_dep)) -> list[ProductListOut]:
+    try:
+        dto = await get_all_products_service(session)
+
+        return dto
+
+    except Exception:
+        raise HTTPException(status_code=500, detail="Internal Error")
+
+
+
+@router.post("/department", status_code=201, response_model=DepartmentOut)
+async def create_department_api(payload: DepartmentIn,
+                                request: Request,
+                                response: Response,
+                                session: AsyncSession = Depends(postgres_dep)) -> DepartmentOut | None:
+    try:
+        dto = await create_department_service(session, payload=payload)
+
+        location = str(request.url_for("get_department_by_id", ident=dto.id))
+        response.headers["Location"] = location
+
+        return dto
+
+    except ValueError:
+        raise HTTPException(status_code=509, detail="Conflict")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Internal Error")
+
+
+@router.get("/department/{ident}", response_model=DepartmentOut, name="get_department_by_id",
+            summary="Einzelne Abteilung anhand seiner ID abrufen.")
+async def get_department_by_id_api(ident: UUID,
+                                   session: AsyncSession = Depends(postgres_dep),
+                                   ) -> DepartmentOut | None:
+    try:
+        dto = await get_department_by_id_service(session, ident=ident)
+
+        return dto
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Not Found")
+    except Exception:
+        HTTPException(status_code=500, detail="Internal Error")
 
 
 @router.get("/test")
