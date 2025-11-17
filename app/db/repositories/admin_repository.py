@@ -53,6 +53,39 @@ async def create_product(session: AsyncSession, payload: BaseProductIn) -> Produ
     return model
 
 
+async def create_department(session: AsyncSession, *, payload: DepartmentIn) -> Department:
+    data = payload.model_dump()
+    name = data["name"]
+
+    department_orm = Department(name=name)
+
+    session.add(department_orm)
+
+    try:
+        await session.flush()
+        await session.refresh(department_orm)
+
+    except IntegrityError as e:
+        raise e
+
+    return department_orm
+
+
+# --- get_all_*-Funktionen ---
+
+async def get_all_products(session: AsyncSession) -> list[Product]:
+    stmt = (select(Product)
+            .options(selectinload(Product.package_items))
+            .order_by(Product.product_type)
+            )
+
+    query = await session.execute(stmt)
+
+    products_orm: list[Product] = list(query.scalars().all())
+
+    return products_orm
+
+
 # --- get_*_by_id-Funktionen ---
 
 async def get_product_by_id(session: AsyncSession, product_id: UUID) -> Product | None:
