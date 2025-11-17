@@ -4,15 +4,15 @@
 from __future__ import annotations
 
 from sqlalchemy import select
-from sqlalchemy.orm import with_polymorphic, selectinload
+from sqlalchemy.orm import with_polymorphic, selectinload, selectin_polymorphic
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Type
 from uuid import UUID
 
 from app.db.orm_models import (Product, Department, Package, PackageItem,
-                               Laptop, Monitor, Desk, Workstation, Keyboard, Chair)
-from app.pydantic_models.admin_models import BaseProductIn
+                               Laptop, Monitor, Desk, Workstation, Keyboard, Chair, Mouse, DockingStation, Webcam, Cable)
+from app.pydantic_models.admin_models import BaseProductIn, DepartmentIn
 
 
 # --- TYPE-MAP für Sortierung in ORM-Subklassen ---
@@ -34,7 +34,7 @@ TYPE_MAP: dict[str, Type[Product]] = {
 
 # --- create_*-Funktionen ---
 
-async def create_product(session: AsyncSession, payload: BaseProductIn) -> Product:
+async def create_product(session: AsyncSession, *, payload: BaseProductIn) -> Product:
     data = payload.model_dump()
     product_type = data.pop("product_type")
 
@@ -88,22 +88,40 @@ async def get_all_products(session: AsyncSession) -> list[Product]:
 
 # --- get_*_by_id-Funktionen ---
 
-async def get_product_by_id(session: AsyncSession, product_id: UUID) -> Product | None:
-    product_orm = await session.get(Product, product_id)
+async def get_product_by_id(session: AsyncSession, *, product_id: UUID) -> Product | None:
+    stmt = (select(Product)
+            .where(Product.id == product_id)
+            )
 
-    return product_orm
+    product_orm = await session.scalars(stmt)
+
+    return product_orm.one_or_none()
+
+
+async def get_department_by_id(session: AsyncSession, *, department_id: UUID) -> Department | None:
+    stmt = (select(Department)
+        .options(
+            # Department.packages
+            selectinload(Department.packages)
+            # zu jedem Package: items laden
+            .selectinload(Package.items)
+            # zu jedem Item: product laden (inkl. Subklassen dank Polymorphie)
+            .selectinload(PackageItem.product)
+        )
+        .where(Department.id == department_id)
+    )
+
+    query = await session.execute(stmt)
+
+    department_orm = query.scalar_one_or_none()
+
+    return department_orm
 
 
 async def get_package_by_id(session: AsyncSession, package_id: UUID) -> Package | None:
     package_orm = await session.get(Package, package_id)
 
     return package_orm
-
-
-async def get_department_by_id(session: AsyncSession, department_id: UUID) -> Department | None:
-    department_orm = await session.get(Department, department_id)
-
-    return department_orm
 
 
 async def get_packageitem_by_id(session: AsyncSession, packageitem_id: UUID) -> PackageItem | None:
