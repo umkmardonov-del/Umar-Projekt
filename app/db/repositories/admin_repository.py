@@ -12,8 +12,7 @@ from uuid import UUID
 
 from app.db.orm_models import (Product, Department, Package, PackageItem,
                                Laptop, Monitor, Desk, Workstation, Keyboard, Chair, Mouse, DockingStation, Webcam, Cable)
-from app.pydantic_models.admin_models import BaseProductIn, DepartmentIn
-
+from app.pydantic_models.admin_models import BaseProductIn, DepartmentIn, PackageIn
 
 # --- TYPE-MAP für Sortierung in ORM-Subklassen ---
 
@@ -65,10 +64,30 @@ async def create_department(session: AsyncSession, *, payload: DepartmentIn) -> 
         await session.flush()
         await session.refresh(department_orm)
 
+
     except IntegrityError as e:
         raise e
 
     return department_orm
+
+
+async def create_package(session: AsyncSession, payload: PackageIn) -> Package:
+    data = payload.model_dump()
+    model = Package(**data)
+
+    session.add(model)
+
+    try:
+        await session.flush()
+        await session.refresh(model)
+
+
+    except IntegrityError as e:
+        raise e
+
+    return model
+
+
 
 
 # --- get_all_*-Funktionen ---
@@ -84,6 +103,19 @@ async def get_all_products(session: AsyncSession) -> list[Product]:
     products_orm: list[Product] = list(query.scalars().all())
 
     return products_orm
+
+
+async def get_all_departments(session: AsyncSession) -> list[Department]:
+    stmt = (select(Department)
+            .options(selectinload(Department.packages))
+            .order_by(Department.name)
+            )
+
+    query = await session.execute(stmt)
+
+    department_orm: list[Department] = list(query.scalars().all())
+
+    return department_orm
 
 
 # --- get_*_by_id-Funktionen ---
