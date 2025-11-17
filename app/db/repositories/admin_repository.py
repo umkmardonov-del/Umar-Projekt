@@ -110,3 +110,37 @@ async def get_packageitem_by_id(session: AsyncSession, packageitem_id: UUID) -> 
     packageitem_orm = await session.get(PackageItem, packageitem_id)
 
     return packageitem_orm
+
+
+# --- Produkte nach Typ ---
+
+async def get_products_by_type(session: AsyncSession, product_type: str) -> list[Product]:
+    if product_type not in TYPE_MAP:
+        raise ValueError("Ungültiger product_type.")
+
+    Model = TYPE_MAP[product_type]
+
+    stmt = (select(Model)
+            .options(selectinload(Model.package_items))
+            .order_by(Model.name)
+            )
+
+    query = await session.execute(stmt)
+
+    products_orm: list[Product] = list(query.scalars().all())
+
+    return products_orm
+
+
+# --- delete_*-Funktionen ---
+
+async def delete_product(session, *, product_id) -> bool:
+    product = await get_product_by_id(session, product_id=product_id)
+    if not product:
+        return False
+
+
+    await session.delete(product)
+    await session.flush()
+
+    return True
