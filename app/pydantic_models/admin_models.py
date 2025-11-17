@@ -155,10 +155,14 @@ class ChairIn(BaseProductIn):
 class KeyboardIn(BaseProductIn):
     product_type: Literal["keyboard"]
 
-    connection_style: str = Field(..., )
-    layout: str = Field(..., )
-    weight: PositiveInt = Field(..., )
-    dimensions: str = Field(..., )
+    connection_style: str = Field(...,
+                                  max_length=50)
+    layout: str = Field(...,
+                        max_length=100)
+    weight: PositiveInt = Field(...,
+                                description="Gewicht in Gramm.")
+    dimensions: str = Field(...,
+                            max_length=20)
     description: str = Field(...,
                              max_length=200,
                              description="Sonstige Vorteile der Tastatur, höchstens 200 Zeichen.")
@@ -172,9 +176,9 @@ class MouseIn(BaseProductIn):
                                   max_length=50)
     weight: int = Field(..., )
     battery: str = Field(...,
-                             max_length=50)
+                         max_length=50)
     description: str = Field(...,
-                                  max_length=200)
+                             max_length=200)
 
 
 class DockingStationIn(BaseProductIn):
@@ -188,7 +192,6 @@ class DockingStationIn(BaseProductIn):
     thunderbolt: int = Field(..., )
     ethernet: int = Field(..., )
     audio: int = Field(..., )
-
 
 
 class WebcamIn(BaseProductIn):
@@ -357,10 +360,14 @@ class ChairOut(BaseProductOut):
 class KeyboardOut(BaseProductOut):
     product_type: Literal["keyboard"] = "keyboard"
 
-    connection_style: str = Field(..., )
-    layout: str = Field(..., )
-    weight: PositiveInt = Field(..., )
-    dimensions: str = Field(..., )
+    connection_style: str = Field(...,
+                                  max_length=50)
+    layout: str = Field(...,
+                        max_length=100)
+    weight: PositiveInt = Field(...,
+                                description="Gewicht in Gramm.")
+    dimensions: str = Field(...,
+                            max_length=20)
     description: str = Field(...,
                              max_length=200,
                              description="Sonstige Vorteile der Tastatur, höchstens 200 Zeichen.")
@@ -398,7 +405,9 @@ class WebcamOut(BaseProductOut):
     fps: int = Field(..., )
     resolution: str = Field(...,
                             max_length=30)
-    dfov_adjustable: bool = Field(..., )
+    dfov_adjustable: bool = Field(...,
+                                  description="dfov_adjustable als Boolean",
+                                  examples=[True, False])
     connection_style: str = Field(...,
                                   max_length=50)
     description: str = Field(...,
@@ -421,6 +430,17 @@ class CableOut(BaseProductOut):
 ProductOut = Annotated[Union[
     LaptopOut, MonitorOut, DeskOut, WorkstationOut, ChairOut, KeyboardOut, MouseOut, DockingStationOut, WebcamOut, CableOut],
              Field(discriminator="product_type")]
+
+
+# --- Ausgabeschema für Produktliste ---
+
+class ProductListOut(BaseModel):
+    id: UUID = Field(...,)
+    name: ProductString
+    price: PriceString
+    product_type: str = Field(...,)
+
+    model_config = ConfigDict(extra="forbid", from_attributes=True)
 
 
 # --- Paketklassen als ENUM ---
