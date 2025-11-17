@@ -471,7 +471,7 @@ class PackageIn(BaseModel):
                        description="'basic', 'premium' oder 'ultra'")
 
     items: List[PackageItemIn] = Field(default_factory=list,
-                                          description="Inhalt des Paketes nach PackageItemIn-Schema.")
+                                       description="Inhalt des Paketes nach PackageItemIn-Schema.")
 
     model_config = ConfigDict(extra="forbid")
 
