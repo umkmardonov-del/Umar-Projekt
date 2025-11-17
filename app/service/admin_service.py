@@ -7,9 +7,11 @@ from pydantic import TypeAdapter
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
-from app.db.repositories.admin_repository import (create_product, get_product_by_id, create_department, get_department_by_id,
-                                                  get_all_products, delete_product, get_products_by_type)
-from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentIn, DepartmentOut, ProductListOut
+from app.db.repositories.admin_repository import (create_product, get_product_by_id, create_department,
+                                                  get_department_by_id,
+                                                  get_all_products, delete_product, get_products_by_type,
+                                                  get_all_departments, create_package)
+from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentIn, DepartmentOut, ProductListOut, PackageIn, PackageOut
 
 
 # --- create_*-Funktionen ---
@@ -34,12 +36,30 @@ async def create_department_service(session: AsyncSession, *, payload: Departmen
     return dto
 
 
+async def create_package_service(session: AsyncSession, payload: PackageIn):
+    package_orm = await create_package(session, payload=payload)
+
+    await session.commit()
+
+    dto = PackageOut.model_validate(package_orm)
+
+    return dto
+
+
 # --- get_all_*-Funktionen ---
 
 async def get_all_products_service(session: AsyncSession) -> list[ProductListOut]:
     product_orm = await get_all_products(session)
 
     dto_items = [ProductListOut.model_validate(t) for t in product_orm]
+
+    return dto_items
+
+
+async def get_all_departments_service(session: AsyncSession) -> list[DepartmentOut]:
+    department_orm = await get_all_departments(session)
+
+    dto_items = [DepartmentOut.model_validate(t) for t in department_orm]
 
     return dto_items
 
