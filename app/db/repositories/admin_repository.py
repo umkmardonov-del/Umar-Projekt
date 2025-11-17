@@ -23,7 +23,11 @@ TYPE_MAP: dict[str, Type[Product]] = {
     "desk": Desk,
     "workstation": Workstation,
     "chair": Chair,
-    "keyboard" : Keyboard
+    "keyboard" : Keyboard,
+    "mouse": Mouse,
+    "docking_station": DockingStation,
+    "webcam": Webcam,
+    "cable": Cable,
 }
 
 
