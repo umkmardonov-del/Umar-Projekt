@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from uvicorn import run
 
 from app.api.admin_api import router as admin_router
+from app.api.user_api import router as user_router
 from app.core.lifespan import lifespan
 from app.core.settings import settings
 
@@ -19,6 +20,7 @@ app = FastAPI(debug=True,
               lifespan=lifespan)
 
 app.include_router(admin_router)
+app.include_router(user_router)
 
 if __name__ == "__main__":
-    run("app.main:app", host=settings.HOST, port=settings.PORT, reload=settings.RELOAD, log_level=settings.LOG_LEVEL.lower())
+    run("app.main:app", host=settings.HOST_LOCAL, port=settings.PORT, reload=settings.RELOAD, log_level=settings.LOG_LEVEL.lower())
