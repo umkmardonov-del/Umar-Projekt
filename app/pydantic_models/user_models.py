@@ -1,5 +1,5 @@
 # --- Pydantic-Models für API In- und Output ---
-# --- path: /app/pydantic_models/models.py ---
+# --- path: /app/pydantic_models/user_models.py ---
 
 from __future__ import annotations
 
