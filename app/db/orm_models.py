@@ -281,9 +281,9 @@ class Department(Base):
 # --- Tabellen, die mit den Paketen zu tun haben ---
 
 class Tier(str, Enum):
-    BASIC = "basic"
-    PREMIUM = "premium"
-    ULTRA = "ultra"
+    basic = "basic"
+    premium = "premium"
+    ultra = "ultra"
 
 
 class Package(Base):

@@ -446,9 +446,9 @@ class ProductListOut(BaseModel):
 # --- Paketklassen als ENUM ---
 
 class Tier(str, Enum):
-    BASIC = "basic"
-    PREMIUM = "premium"
-    ULTRA = "ultra"
+    basic = "basic"
+    premium = "premium"
+    ultra = "ultra"
 
 
 #------- Eingabe-Schemata für Pakete -------
@@ -472,6 +472,13 @@ class PackageIn(BaseModel):
 
     items: List[PackageItemIn] = Field(default_factory=list,
                                        description="Inhalt des Paketes nach PackageItemIn-Schema.")
+
+    @field_validator("tier", mode="before")
+    @classmethod
+    def enum_lower(cls, var: str):
+        if isinstance(var, str):
+            return var.lower()
+        return var
 
     model_config = ConfigDict(extra="forbid")
 
