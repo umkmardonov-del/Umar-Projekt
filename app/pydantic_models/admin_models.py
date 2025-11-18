@@ -66,6 +66,11 @@ class LaptopIn(BaseProductIn):
                         max_length=100,
                         description="Kamera als String, höchstens 100 Zeichen.")
 
+    @field_validator("power_usage", mode="before")
+    @classmethod
+    def _comma_to_point(cls, var):
+        return var.replace(",", ".") if isinstance(var, str) else var
+
 
 class MonitorIn(BaseProductIn):
     product_type: Literal["monitor"]
@@ -141,6 +146,12 @@ class WorkstationIn(BaseProductIn):
                         max_length=100,
                         description="Kamera als String, höchstens 100 Zeichen.")
 
+    @field_validator("power_usage", mode="before")
+    @classmethod
+    def _comma_to_point(cls, var):
+        return var.replace(",", ".") if isinstance(var, str) else var
+
+
 class ChairIn(BaseProductIn):
     product_type: Literal["chair"]
 
@@ -192,6 +203,14 @@ class DockingStationIn(BaseProductIn):
     thunderbolt: int = Field(..., )
     ethernet: int = Field(..., )
     audio: int = Field(..., )
+    power_usage: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Stromverbrauch als Zahl(Kommastellen erlaubt).",
+                                 examples=["42,56", "100", 567.87])
+
+    @field_validator("power_usage", mode="before")
+    @classmethod
+    def _comma_to_point(cls, var):
+        return var.replace(",", ".") if isinstance(var, str) else var
 
 
 class WebcamIn(BaseProductIn):
@@ -346,6 +365,7 @@ class WorkstationOut(BaseProductOut):
                         max_length=100,
                         description="Kamera als String, höchstens 100 Zeichen.")
 
+
 class ChairOut(BaseProductOut):
     product_type: Literal["chair"] = "chair"
 
@@ -397,6 +417,9 @@ class DockingStationOut(BaseProductOut):
     thunderbolt: int = Field(..., )
     ethernet: int = Field(..., )
     audio: int = Field(..., )
+    power_usage: Decimal = Field(..., ge=0, max_digits=6, decimal_places=3,
+                                 description="Stromverbrauch als Zahl(Kommastellen erlaubt).",
+                                 examples=["42,56", "100", 567.87])
 
 
 class WebcamOut(BaseProductOut):
@@ -451,6 +474,11 @@ class Tier(str, Enum):
     ultra = "ultra"
 
 
+class UsageMode(str, Enum):
+    mobile = "mobile"
+    stationary = "stationary"
+
+
 #------- Eingabe-Schemata für Pakete -------
 
 class PackageItemIn(BaseModel):
@@ -469,7 +497,8 @@ class PackageIn(BaseModel):
 
     tier: Tier = Field(...,
                        description="'basic', 'premium' oder 'ultra'")
-
+    usage_mode: UsageMode = Field(...,
+                                  description="'mobile' oder 'stationary'")
     items: List[PackageItemIn] = Field(default_factory=list,
                                        description="Inhalt des Paketes nach PackageItemIn-Schema.")
 
@@ -500,13 +529,12 @@ class PackageItemOut(BaseModel):
 class PackageOut(BaseModel):
     id: UUID = Field(...,
                      description="Datenbank Paket-ID.")
-
     department_id: UUID = Field(...,
                                 description="Datenbank Department-ID.")
-
     tier: Tier = Field(...,
                        description="'basic', 'premium' oder 'ultra'")
-
+    usage_mode: UsageMode = Field(...,
+                                  description="'mobile' oder 'stationary'")
     items: List[PackageItemOut] = Field(default_factory=list,
                                         description="Inhalt des Paketes nach PackageItemIn-Schema.")
 
