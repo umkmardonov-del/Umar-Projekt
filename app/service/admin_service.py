@@ -10,7 +10,7 @@ from uuid import UUID
 from app.db.repositories.admin_repository import (create_product, get_product_by_id, create_department,
                                                   get_department_by_id,
                                                   get_all_products, delete_product, get_products_by_type,
-                                                  get_all_departments, create_package)
+                                                  get_all_departments, create_package, get_all_packages)
 from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentIn, DepartmentOut, ProductListOut, PackageIn, PackageOut
 
 
@@ -41,6 +41,8 @@ async def create_package_service(session: AsyncSession, payload: PackageIn):
 
     await session.commit()
 
+    await session.refresh(package_orm)
+
     dto = PackageOut.model_validate(package_orm)
 
     return dto
@@ -62,6 +64,18 @@ async def get_all_departments_service(session: AsyncSession) -> list[DepartmentO
     dto_items = [DepartmentOut.model_validate(t) for t in department_orm]
 
     return dto_items
+
+
+async def get_all_packages_service(session: AsyncSession) -> list[PackageOut]:
+    package_orm = await get_all_packages(session)
+
+    for pkg in package_orm:
+        for item in pkg.items:
+            await session.refresh(item.product)
+
+    dto = [PackageOut.model_validate(pkg) for pkg in package_orm]
+
+    return dto
 
 
 # --- get_*_by_id-Funktionen ---

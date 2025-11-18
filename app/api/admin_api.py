@@ -14,7 +14,7 @@ from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentOu
 from app.service.admin_service import (create_product_service, get_product_by_id_service, create_department_service,
                                        get_department_by_id_service, get_all_products_service, delete_product_service,
                                        get_products_by_type_service, get_all_departments_service,
-                                       create_package_service)
+                                       create_package_service, get_all_packages_service)
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -110,12 +110,12 @@ async def create_department_api(payload: DepartmentIn,
         return dto
 
     except IntegrityError:
-        raise HTTPException(status_code=509, detail="Conflict")
+        raise HTTPException(status_code=409, detail="Conflict")
     except Exception:
         raise HTTPException(status_code=500, detail="Internal Error")
 
 
-@router.get("/department", response_model=list[DepartmentOut])
+@router.get("/departments", response_model=list[DepartmentOut])
 async def get_all_departments_api(session: AsyncSession = Depends(postgres_dep)):
     try:
         dto = await get_all_departments_service(session)
@@ -149,11 +149,25 @@ async def create_package_api(payload: PackageIn,
                              request: Request,
                              response : Response,
                              session: AsyncSession = Depends(postgres_dep)):
-    try:
+    #try:
         dto = await create_package_service(session, payload=payload)
 
         location = str(request.url_for("get_department_by_id", ident=dto.id))
         response.headers["Location"] = location
+
+        return dto
+
+    #except IntegrityError:
+        raise HTTPException(status_code=409, detail="Conflict")
+    #except Exception:
+        raise HTTPException(status_code=503, detail="Service Unavailable")
+
+
+@router.get("/packages", response_model=list[PackageOut])
+async def get_all_packages_api(session: AsyncSession = Depends(postgres_dep)
+                               ) -> list[PackageOut]:
+    try:
+        dto = await get_all_packages_service(session)
 
         return dto
 

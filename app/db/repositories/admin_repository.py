@@ -72,20 +72,23 @@ async def create_department(session: AsyncSession, *, payload: DepartmentIn) -> 
 
 
 async def create_package(session: AsyncSession, payload: PackageIn) -> Package:
-    data = payload.model_dump()
-    model = Package(**data)
+    package = Package(department_id=payload.department_id, tier=payload.tier)
 
-    session.add(model)
+    package.items = [
+        PackageItem(product_id=item.product_id, quantity=item.quantity) for item in payload.items
+    ]
+
+    session.add(package)
 
     try:
         await session.flush()
-        await session.refresh(model)
+        await session.refresh(package)
 
 
     except IntegrityError as e:
         raise e
 
-    return model
+    return package
 
 
 
@@ -116,6 +119,19 @@ async def get_all_departments(session: AsyncSession) -> list[Department]:
     department_orm: list[Department] = list(query.scalars().all())
 
     return department_orm
+
+
+async def get_all_packages(session: AsyncSession) -> list[Package]:
+    stmt = (select(Package)
+            .options(selectinload(Package.department),
+                     selectinload(Package.items).selectinload(PackageItem.product))
+            .order_by(Package.tier))
+
+    query = await session.execute(stmt)
+
+    package_orm: list[Package] = list(query.scalars().all())
+
+    return package_orm
 
 
 # --- get_*_by_id-Funktionen ---
