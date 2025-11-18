@@ -221,6 +221,8 @@ class DockingStation(Product):
                                     nullable=False)
     audio: Mapped[int] = mapped_column(Integer,
                                     nullable=False)
+    power_usage: Mapped[Decimal] = mapped_column(Numeric(6, 3),
+                                                 nullable=False)
 
     __mapper_args__ = {"polymorphic_identity": "docking_station"}
 
@@ -286,10 +288,15 @@ class Tier(str, Enum):
     ultra = "ultra"
 
 
+class UsageMode(str, Enum):
+    mobile = "mobile"
+    stationary = "stationary"
+
+
 class Package(Base):
     __tablename__ = "packages"
     __table_args__ = (
-        UniqueConstraint("department_id", "tier", name="uq_packages_department_tier"),
+        UniqueConstraint("department_id", "tier", "usage_mode", name="uq_packages_department_tier_usage_mode"),
     )
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True),
@@ -299,6 +306,8 @@ class Package(Base):
                                               nullable=False)
     tier: Mapped[Tier] = mapped_column(PGENUM(Tier, name="tier", create_type=False, validate_strings=True),
                                        nullable=False)
+    usage_mode: Mapped[UsageMode] = mapped_column(PGENUM(UsageMode, name="usage_mode", create_type=False, validate_strings=True),
+                                                  nullable=False)
 
     department: Mapped["Department"] = relationship(back_populates="packages")
 
