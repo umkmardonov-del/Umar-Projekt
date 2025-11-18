@@ -41,7 +41,8 @@ async def create_package_service(session: AsyncSession, payload: PackageIn):
 
     await session.commit()
 
-    await session.refresh(package_orm)
+    for item in package_orm.items:
+        await session.refresh(item)
 
     dto = PackageOut.model_validate(package_orm)
 
