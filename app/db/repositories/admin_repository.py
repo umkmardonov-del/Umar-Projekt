@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from sqlalchemy import select
-from sqlalchemy.orm import with_polymorphic, selectinload, selectin_polymorphic
+from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Type
