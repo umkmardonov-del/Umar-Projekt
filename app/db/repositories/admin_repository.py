@@ -72,23 +72,25 @@ async def create_department(session: AsyncSession, *, payload: DepartmentIn) -> 
 
 
 async def create_package(session: AsyncSession, payload: PackageIn) -> Package:
-    package = Package(department_id=payload.department_id, tier=payload.tier)
+    package_orm = Package(
+        department_id=payload.department_id, tier=payload.tier, usage_mode=payload.usage_mode
+    )
 
-    package.items = [
+    package_orm.items = [
         PackageItem(product_id=item.product_id, quantity=item.quantity) for item in payload.items
     ]
 
-    session.add(package)
+    session.add(package_orm)
 
     try:
         await session.flush()
-        await session.refresh(package)
+        await session.refresh(package_orm)
 
 
     except IntegrityError as e:
         raise e
 
-    return package
+    return package_orm
 
 
 
