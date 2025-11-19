@@ -39,7 +39,6 @@ async def calculate_results_service(session: AsyncSession, *, payload: Calculato
 
     results: list[CalculatorOut] = []
 
-    # 3) Alle Pakete der Abteilung durchgehen
     for pkg in department.packages:
         # Nur Pakete mit gewünschtem usage_mode berücksichtigen
         if getattr(pkg, "usage_mode", None) != request_usage_mode:
@@ -49,10 +48,7 @@ async def calculate_results_service(session: AsyncSession, *, payload: Calculato
         power_total_watt = Decimal("0")
         items_out: list[CalculatorItemOut] = []
 
-        # 4) Alle Items (Produkte) im Paket durchgehen
         for item in pkg.items:
-            # Produkt inkl. aller Spezifikationen (polymorph) laden,
-            # damit KEIN Lazy-Loading / MissingGreenlet mehr passiert.
             result = await session.execute(
                 select(with_polymorphic(Product, "*")).where(with_polymorphic(Product, "*").id == item.product_id)
             )
@@ -60,7 +56,6 @@ async def calculate_results_service(session: AsyncSession, *, payload: Calculato
 
             quantity = item.quantity
 
-            # Preis pro Produkt
             unit_price: Decimal = product.price
             hardware_cost_per_seat += unit_price * quantity
 
@@ -73,7 +68,10 @@ async def calculate_results_service(session: AsyncSession, *, payload: Calculato
                 power_usage = Decimal("0")
 
             price_rounded = unit_price.quantize(Decimal("0.01"))  # 2 Nachkommastellen
-            power_usage_rounded = power_usage.quantize(Decimal("0.001"))  # 3 Nachkommastellen
+
+            power_usage_rounded: Decimal | None = None
+            if power_usage is not None and power_usage != 0:
+                power_usage_rounded = power_usage.quantize(Decimal("0.001"))
 
             # Item fürs Frontend
             items_out.append(
