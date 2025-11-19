@@ -15,13 +15,9 @@ from app.db.repositories.user_repository import get_department_by_name
 from app.pydantic_models.user_models import CalculatorIn, CalculatorOut, CalculatorItemOut
 
 
-
 HOURS_PER_DAY: Final[int] = 8
 WORKDAYS_PER_YEAR: Final[int] = 220
 ELECTRICITY_PRICE: Final[Decimal] = Decimal("0.35")
-
-
-ProductWithSpecs = with_polymorphic(Product, "*")
 
 
 class UsageMode(str, Enum):
@@ -58,7 +54,7 @@ async def calculate_results_service(session: AsyncSession, *, payload: Calculato
             # Produkt inkl. aller Spezifikationen (polymorph) laden,
             # damit KEIN Lazy-Loading / MissingGreenlet mehr passiert.
             result = await session.execute(
-                select(ProductWithSpecs).where(ProductWithSpecs.id == item.product_id)
+                select(with_polymorphic(Product, "*")).where(with_polymorphic(Product, "*").id == item.product_id)
             )
             product = result.scalar_one()
 
