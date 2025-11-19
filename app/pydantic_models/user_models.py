@@ -60,12 +60,8 @@ class CalculatorOut(BaseModel):
 
     hardware_cost_member: PriceString
     hardware_cost_total: PriceString
-    energy_cost_member: Decimal = Field(..., ge=0, max_digits=7, decimal_places=3,
-                                       description="Energieverbrauch des Produkts.",
-                                       examples=["42,56", "100", "567.87"])
-    energy_cost_total: Decimal = Field(..., ge=0, max_digits=7, decimal_places=3,
-                                       description="Energieverbrauch des Produkts.",
-                                       examples=["42,56", "100", "567.87"])
+    energy_cost_member: PriceString
+    energy_cost_total: PriceString
 
     model_config = ConfigDict(extra="forbid", from_attributes=True)
 
