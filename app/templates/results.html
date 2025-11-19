@@ -2,9 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+
+    <!-- gleiche Styles wie auf der Startseite -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+
+    <title>Results – Atec Systems</title>
 </head>
 <body>
+<div class="wrapper">
 
+    <!-- Header -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="header__top-inner">
+
+                    <div class="header__logo logo">
+                        <img src="{{ url_for('static', path='images/logo.svg') }}" alt="Logo">
+                    </div>
+
+                    <nav class="header__nav">
+                        <ul class="header__nav-list">
+                            <li class="header__nav-item"><a class="header__nav-link" href="/">Home</a></li>
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">About</a></li>
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">Services</a></li>
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">Contact</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="header__body">
+            <div class="container">
+                <div class="header__body-inner">
+
+                    <div class="header__content">
+                        <div class="header__text">
+                            <h1 class="header__title">
+                                Smart IT Cost <br>
+                                Management Tool
+                            </h1>
+                        </div>
+
+                        <div class="header__image">
+                            <img src="{{ url_for('static', path='images/main.svg') }}" alt="main illustration">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Intro / Beschreibung -->
+    <section class="config-section">
+        <div class="container config-section__inner">
+
+            <h2 class="config-section__title">System Configuration</h2>
+            <p class="config-section__subtitle">Your calculation results</p>
+
+            <p class="config-section__text">
+                Below you can see the suggested hardware packages for your department,
+                including per-member and total costs as well as energy consumption.
+            </p>
+
+            <!-- Results Cards -->
+            <section class="results">
+                <div class="results__grid">
+
+                    {% if dto %}
+                        {% for pkg in dto %}
+                            <article class="results__card">
+
+                                <header class="results__card-header">
+                                    <div>
+                                        <h2 class="results__card-title">
+                                            {{ pkg.department_name }} – {{ pkg.tier|upper }} ({{ "Stationary Setup" if pkg.usage_mode == "stationary" else "Mobile Setup" }})
+                                        </h2>
+                                        <p class="results__card-subtitle">
+                                            {{ pkg.members }} seats • {{ pkg.os }} • {{ pkg.include_software }}
+                                        </p>
+                                    </div>
+                                </header>
+
+                                <!-- Meta Infos -->
+                                <div class="results__meta">
+                                    <div class="results__meta-item">
+                                        <span class="results__meta-label">Team size</span>
+                                        <span class="results__meta-value">{{ pkg.members }}</span>
+                                    </div>
+                                    <div class="results__meta-item">
+                                        <span class="results__meta-label">Operating system</span>
+                                        <span class="results__meta-value">{{ pkg.os }}</span>
+                                    </div>
+                                    <div class="results__meta-item">
+                                        <span class="results__meta-label">Software</span>
+                                        <span class="results__meta-value">{{ pkg.include_software }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Produkte -->
+                                <table class="results__table">
+                                    <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price per device</th>
+                                        <th>Power usage</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in pkg.items %}
+                                        <tr>
+                                            <td>{{ item.product_name }}</td>
+                                            <td>{{ item.price | trim_zeros(2) }} €</td>
+                                            <td>
+                                                {% if item.power_usage is not none %}
+                                                    {{ item.power_usage | trim_zeros(3) }} W
+                                                {% else %}
+                                                    –
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <!-- Zusammenfassung -->
+                                <div class="results__summary">
+                                    <div class="results__summary-item">
+                                        <span class="results__summary-label">Hardware per member</span>
+                                        <span class="results__summary-value">
+                                            {{ pkg.hardware_cost_member | trim_zeros(2) }} €
+                                        </span>
+                                    </div>
+                                    <div class="results__summary-item">
+                                        <span class="results__summary-label">Hardware total</span>
+                                        <span class="results__summary-value">
+                                            {{ pkg.hardware_cost_total | trim_zeros(2) }} €
+                                        </span>
+                                    </div>
+                                    <div class="results__summary-item">
+                                        <span class="results__summary-label">Energy per member / year</span>
+                                        <span class="results__summary-value">
+                                            {{ pkg.energy_cost_member | trim_zeros(2) }} €
+                                        </span>
+                                    </div>
+                                    <div class="results__summary-item">
+                                        <span class="results__summary-label">Energy total / year</span>
+                                        <span class="results__summary-value">
+                                            {{ pkg.energy_cost_total | trim_zeros(2) }} €
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </article>
+                        {% endfor %}
+                    {% else %}
+                        <p class="results__empty">
+                            No results available. Please go back to the configurator and run a new calculation.
+                        </p>
+                    {% endif %}
+
+                </div>
+            </section>
+
+            <hr class="config-section__divider">
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__icons">
+            <a href="#" class="footer__icon"><img src="{{ url_for('static', path='images/linked_icon-icons.com_66685.svg') }}" alt="LinkedIn"></a>
+            <a href="#" class="footer__icon"><img src="{{ url_for('static', path='images/snapchat_logo_icon_147235.svg') }}" alt="Snapchat"></a>
+            <a href="#" class="footer__icon"><img src="{{ url_for('static', path='images/telegram_logo_icon_186899.svg') }}" alt="Telegram"></a>
+            <a href="#" class="footer__icon"><img src="{{ url_for('static', path='images/1491579602-yumminkysocialmedia36_83067 1.svg') }}" alt="Instagram"></a>
+        </div>
+
+        <div class="footer__links">
+            <a href="#">Home</a>
+            <a href="#">Our Team</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Features</a>
+        </div>
+
+        <div class="footer__contact">
+            <p>📞 Phone: <span>+49 170 1234567</span></p>
+            <p>📧 Email: <span>service@deinefirma.de</span></p>
+            <p>🕒 Service Hours: Mo–Fr 09:00–18:00</p>
+        </div>
+    </footer>
+
+</div>
 </body>
 </html>
