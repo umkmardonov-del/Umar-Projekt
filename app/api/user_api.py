@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import postgres_dep
 from app.pydantic_models.user_models import CalculatorIn, CalculatorOut
-from app.service.user_service import calculate_prices_service
+from app.service.user_service import calculate_results_service
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter(prefix="/user",tags=["user"])
@@ -24,19 +24,19 @@ async def get_user_specifications(request: Request,
                                   included_software: str = Form(...),
                                   session: AsyncSession = Depends(postgres_dep)
                                   ) -> list[CalculatorOut]:
-    #try:
+    try:
         usage_mode = "mobile" if device_type.lower() == "laptop" else "stationary"
 
         payload = CalculatorIn(department=department, team_members=team_members, usage_mode=usage_mode,
                                os=operating_system, included_software=included_software)
 
-        dto = await calculate_prices_service(session, payload=payload)
+        dto = await calculate_results_service(session, payload=payload)
 
         return dto
 
-    #except ValueError:
+    except ValueError:
         raise HTTPException(status_code=404, detail="Not Found")
-    # Exception:
+    except Exception:
         raise HTTPException(status_code=503, detail="Service Unavailable")
 
 
