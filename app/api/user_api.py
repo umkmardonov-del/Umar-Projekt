@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Form, Request, HTTPException
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,11 +13,12 @@ from app.pydantic_models.user_models import CalculatorIn, CalculatorOut
 from app.service.user_service import calculate_results_service
 
 templates = Jinja2Templates(directory="templates")
+
 router = APIRouter(prefix="/user",tags=["user"])
 
 
-@router.post("/calculator", response_model=list[CalculatorOut], response_model_exclude_none=True,
-             summary="Anforderungen von Website erhalten.")
+@router.post("/calculator", response_class=HTMLResponse, response_model=list[CalculatorOut],
+             response_model_exclude_none=True, summary="Anforderungen von Website erhalten.")
 async def get_user_specifications(request: Request,
                                   department: str = Form(...),
                                   team_members: int = Form(...),
@@ -24,7 +26,7 @@ async def get_user_specifications(request: Request,
                                   operating_system: str = Form(...),
                                   included_software: str = Form(...),
                                   session: AsyncSession = Depends(postgres_dep)
-                                  ) -> list[CalculatorOut]:
+                                  ):
     try:
         usage_mode = "mobile" if device_type.lower() == "laptop" else "stationary"
 
@@ -33,7 +35,9 @@ async def get_user_specifications(request: Request,
 
         dto = await calculate_results_service(session, payload=payload)
 
-        return dto
+        return templates.TemplateResponse("results.html",
+                                          {"request": request,
+                                           "dto": dto})
 
     except ValueError:
         raise HTTPException(status_code=404, detail="Not Found")
@@ -41,8 +45,24 @@ async def get_user_specifications(request: Request,
         raise HTTPException(status_code=503, detail="Service Unavailable")
 
 
-
-
 @router.get("/home", summary="Landing Page")
 async def home_api(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+# ------- Helper -------
+
+def trim_zeros(value, decimals: int | None = None) -> str:
+    if value is None:
+        return ""
+    if decimals is not None:
+        fmt = f"{{:.{decimals}f}}"
+        s = fmt.format(float(value))
+    else:
+        s = str(value)
+
+    if "." in s:
+        s = s.rstrip("0").rstrip(".")
+    return s
+
+templates.env.filters["trim_zeros"] = trim_zeros

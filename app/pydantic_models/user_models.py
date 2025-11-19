@@ -43,7 +43,7 @@ DepartmentString = Annotated[str, StringConstraints(min_length=1, max_length=100
 ProductString = Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True),
                                Field(..., description="Name des Produkts.")]
 
-PriceString = Annotated[Decimal, Field(..., ge=0, max_digits=7, decimal_places=2,
+PriceString = Annotated[Decimal, Field(..., ge=0, max_digits=9, decimal_places=2,
                                        description="Preis des Produkts.",
                                        examples=["42,56", "100", "567.87"])]
 
@@ -60,12 +60,8 @@ class CalculatorOut(BaseModel):
 
     hardware_cost_member: PriceString
     hardware_cost_total: PriceString
-    energy_cost_member: Decimal = Field(..., ge=0, max_digits=7, decimal_places=3,
-                                       description="Energieverbrauch des Produkts.",
-                                       examples=["42,56", "100", "567.87"])
-    energy_cost_total: Decimal = Field(..., ge=0, max_digits=7, decimal_places=3,
-                                       description="Energieverbrauch des Produkts.",
-                                       examples=["42,56", "100", "567.87"])
+    energy_cost_member: PriceString
+    energy_cost_total: PriceString
 
     model_config = ConfigDict(extra="forbid", from_attributes=True)
 

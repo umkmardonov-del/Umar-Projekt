@@ -4,174 +4,201 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+
     <title>Atec Systems</title>
 </head>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
 
-        <header class="header">
+    <!-- Header -->
+    <header class="header">
 
-            <div class="header__top">
-                <div class="container">
-                    <div class="header__top-inner">
+        <div class="header__top">
+            <div class="container">
+                <div class="header__top-inner">
 
-                        <div class="header__logo logo">
-                            <img src="images/logo.svg" alt="Logo">
-                        </div>
-
-                        <nav class="header__nav">
-                            <ul class="header__nav-list">
-                                <li class="header__nav-item"><a class="header__nav-link" href="#">Home</a></li>
-                                <li class="header__nav-item"><a class="header__nav-link" href="#">About</a></li>
-                                <li class="header__nav-item"><a class="header__nav-link" href="#">Services</a></li>
-                                <li class="header__nav-item"><a class="header__nav-link" href="#">Contact</a></li>
-                            </ul>
-                        </nav>
-
+                    <div class="header__logo logo">
+                        <img src="{{ url_for('static', path='images/logo.svg') }}" alt="Logo">
                     </div>
+
+                    <nav class="header__nav">
+                        <ul class="header__nav-list">
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">Home</a></li>
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">About</a></li>
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">Services</a></li>
+                            <li class="header__nav-item"><a class="header__nav-link" href="#">Contact</a></li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
+        </div>
 
-            
-            <div class="header__body">
-                <div class="container">
-                    <div class="header__body-inner">
+        <div class="header__body">
+            <div class="container">
+                <div class="header__body-inner">
 
-                        <div class="header__content">
+                    <div class="header__content">
 
-                            
-                            <div class="header__text">
-                                <h1 class="header__title">
-                                    Smart IT Cost <br>
-                                    Management Tool
-                                </h1>
+                        <div class="header__text">
+                            <h1 class="header__title">
+                                Smart IT Cost <br>
+                                Management Tool
+                            </h1>
 
-                                <div class="header__button-wrapper">
-                                    <a class="header__anchor" href=".config-section">
-                                        <button class="header__button">Try it!</button>
-                                    </a>
-                                </div>
+                            <div class="header__button-wrapper">
+                                <a class="header__anchor" href="#config-section">
+                                    <button class="header__button" type="button">Try it!</button>
+                                </a>
                             </div>
+                        </div>
 
-                            
-                            <div class="header__image">
-                                <img src="images/calculator (1) 1.svg" alt="main illustration">
-                            </div>
-
+                        <div class="header__image">
+                            <img src="{{ url_for('static', path='images/main.svg') }}" alt="main illustration">
                         </div>
 
                     </div>
+
                 </div>
             </div>
+        </div>
 
-        </header>
+    </header>
 
+    <!-- Config-Intro -->
+    <section class="config-section" id="config-section">
+        <div class="container config-section__inner">
 
-        <section class="config-section">
-            <div class="container config-section__inner">
+            <h2 class="config-section__title">System Configuration</h2>
+            <p class="config-section__subtitle">How does it work?</p>
 
-                <h2 class="config-section__title">System Configuration</h2>
-                <p class="config-section__subtitle">How it works?</p>
+            <p class="config-section__text">
+                To start, please enter any details and system information into the fields below. <br>
+                Select the department (e.g. Software Development), number of team members, <br>
+                device types (laptops or PCs), and operating system. <br>
+                You can save your configuration and load it anytime to review or update your setup.
+            </p>
 
-                <p class="config-section__text">
-                    Please enter all department details and system information into the fields below. <br>
-                    Select the department (e.g. Software Development), number of team members, <br>
-                    device types (laptops or PCs), and operating system. <br>
-                    You can save your configuration and load it anytime to review or update your setup.
-                </p>
+            <div class="config-section__buttons">
+                <button class="config-section__button" type="button">Load configuration</button>
+                <button class="config-section__button" type="button">Save configuration</button>
+                <button class="config-section__button" type="button">Reset</button>
+            </div>
 
-                <div class="config-section__buttons">
-                    <button class="config-section__button">Load configuration</button>
-                    <button class="config-section__button">Save configuration</button>
-                    <button class="config-section__button">Reset</button>
+            <hr class="config-section__divider">
+
+        </div>
+    </section>
+
+    <!-- Calculator -->
+    <section class="calculator">
+        <div class="container calculator__inner">
+
+            <h2 class="calculator__title">System Configurator</h2>
+
+            <form class="calculator__form"
+                  method="post"
+                  action="/user/calculator">
+
+                <!-- Department -->
+                <div class="calculator__field">
+                    <label class="calculator__label" for="department">Department</label>
+                    <select class="calculator__select" id="department" name="department">
+                        <option value="IT">Information Technology</option>
+                        <option value="Corporate">Corporate</option>
+                        <option value="HR">Human Resources</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
                 </div>
 
-                <hr class="config-section__divider">
-
-            </div>
-        </section>
-
-<section class="calculator">
-    <div class="container calculator__inner">
-
-        <h2 class="calculator__title">System Configurator</h2>
-
-        <!-- Formular: schickt die Daten per POST an dein FastAPI-Backend -->
-        <form class="calculator__form"
-              method="post"
-              action="/user/calculator">
-
-            <!-- Department -->
-            <div class="calculator__field">
-                <label class="calculator__label" for="department">Department</label>
-                <select class="calculator__select" id="department" name="department">
-                    <option value="IT">Information Technology</option>
-                    <option value="Corporate">Corporate</option>
-                    <option value="HR">Human Resources</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Marketing">Marketing</option>
-                </select>
-            </div>
-
-            <!-- Team Members -->
-            <div class="calculator__field">
-                <label class="calculator__label">Team Members</label>
-
-                <div class="calculator__counter">
-                    <button class="calculator__counter-btn calculator__counter-btn--minus" type="button">-</button>
-                    <span class="calculator__counter-value">0</span>
-                    <button class="calculator__counter-btn calculator__counter-btn--plus" type="button">+</button>
+                <!-- Team Members -->
+                <div class="calculator__field">
+                    <label class="calculator__label" for="team_members">Team Members</label>
+                    <input
+                        id="team_members"
+                        name="team_members"
+                        type="number"
+                        class="calculator__input"
+                        value="10"
+                        min="1"
+                        step="1"
+                    >
                 </div>
 
-                <!-- verstecktes Feld, das tatsächlich gesendet wird -->
-                <input type="hidden"
-                       name="team_members"
-                       class="calculator__team-members-input"
-                       value="10">
-            </div>
+                <!-- Device Type -->
+                <div class="calculator__field">
+                    <label class="calculator__label" for="device_type">Device Type</label>
+                    <select class="calculator__select" id="device_type" name="device_type">
+                        <option value="Laptop">Laptop</option>
+                        <option value="Desktop PC">Desktop PC</option>
+                    </select>
+                </div>
 
-            <!-- Device Type -->
-            <div class="calculator__field">
-                <label class="calculator__label" for="device_type">Device Type</label>
-                <select class="calculator__select" id="device_type" name="device_type">
-                    <option value="Laptop">Laptop</option>
-                    <option value="Desktop PC">Desktop PC</option>
-                </select>
-            </div>
+                <!-- Operating System -->
+                <div class="calculator__field">
+                    <label class="calculator__label" for="operating_system">Operating System</label>
+                    <select class="calculator__select" id="operating_system" name="operating_system">
+                        <option value="Windows 11">Windows 11</option>
+                        <option value="Linux">Linux</option>
+                    </select>
+                </div>
 
-            <!-- Operating System -->
-            <div class="calculator__field">
-                <label class="calculator__label" for="operating_system">Operating System</label>
-                <select class="calculator__select" id="operating_system" name="operating_system">
-                    <option value="Windows 11">Windows 11</option>
-                    <option value="Linux">Linux</option>
-                </select>
-            </div>
+                <!-- Included Software -->
+                <div class="calculator__field">
+                    <label class="calculator__label" for="included_software">Included Software</label>
+                    <select class="calculator__select" id="included_software" name="included_software">
+                        <option value="Office 365">Office 365</option>
+                        <option value="Adobe Suite">Adobe Suite</option>
+                        <option value="Developer Tools">Developer Tools</option>
+                        <option value="No Extras">No Extras</option>
+                    </select>
+                </div>
 
-            <!-- Included Software -->
-            <div class="calculator__field">
-                <label class="calculator__label" for="included_software">Included Software</label>
-                <select class="calculator__select" id="included_software" name="included_software">
-                    <option value="Office 365">Office 365</option>
-                    <option value="Adobe Suite">Adobe Suite</option>
-                    <option value="Developer Tools">Developer Tools</option>
-                    <option value="No Extras">No Extras</option>
-                </select>
-            </div>
+                <div class="calculator__button-wrapper">
+                    <button class="calculator__button" type="submit">Calculate</button>
+                </div>
 
-            <div class="calculator__button-wrapper">
-                <button class="calculator__button" type="submit">Calculate</button>
-            </div>
+            </form>
 
-        </form>
+        </div>
+    </section>
 
-    </div>
-</section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__icons">
+            <a href="#" class="footer__icon">
+                <img src="{{ url_for('static', path='images/linkedin_logo.svg') }}" alt="LinkedIn">
+            </a>
+            <a href="#" class="footer__icon">
+                <img src="{{ url_for('static', path='images/snapchat_logo.svg') }}" alt="Snapchat">
+            </a>
+            <a href="#" class="footer__icon">
+                <img src="{{ url_for('static', path='images/telegram_logo.svg') }}" alt="Telegram">
+            </a>
+            <a href="#" class="footer__icon">
+                <img src="{{ url_for('static', path='images/instagram_logo.svg') }}" alt="Instagram">
+            </a>
+        </div>
 
+        <div class="footer__links">
+            <a href="#">Home</a>
+            <a href="#">Our Team</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Features</a>
+        </div>
 
-    </div>
+        <div class="footer__contact">
+            <p>📞 Phone: <span>+49 170 1234567</span></p>
+            <p>📧 Email: <span>service@deinefirma.de</span></p>
+            <p>🕒 Service Hours: Mo–Fr 09:00–18:00</p>
+        </div>
+    </footer>
+
+</div>
 </body>
 </html>

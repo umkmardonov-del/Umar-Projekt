@@ -95,8 +95,8 @@ async def calculate_results_service(session: AsyncSession, *, payload: Calculato
 
         hardware_cost_member_rounded = hardware_cost_per_seat.quantize(Decimal("0.01"))
         hardware_cost_total_rounded = hardware_cost_total.quantize(Decimal("0.01"))
-        energy_cost_member_rounded = energy_cost_per_seat.quantize(Decimal("0.001"))
-        energy_cost_total_rounded = energy_cost_total.quantize(Decimal("0.001"))
+        energy_cost_member_rounded = energy_cost_per_seat.quantize(Decimal("0.01"))
+        energy_cost_total_rounded = energy_cost_total.quantize(Decimal("0.01"))
 
         # 7) Output-DTO für dieses Paket bauen
         results.append(
