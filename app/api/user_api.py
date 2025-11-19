@@ -15,7 +15,8 @@ templates = Jinja2Templates(directory="templates")
 router = APIRouter(prefix="/user",tags=["user"])
 
 
-@router.post("/calculator", response_model=list[CalculatorOut], summary="Anforderungen von Website erhalten.")
+@router.post("/calculator", response_model=list[CalculatorOut], response_model_exclude_none=True,
+             summary="Anforderungen von Website erhalten.")
 async def get_user_specifications(request: Request,
                                   department: str = Form(...),
                                   team_members: int = Form(...),
