@@ -3,39 +3,72 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, RootModel, Field, ConfigDict, StringConstraints, StrictInt, StrictBool, field_validator
+from decimal import Decimal
+from enum import Enum
+from pydantic import BaseModel, Field, ConfigDict, StringConstraints, PositiveInt
 from typing import Annotated
 
 
-# --- Eingabeschema für Info-Sammel-Seite ---
+# --- Enum(s) ---
 
-DepartmentList = Annotated[str, StringConstraints(min_length=1, max_length=64, strip_whitespace=True)]
+class Tier(str, Enum):
+    basic = "basic"
+    premium = "premium"
+    ultra = "ultra"
 
-class InformationContents(BaseModel):
-    department: DepartmentList = Field(...,
-                            description="Name der Abteilung, mindestens 1 und höchstens 64 Zeichen.",
-                            examples=["HR", "IT", "Geschäftsführung"])
-    member_count: StrictInt = Field(...,
-                                    ge=0,
-                                    description="Anzahl Mitglieder in einer Abteilung als int.",
-                                    examples=[1, 23, 100])
-    mobile: StrictBool = Field(...,
-                         description="Ist mobile oder stationäre Ausstattung gesucht?",
-                         examples=[True, False])
 
-    @field_validator("department")
-    @classmethod
-    def _no_empty_department(cls, validate: str):
-        if not validate.strip():
-            return ValueError("Feld 'Abteilung' darf nicht leer sein.")
-        return validate
+class UsageMode(str, Enum):
+    mobile = "mobile"
+    stationary = "stationary"
+
+
+# --- Eingabeschema für Calculator ---
+
+class CalculatorIn(BaseModel):
+    department: str = Field(...,)
+    team_members: PositiveInt = Field(...,)
+    usage_mode: str = Field(...,
+                                  description="'mobile' oder 'stationary'")
+    os: str = Field(...,)
+    included_software: str = Field(...,)
 
     model_config = ConfigDict(extra="forbid")
 
 
-class InformationIn(RootModel[list[InformationContents]]):
-    pass
+# --- Ausgabeschema für Calculator ---
+
+DepartmentString = Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+                                  Field(..., description="Einmalig vergebbarer Name der Abteilung, höchstens 100 Zeichen.")]
+
+ProductString = Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True),
+                               Field(..., description="Name des Produkts.")]
+
+PriceString = Annotated[Decimal, Field(..., ge=0, max_digits=7, decimal_places=2,
+                                       description="Preis des Produkts.",
+                                       examples=["42,56", "100", "567.87"])]
 
 
-# --- Eingabeschema für Spezifikationen ---
+class CalculatorOut(BaseModel):
+    department_name: DepartmentString
+    tier: Tier = Field(...)
+    usage_mode: UsageMode = Field(...)
+    items: list[CalculatorItemOut] = Field()
 
+    members: PositiveInt = Field(...)
+    os: str = Field(...)
+    include_software: str = Field(...)
+
+    hardware_cost_member: PriceString
+    hardware_cost_total: PriceString
+    energy_cost_member: PriceString
+    energy_cost_total: PriceString
+
+    model_config = ConfigDict(extra="forbid", from_attributes=True)
+
+
+class CalculatorItemOut(BaseModel):
+    product_name: ProductString
+    price: PriceString
+    power_usage: Decimal = Field(...)
+
+    model_config = ConfigDict(extra="forbid", from_attributes=True)
