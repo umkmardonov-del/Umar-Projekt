@@ -94,67 +94,79 @@
             </div>
         </section>
 
-       <section class="calculator">
+<section class="calculator">
     <div class="container calculator__inner">
 
         <h2 class="calculator__title">System Configurator</h2>
 
-        <div class="calculator__form">
+        <!-- Formular: schickt die Daten per POST an dein FastAPI-Backend -->
+        <form class="calculator__form"
+              method="post"
+              action="/user/calculator">
 
-            
+            <!-- Department -->
             <div class="calculator__field">
-                <label class="calculator__label">Department</label>
-                <select class="calculator__select">
-                    <option>Software Development</option>
-                    <option>IT Support</option>
-                    <option>Human Resources</option>
-                    <option>Finance</option>
+                <label class="calculator__label" for="department">Department</label>
+                <select class="calculator__select" id="department" name="department">
+                    <option value="IT">Information Technology</option>
+                    <option value="Corporate">Corporate</option>
+                    <option value="HR">Human Resources</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
                 </select>
             </div>
-           
+
+            <!-- Team Members -->
             <div class="calculator__field">
                 <label class="calculator__label">Team Members</label>
 
                 <div class="calculator__counter">
-                    <button class="calculator__counter-btn calculator__counter-btn--minus">-</button>
+                    <button class="calculator__counter-btn calculator__counter-btn--minus" type="button">-</button>
                     <span class="calculator__counter-value">0</span>
-                    <button class="calculator__counter-btn calculator__counter-btn--plus">+</button>
+                    <button class="calculator__counter-btn calculator__counter-btn--plus" type="button">+</button>
                 </div>
+
+                <!-- verstecktes Feld, das tatsächlich gesendet wird -->
+                <input type="hidden"
+                       name="team_members"
+                       class="calculator__team-members-input"
+                       value="10">
             </div>
 
-            
+            <!-- Device Type -->
             <div class="calculator__field">
-                <label class="calculator__label">Device Type</label>
-                <select class="calculator__select">
-                    <option>Laptop</option>
-                    <option>Desktop PC</option>
+                <label class="calculator__label" for="device_type">Device Type</label>
+                <select class="calculator__select" id="device_type" name="device_type">
+                    <option value="Laptop">Laptop</option>
+                    <option value="Desktop PC">Desktop PC</option>
                 </select>
             </div>
 
-            
+            <!-- Operating System -->
             <div class="calculator__field">
-                <label class="calculator__label">Operating System</label>
-                <select class="calculator__select">
-                    <option>Windows 11</option>
-                    <option>Linux</option>
+                <label class="calculator__label" for="operating_system">Operating System</label>
+                <select class="calculator__select" id="operating_system" name="operating_system">
+                    <option value="Windows 11">Windows 11</option>
+                    <option value="Linux">Linux</option>
                 </select>
             </div>
 
+            <!-- Included Software -->
             <div class="calculator__field">
-                <label class="calculator__label">Included Software</label>
-                <select class="calculator__select">
-                    <option>Office 365</option>
-                    <option>Adobe Suite</option>
-                    <option>Developer Tools</option>
-                    <option>No Extras</option>
+                <label class="calculator__label" for="included_software">Included Software</label>
+                <select class="calculator__select" id="included_software" name="included_software">
+                    <option value="Office 365">Office 365</option>
+                    <option value="Adobe Suite">Adobe Suite</option>
+                    <option value="Developer Tools">Developer Tools</option>
+                    <option value="No Extras">No Extras</option>
                 </select>
             </div>
 
             <div class="calculator__button-wrapper">
-                <button class="calculator__button">Calculate</button>
+                <button class="calculator__button" type="submit">Calculate</button>
             </div>
 
-        </div>
+        </form>
 
     </div>
 </section>
