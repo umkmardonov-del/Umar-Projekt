@@ -13,6 +13,9 @@
     <title>Results – Atec Systems</title>
 </head>
 <body>
+
+<div id="particles-js"></div>
+
 <div class="wrapper">
 
     <!-- Header -->
@@ -83,7 +86,7 @@
                                 <header class="results__card-header">
                                     <div>
                                         <h2 class="results__card-title">
-                                            {{ pkg.department_name }} – {{ pkg.tier|upper }} ({{ "Stationary Setup" if pkg.usage_mode == "stationary" else "Mobile Setup" }})
+                                            {{ pkg.department_name }} – {{ pkg.tier|upper }} ({{ "PC Setup" if pkg.usage_mode == "stationary" else "Mobile Setup" }})
                                         </h2>
                                         <p class="results__card-subtitle">
                                             {{ pkg.members }} seats • {{ pkg.os }} • {{ pkg.include_software }}
@@ -209,5 +212,10 @@
     </footer>
 
 </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script src="{{ url_for('static', path='js/particles-config.js') }}"></script>
+    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+
 </body>
 </html>

@@ -12,6 +12,10 @@
     <title>Atec Systems</title>
 </head>
 <body>
+
+<!-- Particles über die ganze Seite -->
+<div id="particles-js"></div>
+
 <div class="wrapper">
 
     <!-- Header -->
@@ -51,8 +55,10 @@
                             </h1>
 
                             <div class="header__button-wrapper">
-                                <a class="header__anchor" href="#config-section">
-                                    <button class="header__button" type="button">Try it!</button>
+                                <a class="header__anchor" href="#configSection">
+                                    <button class="header__button" type="button" id="tryBtn">
+                                        Try it!
+                                    </button>
                                 </a>
                             </div>
                         </div>
@@ -70,7 +76,7 @@
     </header>
 
     <!-- Config-Intro -->
-    <section class="config-section" id="config-section">
+    <section id="configSection">
         <div class="container config-section__inner">
 
             <h2 class="config-section__title">System Configuration</h2>
@@ -95,7 +101,7 @@
     </section>
 
     <!-- Calculator -->
-    <section class="calculator">
+    <section id="calculator">
         <div class="container calculator__inner">
 
             <h2 class="calculator__title">System Configurator</h2>
@@ -200,5 +206,11 @@
     </footer>
 
 </div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+<script src="{{ url_for('static', path='js/particles-config.js') }}"></script>
+<script src="{{ url_for('static', path='js/main.js') }}"></script>
+
 </body>
 </html>
