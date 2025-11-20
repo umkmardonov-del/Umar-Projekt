@@ -6,6 +6,7 @@ services:
       - "127.0.0.1:55432:5432"
     volumes:
       - pg_data:/var/lib/postgresql
+      - ./db/backup.sql:/docker-entrypoint-initdb.d/backup_20_11_25.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
