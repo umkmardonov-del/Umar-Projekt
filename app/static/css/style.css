@@ -1,15 +1,21 @@
+/* -------------------------------
+   Grundlegendes
+----------------------------------*/
 html, body {
     margin: 0;
     padding: 0;
     background-color: black;
     color: #ffffff;
     font-family: "Itim", sans-serif;
+    height: 100%;
 }
 
 .wrapper {
     min-height: 100%;
     width: 100%;
     overflow: hidden;
+    position: relative;
+    z-index: 1; /* Damit der Content über Particles liegt */
 }
 
 .container {
@@ -18,10 +24,27 @@ html, body {
     margin: 0 auto;
 }
 
-.header {
-    margin-top: 56px;
+/* -------------------------------
+   Particles Hintergrund
+----------------------------------*/
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Hintergrund */
+    background-color: black;
 }
 
+/* -------------------------------
+   Header
+----------------------------------*/
+.header {
+    margin-top: 120px;
+}
+
+/* Top-Leiste mit Logo + Navigation */
 .header__top-inner {
     display: flex;
     justify-content: space-between;
@@ -59,32 +82,34 @@ html, body {
     color: #35d1d1;
 }
 
+/* Body-Bereich des Headers (Text + Illustration) */
 .header__body-inner {
-    margin-top: 120px; 
+    margin-top: 120px;
 }
 
 .header__content {
-    margin-top: 120px;
-    margin-bottom: 280px;
     display: flex;
     justify-content: space-between;
-    align-items: center; 
+    align-items: center;
     gap: 60px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    margin-bottom: 100px;
 }
 
 .header__text {
-    max-width: 600px; 
-    margin-left: 40px; 
+    max-width: 600px;
+    margin-left: 40px;
 }
 
 .header__title {
-    font-size: 75px;        
-    line-height: 1.12;      
-    margin-bottom: 55px;
+    font-size: 60px;
+    line-height: 1.1;
+    margin-bottom: 40px;
 }
 
 .header__button-wrapper {
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .header__button {
@@ -94,9 +119,9 @@ html, body {
     font-size: 28px;
     padding: 16px 48px;
     border-radius: 6px;
-    font-family: inherit;
     cursor: pointer;
     transition: 0.3s;
+    font-family: inherit;
 }
 
 .header__button:hover {
@@ -104,34 +129,38 @@ html, body {
 }
 
 .header__image img {
-    margin-right: 50px;
     width: 338px;
     height: 338px;
+    margin-right: 50px;
 }
 
 /* -------------------------------
-   Config + Calculator nebeneinander
+   Container für Config + Calculator
 ----------------------------------*/
 .div_container1 {
     display: flex;
-    gap: 50px; /* vorher: 20px */
+    gap: 50px;
     max-width: 1300px;
-    margin: 60px auto 0;
+    margin: 0 auto 60px;
     flex-wrap: wrap;
-}
-
-.config-section,
-.calculator {
-    flex: 1 1 640px;
-    box-sizing: border-box;
-    padding: 40px 50px; /* vorher: 20px */
-    background-color: #111;
-    border-radius: 14px;
+    z-index: 1;
+    position: relative;
 }
 
 /* -------------------------------
    Config Section
 ----------------------------------*/
+.config-section,
+.calculator {
+    flex: 1 1 640px;
+    box-sizing: border-box;
+    padding: 40px 50px;
+    background-color: #111;
+    border-radius: 14px;
+    z-index: 1;
+    position: relative;
+}
+
 .config-section__inner {
     display: flex;
     flex-direction: column;
@@ -185,10 +214,9 @@ html, body {
     background: #444;
 }
 
-/* -----------------------------------
+/* -------------------------------
    Calculator Section
------------------------------------ */
-
+----------------------------------*/
 .calculator__title {
     font-size: 45px;
     margin-bottom: 40px;
@@ -248,28 +276,32 @@ html, body {
     opacity: 0.85;
 }
 
-#calculator {
+/* -------------------------------
+   Fade-In Animation für Sektionen
+----------------------------------*/
+#calculator,
+#configSection {
     opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-#calculator.show {
+#calculator.show,
+#configSection.show {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* -----------------------------------
-   Footer Section
------------------------------------ */
-
+/* -------------------------------
+   Footer
+----------------------------------*/
 .footer {
-    margin-top: 160px;
-    width: 100%;
+    margin-top: 100px;
     padding: 50px 0;
-    background: black;
-    color: white;
+    background: rgba(0, 0, 0, 0.7);
     text-align: center;
+    z-index: 0;
+    position: relative;
 }
 
 .footer__icons {
@@ -280,8 +312,8 @@ html, body {
 }
 
 .footer__icon img {
-    width: 80px;
-    height: 80px;
+    width: 40px;  /* vorher 80px */
+    height: 40px; /* vorher 80px */
     transition: 0.3s;
 }
 
