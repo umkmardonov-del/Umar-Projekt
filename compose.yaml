@@ -16,13 +16,27 @@ services:
       retries: 5
 
   server:
+    env_file: ".env.docker"
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /app/app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - "**/.pytest_cache/**"
+            - "**/.venv/**"
+            - "**/node_modules/**"
+        - action: rebuild
+          path: ./pyproject.toml
+        - action: rebuild
+          path: ./requirements.txt
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     build:
       context: .
       dockerfile: Dockerfile
     container_name: bs14_server
-    env_file:
-      - .env.docker
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
