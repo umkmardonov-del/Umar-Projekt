@@ -20,7 +20,6 @@ services:
         - action: sync
           path: ./app
           target: /app/app
-          initial_sync: true
           ignore:
             - __pycache__/
             - "*.pyc"
