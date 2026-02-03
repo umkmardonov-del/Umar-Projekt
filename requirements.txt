@@ -1,8 +1,11 @@
-# --- Datenbank ---
+# --- PostgreSQL Datenbank ---
 alembic>=1.17.1
 
 sqlalchemy>=2.0.44
 asyncpg>=0.30.0
+
+# --- Redis Datenbank ---
+redis[hiredis]>=7.1.0
 
 # --- APP ---
 fastapi[standard]>=0.121.1
