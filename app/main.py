@@ -15,15 +15,13 @@ from app.core.settings import settings
 
 BASE_DIR = Path(__file__).resolve().parent
 
-app = FastAPI(
-    debug=True,
-    title=settings.APP_NAME,
-    version="1.0.0",
-    openapi_url=f"{settings.API_PREFIX}/openapi.json",
-    docs_url=f"{settings.API_PREFIX}/docs",
-    redoc_url=f"{settings.API_PREFIX}/redoc",
-    lifespan=lifespan
-)
+app = FastAPI(debug=True,
+              title=settings.APP_NAME,
+              version="1.0.0",
+              openapi_url=f"{settings.API_PREFIX}/openapi.json",
+              docs_url=f"{settings.API_PREFIX}/docs",
+              redoc_url=f"{settings.API_PREFIX}/redoc",
+              lifespan=lifespan)
 
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
