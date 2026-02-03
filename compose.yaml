@@ -1,7 +1,9 @@
 services:
   postgres:
-    env_file: ".env.docker"
     image: postgres:18
+    container_name: bs14_postgres
+    env_file:
+      - .env.docker
     ports:
       - "127.0.0.1:55432:5432"
     volumes:
