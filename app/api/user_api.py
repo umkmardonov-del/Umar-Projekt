@@ -29,7 +29,7 @@ async def get_user_specifications(request: Request,
                                   operating_system: str = Form(...),
                                   included_software: str = Form(...),
                                   session: AsyncSession = Depends(postgres_dep)
-                                  ):
+                                  ) -> HTMLResponse:
     try:
         usage_mode = "mobile" if device_type.lower() == "laptop" else "stationary"
 
@@ -49,7 +49,7 @@ async def get_user_specifications(request: Request,
 
 
 @router.get("/home", summary="Landing Page")
-async def home_api(request: Request):
+async def home_api(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("index.html", {"request": request})
 
 
