@@ -53,7 +53,7 @@ async def home_api(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-# ------- Helper -------
+# ------- Template helper -------
 
 def trim_zeros(value, decimals: int | None = None) -> str:
     if value is None:

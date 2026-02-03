@@ -1,12 +1,14 @@
 services:
   postgres:
-    env_file: ".env.docker"
     image: postgres:18
+    container_name: bs14_postgres
+    env_file:
+      - .env.docker
     ports:
       - "127.0.0.1:55432:5432"
     volumes:
       - pg_data:/var/lib/postgresql
-      - ./db/backup.sql:/docker-entrypoint-initdb.d/backup_20_11_25.sql
+      - ./db/backup/backup.sql:/docker-entrypoint-initdb.d/backup_20_11_25.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
@@ -20,7 +22,6 @@ services:
         - action: sync
           path: ./app
           target: /app/app
-          initial_sync: true
           ignore:
             - __pycache__/
             - "*.pyc"

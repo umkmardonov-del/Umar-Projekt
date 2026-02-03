@@ -1,5 +1,5 @@
 # --- Main Datei zum Ausführen des Programmes ---
-# --- path: /app/main.py
+# --- path: /app/main.py ---
 
 from __future__ import annotations
 
@@ -13,16 +13,17 @@ from app.api.user_api import router as user_router
 from app.core.lifespan import lifespan
 from app.core.settings import settings
 
-
 BASE_DIR = Path(__file__).resolve().parent
 
-app = FastAPI(debug=True,
-              title=settings.APP_NAME,
-              version="1.0.0",
-              openapi_url=f"{settings.API_PREFIX}/openapi.json",
-              docs_url=f"{settings.API_PREFIX}/docs",
-              redoc_url=f"{settings.API_PREFIX}/redoc",
-              lifespan=lifespan)
+app = FastAPI(
+    debug=True,
+    title=settings.APP_NAME,
+    version="1.0.0",
+    openapi_url=f"{settings.API_PREFIX}/openapi.json",
+    docs_url=f"{settings.API_PREFIX}/docs",
+    redoc_url=f"{settings.API_PREFIX}/redoc",
+    lifespan=lifespan
+)
 
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
