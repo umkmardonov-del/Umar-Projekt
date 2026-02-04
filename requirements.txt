@@ -7,6 +7,9 @@ asyncpg>=0.30.0
 # --- Redis Datenbank ---
 redis[hiredis]>=7.1.0
 
+# --- Sicherheit ---
+argon2-cffi>=25.1.0
+
 # --- APP ---
 fastapi[standard]>=0.121.1
 pydantic>=2.12.4
