@@ -1,5 +1,5 @@
 # --- ORM-Models für SQLAlchemy bzw. Alembic ---
-# --- path: /app/db/orm_models.py ---
+# --- path: /app/db/products.py ---
 
 from __future__ import annotations
 
@@ -24,8 +24,8 @@ class Product(Base):
     __tablename__ = "products"
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True),
-                                              primary_key=True,
-                                              default=uuid4)
+                                            primary_key=True,
+                                            default=uuid4)
     name: Mapped[str] = mapped_column(String(200),
                                       nullable=False)
     price: Mapped[Decimal]  = mapped_column(Numeric(7,2),
