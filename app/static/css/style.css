@@ -1,466 +1,189 @@
-/* -------------------------------
-   Grundlegendes
-----------------------------------*/
-html, body {
-    margin: 0;
-    padding: 0;
-    background-color: black;
-    color: #ffffff;
-    font-family: "Itim", sans-serif;
-    height: 100%;
+:root {
+  --bg: #050505;
+  --panel: #0e0e0e;
+  --text: #ffffff;
+  --muted: #9aa0a6;
+  --accent: #35d1d1;
 }
 
-.wrapper {
-    min-height: 100%;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    z-index: 1; /* Damit der Content über Particles liegt */
+.light {
+  --bg: #f5f7fa;
+  --panel: #ffffff;
+  --text: #111;
+  --muted: #555;
 }
 
-.container {
-    max-width: 1290px;
-    padding: 0 15px;
-    margin: 0 auto;
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* -------------------------------
-   Particles Hintergrund
-----------------------------------*/
 #particles-js {
-    position: fixed;
-    top: 0;
-    left: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+}
+
+/* VIEWS */
+.view {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.view.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 32px 48px;
+}
+
+/* HERO */
+.hero {
+  margin-top: 140px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 64px;
+}
+
+.hero span {
+  background: linear-gradient(90deg, #35d1d1, #5cd3b4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.2);
+}
+
+/* AUTH */
+#auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-card {
+  background: var(--panel);
+  padding: 48px;
+  border-radius: 18px;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* DASHBOARD */
+.dashboard {
+  display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: var(--panel);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.sidebar a {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.sidebar a:hover {
+  color: var(--accent);
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  padding: 60px;
+  overflow-y: auto;
+}
+
+/* SECTIONS */
+.section {
+  display: none;
+}
+
+.section.is-active {
+  display: block;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 24px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #000;
+  color: white;
+}
+
+/* PANEL */
+.panel {
+  margin-top: 30px;
+  padding: 32px;
+  background: var(--panel);
+  border-radius: 16px;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .dashboard {
+    flex-direction: column;
+  }
+  .sidebar {
+    flex-direction: row;
     width: 100%;
-    height: 100%;
-    z-index: 0; /* Hintergrund */
-    background-color: black;
-}
-
-/* -------------------------------
-   Header
-----------------------------------*/
-.header {
-    margin-top: 120px;
-}
-
-/* Top-Leiste mit Logo + Navigation */
-.header__top-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header__nav {
-    font-size: 30px;
-}
-
-.header__nav-list {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.header__nav-item {
-    margin-right: 91px;
-}
-
-.header__nav-item:last-child {
-    margin-right: 0;
-}
-
-.header__nav-link {
-    font-size: 33px;
-    color: ghostwhite;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.header__nav-link:hover {
-    color: #35d1d1;
-}
-
-/* Body-Bereich des Headers (Text + Illustration) */
-.header__body-inner {
-    margin-top: 120px;
-}
-
-.header__content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 60px;
-    flex-wrap: wrap;
-    margin-top: 50px;
-    margin-bottom: 100px;
-}
-
-.header__text {
-    max-width: 600px;
-    margin-left: 40px;
-}
-
-.header__title {
-    font-size: 60px;
-    line-height: 1.1;
-    margin-bottom: 40px;
-}
-
-.header__button-wrapper {
-    margin-top: 20px;
-}
-
-.header__button {
-    background-color: #0A5D5D;
-    color: white;
-    border: none;
-    font-size: 28px;
-    padding: 16px 48px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-family: inherit;
-}
-
-.header__button:hover {
-    opacity: 0.8;
-}
-
-.header__image img {
-    width: 338px;
-    height: 338px;
-    margin-right: 50px;
-}
-
-/* -------------------------------
-   Container für Config + Calculator
-----------------------------------*/
-.div_container1 {
-    display: flex;
-    gap: 50px;
-    max-width: 1300px;
-    margin: 0 auto 60px;
-    flex-wrap: wrap;
-    z-index: 1;
-    position: relative;
-}
-
-/* -------------------------------
-   Config Section
-----------------------------------*/
-.config-section,
-.calculator {
-    flex: 1 1 640px;
-    box-sizing: border-box;
-    padding: 40px 50px;
-    background-color: #111;
-    border-radius: 14px;
-    z-index: 1;
-    position: relative;
-}
-
-.config-section__inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.config-section__title {
-    font-size: 50px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.config-section__subtitle {
-    font-size: 28px;
-    opacity: 0.9;
-    margin-bottom: 25px;
-}
-
-.config-section__text {
-    font-size: 22px;
-    line-height: 1.6;
-    opacity: 0.85;
-    margin-bottom: 40px;
-}
-
-.config-section__buttons {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 50px;
-}
-
-.config-section__button {
-    background-color: transparent;
-    color: white;
-    border: 1px solid #686868;
-    padding: 14px 28px;
-    font-size: 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.25s ease;
-    font-family: inherit;
-}
-
-.config-section__button:hover {
-    background-color: #222;
-}
-
-.config-section__divider {
-    border: none;
-    height: 1px;
-    background: #444;
-}
-
-/* -------------------------------
-   Calculator Section
-----------------------------------*/
-.calculator__title {
-    font-size: 45px;
-    margin-bottom: 40px;
-}
-
-.calculator__form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 80px;
-    row-gap: 45px;
-}
-
-.calculator__field {
-    display: flex;
-    flex-direction: column;
-}
-
-.calculator__label {
-    font-size: 22px;
-    margin-bottom: 16px;
-    opacity: 0.9;
-}
-
-.calculator__select,
-.calculator__input {
-    background: #111;
-    border: 1px solid #666;
-    padding: 14px;
-    border-radius: 6px;
-    font-size: 18px;
-    color: white;
-    font-family: inherit;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.calculator__input:focus,
-.calculator__select:focus {
-    border-color: #5cd3b4;
-}
-
-.calculator__button-wrapper {
-    grid-column: span 2;
-}
-
-.calculator__button {
-    background-color: #0A5D5D;
-    color: white;
-    border: none;
-    font-size: 24px;
-    padding: 16px 40px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.calculator__button:hover {
-    opacity: 0.85;
-}
-
-/* -------------------------------
-   Fade-In Animation für Sektionen
-----------------------------------*/
-#calculator,
-#configSection {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-#calculator.show,
-#configSection.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* -------------------------------
-   Footer
-----------------------------------*/
-.footer {
-    margin-top: 100px;
-    padding: 50px 0;
-    background: rgba(0, 0, 0, 0.7);
-    text-align: center;
-    z-index: 0;
-    position: relative;
-}
-
-.footer__icons {
-    display: flex;
-    justify-content: center;
-    gap: 80px;
-    margin-bottom: 30px;
-}
-
-.footer__icon img {
-    width: 40px;  /* vorher 80px */
-    height: 40px; /* vorher 80px */
-    transition: 0.3s;
-}
-
-.footer__icon img:hover {
-    transform: scale(1.1);
-    opacity: 0.8;
-}
-
-.footer__links {
-    display: flex;
-    justify-content: center;
-    gap: 120px;
-    margin-bottom: 40px;
-    font-size: 22px;
-}
-
-.footer__links a {
-    color: white;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.footer__links a:hover {
-    opacity: 0.7;
-}
-
-.footer__contact {
-    font-size: 18px;
-    opacity: 0.85;
-    line-height: 1.8;
-}
-
-/* -----------------------------------
-   Results page
------------------------------------ */
-
-.results {
-    margin-top: 30px;
-}
-
-.results__grid {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-}
-
-.results__card {
-    background-color: #111;
-    border-radius: 14px;
-    padding: 32px 40px;
-    border: 1px solid #444;
-}
-
-.results__card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.results__card-title {
-    font-size: 32px;
-    margin: 0 0 6px;
-}
-
-.results__card-subtitle {
-    font-size: 18px;
-    opacity: 0.85;
-    margin: 0;
-}
-
-.results__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px 40px;
-    margin-bottom: 20px;
-}
-
-.results__meta-item {
-    display: flex;
-    flex-direction: column;
-    min-width: 140px;
-}
-
-.results__meta-label {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    opacity: 0.7;
-    margin-bottom: 4px;
-}
-
-.results__meta-value {
-    font-size: 20px;
-}
-
-/* Tabelle im Card-Stil */
-
-.results__table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 8px;
-    margin-bottom: 20px;
-    font-size: 18px;
-}
-
-.results__table th,
-.results__table td {
-    padding: 10px 12px;
-    text-align: left;
-}
-
-.results__table thead th {
-    border-bottom: 1px solid #444;
-    font-weight: 600;
-}
-
-.results__table tbody tr:nth-child(odd) {
-    background-color: #151515;
-}
-
-/* Zusammenfassung */
-
-.results__summary {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 40px;
-    margin-top: 8px;
-}
-
-.results__summary-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-}
-
-.results__summary-label {
-    opacity: 0.8;
-}
-
-.results__summary-value {
-    font-weight: 600;
-}
-
-.results__empty {
-    font-size: 18px;
-    opacity: 0.85;
-    margin-top: 20px;
+  }
 }
