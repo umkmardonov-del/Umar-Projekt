@@ -1,0 +1,13 @@
+# --- Custom Exceptions ---
+# --- path: app/core/exceptions.py ---
+
+class AppError(Exception):
+    pass
+
+
+class DomainError(AppError):
+    pass
+
+
+class InfraError(AppError):
+    pass
