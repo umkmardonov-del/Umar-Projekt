@@ -24,12 +24,12 @@ class Product(Base):
     __tablename__ = "products"
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True),
-                                            primary_key=True,
-                                            default=uuid4)
+                                     primary_key=True,
+                                     default=uuid4)
     name: Mapped[str] = mapped_column(String(200),
                                       nullable=False)
-    price: Mapped[Decimal]  = mapped_column(Numeric(7,2),
-                                          nullable=False,)
+    price: Mapped[Decimal] = mapped_column(Numeric(7, 2),
+                                           nullable=False, )
     # Discriminator für Polymorphie (String → flexibel für neue Typen)
     product_type: Mapped[str] = mapped_column(String(50),
                                               nullable=False,
@@ -49,7 +49,7 @@ class Monitor(Product):
     __tablename__ = "monitors"
 
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
-                                          primary_key=True)
+                                     primary_key=True)
     resolution_height: Mapped[int] = mapped_column(Integer,
                                                    nullable=False)
     resolution_width: Mapped[int] = mapped_column(Integer,
@@ -58,8 +58,8 @@ class Monitor(Product):
                                          nullable=False)
     refresh_rate: Mapped[int] = mapped_column(Integer,
                                               nullable=False)
-    power_usage: Mapped[Decimal] = mapped_column(Numeric(6,3),
-                                               nullable=False)
+    power_usage: Mapped[Decimal] = mapped_column(Numeric(6, 3),
+                                                 nullable=False)
     screen_size: Mapped[int] = mapped_column(Integer,
                                              nullable=False)
     connectors: Mapped[str] = mapped_column(String(200),
@@ -86,9 +86,9 @@ class Laptop(Product):
     screen_size: Mapped[int] = mapped_column(Integer,
                                              nullable=False)
     resolution_height: Mapped[int] = mapped_column(Integer,
-                                                  nullable=False)
+                                                   nullable=False)
     resolution_width: Mapped[int] = mapped_column(Integer,
-                                            nullable=False)
+                                                  nullable=False)
     refresh_rate: Mapped[int] = mapped_column(Integer,
                                               nullable=False)
     graphics_card: Mapped[str] = mapped_column(String(100),
@@ -106,7 +106,7 @@ class Desk(Product):
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
                                      primary_key=True)
     height_adjustable: Mapped[bool] = mapped_column(Boolean,
-                                            nullable=False)
+                                                    nullable=False)
     dimensions: Mapped[str] = mapped_column(String(20),
                                             nullable=False)
     description: Mapped[str] = mapped_column(String(200),
@@ -118,7 +118,7 @@ class Desk(Product):
 class Workstation(Product):
     __tablename__ = "workstations"
 
-    id: Mapped[UUID] = mapped_column(ForeignKey("products.id",ondelete="CASCADE"),
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
                                      primary_key=True)
     processor: Mapped[str] = mapped_column(String(50),
                                            nullable=False)
@@ -130,8 +130,8 @@ class Workstation(Product):
                                                  nullable=False)
     disc_memory: Mapped[str] = mapped_column(String(50),
                                              nullable=False)
-    screen_size: Mapped[Decimal] = mapped_column(Numeric(6,3),
-                                             nullable=False)
+    screen_size: Mapped[Decimal] = mapped_column(Numeric(6, 3),
+                                                 nullable=False)
     resolution_height: Mapped[int] = mapped_column(Integer,
                                                    nullable=False)
     resolution_width: Mapped[int] = mapped_column(Integer,
@@ -150,10 +150,10 @@ class Workstation(Product):
 class Chair(Product):
     __tablename__ = "chairs"
 
-    id: Mapped[UUID] = mapped_column(ForeignKey("products.id",ondelete="CASCADE"),
+    id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
                                      primary_key=True)
     height_max: Mapped[int] = mapped_column(Integer,
-                                        nullable=False)
+                                            nullable=False)
     height_min: Mapped[int] = mapped_column(Integer,
                                             nullable=False)
     max_weight: Mapped[int] = mapped_column(Integer,
@@ -168,7 +168,7 @@ class Keyboard(Product):
     __tablename__ = "keyboards"
 
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
-                                          primary_key=True)
+                                     primary_key=True)
     connection_style: Mapped[str] = mapped_column(String(50),
                                                   nullable=False)
     layout: Mapped[str] = mapped_column(String(100),
@@ -187,7 +187,7 @@ class Mouse(Product):
     __tablename__ = "mouses"
 
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
-                                          primary_key=True)
+                                     primary_key=True)
     dpi: Mapped[int] = mapped_column(Integer,
                                      nullable=False)
     connection_style: Mapped[str] = mapped_column(String(50),
@@ -208,19 +208,19 @@ class DockingStation(Product):
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
                                      primary_key=True)
     display_port: Mapped[int] = mapped_column(Integer,
-                                    nullable=False)
+                                              nullable=False)
     hdmi: Mapped[int] = mapped_column(Integer,
-                                    nullable=False)
+                                      nullable=False)
     usb: Mapped[str] = mapped_column(String(80),
-                                    nullable=False)
+                                     nullable=False)
     usb_c: Mapped[int] = mapped_column(Integer,
                                        nullable=False)
     thunderbolt: Mapped[int] = mapped_column(Integer,
                                              nullable=False)
     ethernet: Mapped[int] = mapped_column(Integer,
-                                    nullable=False)
+                                          nullable=False)
     audio: Mapped[int] = mapped_column(Integer,
-                                    nullable=False)
+                                       nullable=False)
     power_usage: Mapped[Decimal] = mapped_column(Numeric(6, 3),
                                                  nullable=False)
 
@@ -231,7 +231,7 @@ class Webcam(Product):
     __tablename__ = "webcams"
 
     id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"),
-                                          primary_key=True)
+                                     primary_key=True)
     fps: Mapped[int] = mapped_column(Integer,
                                      nullable=False)
     resolution: Mapped[str] = mapped_column(String(30),
@@ -256,9 +256,9 @@ class Cable(Product):
     ethernet: Mapped[str] = mapped_column(String(80),
                                           nullable=False)
     usb_c: Mapped[str] = mapped_column(String(80),
-                                          nullable=False)
+                                       nullable=False)
     display_port: Mapped[str] = mapped_column(String(80),
-                                          nullable=False)
+                                              nullable=False)
 
     __mapper_args__ = {"polymorphic_identity": "cable"}
 
@@ -269,8 +269,8 @@ class Department(Base):
     __tablename__ = "departments"
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True),
-                                      primary_key=True,
-                                      default=uuid4)
+                                     primary_key=True,
+                                     default=uuid4)
     name: Mapped[str] = mapped_column(String(100),
                                       unique=True,
                                       nullable=False)
@@ -303,7 +303,7 @@ class Package(Base):
                                      primary_key=True,
                                      default=uuid4)
     department_id: Mapped[UUID] = mapped_column(ForeignKey("departments.id", ondelete="CASCADE"),
-                                              nullable=False)
+                                                nullable=False)
     tier: Mapped[Tier] = mapped_column(PGENUM(Tier, name="tier", create_type=False, validate_strings=True),
                                        nullable=False)
     usage_mode: Mapped[UsageMode] = mapped_column(PGENUM(UsageMode, name="usage_mode", create_type=False, validate_strings=True),
@@ -312,9 +312,8 @@ class Package(Base):
     department: Mapped["Department"] = relationship(back_populates="packages")
 
     # Association-Object: Items mit Zusatzfeldern (quantity)
-    items: Mapped[List["PackageItem"]] = relationship(
-        back_populates="package", cascade="all, delete-orphan"
-    )
+    items: Mapped[List["PackageItem"]] = relationship(back_populates="package",
+                                                      cascade="all, delete-orphan")
 
     # Optionaler Komfort: direkt auf die Produkte zugreifen (READ-ONLY)
     products = association_proxy("items", "product")
@@ -330,7 +329,7 @@ class PackageItem(Base):
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True),
                                      primary_key=True,
                                      default=uuid4)
-    package_id: Mapped[UUID] = mapped_column(ForeignKey("packages.id",ondelete="CASCADE"),
+    package_id: Mapped[UUID] = mapped_column(ForeignKey("packages.id", ondelete="CASCADE"),
                                              nullable=False)
     product_id: Mapped[UUID] = mapped_column(ForeignKey("products.id", ondelete="RESTRICT"),
                                              nullable=False)
