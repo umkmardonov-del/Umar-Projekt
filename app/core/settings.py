@@ -38,4 +38,8 @@ class Settings(BaseSettings):
     DB_ECHO: bool = False
     DB_POOL_PRE_PING: bool = True
 
+    # --- Datenbank: Redis ---
+    REDIS_URL: str = Field(default="redis://user:password@host:port/database",
+                           description="Redis URL.")
+
 settings = Settings()
