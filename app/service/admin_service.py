@@ -11,7 +11,7 @@ from app.db.repositories.product.admin_repository import (create_product, get_pr
                                                           get_department_by_id,
                                                           get_all_products, delete_product, get_products_by_type,
                                                           get_all_departments, create_package, get_all_packages)
-from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentIn, DepartmentOut, ProductListOut, PackageIn, PackageOut
+from app.pydantic_models.product.admin_models import ProductIn, ProductOut, DepartmentIn, DepartmentOut, ProductListOut, PackageIn, PackageOut
 
 
 # --- create_*-Funktionen ---

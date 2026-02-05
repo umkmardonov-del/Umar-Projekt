@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
 from app.core.deps import postgres_dep
-from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentOut, DepartmentIn, ProductListOut, \
+from app.pydantic_models.product.admin_models import ProductIn, ProductOut, DepartmentOut, DepartmentIn, ProductListOut, \
     PackageOut, PackageIn
 from app.service.admin_service import (create_product_service, get_product_by_id_service, create_department_service,
                                        get_department_by_id_service, get_all_products_service, delete_product_service,
