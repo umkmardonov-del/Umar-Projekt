@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import postgres_dep
 from app.pydantic_models.product.user_models import CalculatorIn, CalculatorOut
-from app.service.user_service import calculate_results_service
+from app.service.product.user_service import calculate_results_service
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent

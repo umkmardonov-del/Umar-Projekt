@@ -11,10 +11,10 @@ from uuid import UUID
 from app.core.deps import postgres_dep
 from app.pydantic_models.product.admin_models import ProductIn, ProductOut, DepartmentOut, DepartmentIn, ProductListOut, \
     PackageOut, PackageIn
-from app.service.admin_service import (create_product_service, get_product_by_id_service, create_department_service,
-                                       get_department_by_id_service, get_all_products_service, delete_product_service,
-                                       get_products_by_type_service, get_all_departments_service,
-                                       create_package_service, get_all_packages_service)
+from app.service.product.admin_service import (create_product_service, get_product_by_id_service, create_department_service,
+                                               get_department_by_id_service, get_all_products_service, delete_product_service,
+                                               get_products_by_type_service, get_all_departments_service,
+                                               create_package_service, get_all_packages_service)
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
