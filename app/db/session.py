@@ -5,10 +5,10 @@ from __future__ import annotations
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from typing import Final
 
-from .engine import get_engine
+from .engines import get_postgres_engine
 
 
-engine = get_engine()
+engine = get_postgres_engine()
 
 
 # --- Fabrikfunktion: Liefert AsyncSessions ---
