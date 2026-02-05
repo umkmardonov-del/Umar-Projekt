@@ -11,3 +11,7 @@ class DomainError(AppError):
 
 class InfraError(AppError):
     pass
+
+# ------ InfraError Child-Klassen ------
+class HashError(InfraError):
+    pass
