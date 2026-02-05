@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.orm_models import Department, PackageItem, Package
+from app.db.orm_models.products import Department, PackageItem, Package
 
 
 async def get_department_by_name(session: AsyncSession, department_name: str) -> Department | None:

@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Type
 from uuid import UUID
 
-from app.db.orm_models import (Product, Department, Package, PackageItem,
+from app.db.orm_models.products import (Product, Department, Package, PackageItem,
                                Laptop, Monitor, Desk, Workstation, Keyboard, Chair, Mouse, DockingStation, Webcam, Cable)
 from app.pydantic_models.admin_models import BaseProductIn, DepartmentIn, PackageIn
 
