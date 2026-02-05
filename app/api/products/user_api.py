@@ -17,7 +17,7 @@ from app.service.product.user_service import calculate_results_service
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
-router = APIRouter(prefix="/user",tags=["user"])
+router = APIRouter(prefix="/product/user",tags=["user", "product"])
 
 
 @router.post("/calculator", response_class=HTMLResponse, response_model=list[CalculatorOut],

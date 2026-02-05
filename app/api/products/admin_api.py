@@ -16,7 +16,7 @@ from app.service.product.admin_service import (create_product_service, get_produ
                                                get_products_by_type_service, get_all_departments_service,
                                                create_package_service, get_all_packages_service)
 
-router = APIRouter(prefix="/admin", tags=["admin"])
+router = APIRouter(prefix="/product/admin", tags=["admin", "product"])
 
 
 # --- Produktspezifische Endpunkte ---
