@@ -1,14 +1,16 @@
 # --- Engine-Connection für DB-Sessions ---
-# --- path: /app/db/engine.py ---
+# --- path: /app/db/engines.py ---
 
 from __future__ import annotations
 
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 
 from app.core.settings import settings
 
 
-def get_engine() -> AsyncEngine:
+# --- PostgreSQL Engine ---
+def get_postgres_engine() -> AsyncEngine:
     return create_async_engine(
         settings.DATABASE_URL,
         echo=settings.DB_ECHO,
@@ -45,4 +47,3 @@ async def close_redis() -> None:
     if _redis is not None:
         await _redis.aclose()
         _redis = None
-        
