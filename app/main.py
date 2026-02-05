@@ -8,8 +8,8 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from uvicorn import run
 
-from app.api.admin_api import router as admin_router
-from app.api.user_api import router as user_router
+from app.api.products.admin_api import router as admin_router
+from app.api.products.user_api import router as user_router
 from app.core.lifespan import lifespan
 from app.core.settings import settings
 

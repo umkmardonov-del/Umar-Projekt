@@ -1,4 +1,4 @@
-# --- API-Endpunkte für unser Projekt ---
+# --- API-Endpunkte für allgemeine User ---
 # --- path: /app/api/user_api.py ---
 
 from __future__ import annotations

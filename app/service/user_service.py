@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Final
 
 from app.db.orm_models.products import Product
-from app.db.repositories.user_repository import get_department_by_name
+from app.db.repositories.product.user_repository import get_department_by_name
 from app.pydantic_models.user_models import CalculatorIn, CalculatorOut, CalculatorItemOut
 
 

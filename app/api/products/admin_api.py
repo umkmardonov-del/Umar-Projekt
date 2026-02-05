@@ -68,7 +68,7 @@ async def get_product_by_id_api(ident: UUID,
         HTTPException(status_code=500, detail="Internal Error")
 
 
-@router.get("/products", response_model=list[ProductListOut])
+@router.get("", response_model=list[ProductListOut])
 async def get_all_products_api(session: AsyncSession = Depends(postgres_dep)) -> list[ProductListOut]:
     try:
         dto = await get_all_products_service(session)

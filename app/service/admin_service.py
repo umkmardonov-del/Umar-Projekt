@@ -7,10 +7,10 @@ from pydantic import TypeAdapter
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
-from app.db.repositories.admin_repository import (create_product, get_product_by_id, create_department,
-                                                  get_department_by_id,
-                                                  get_all_products, delete_product, get_products_by_type,
-                                                  get_all_departments, create_package, get_all_packages)
+from app.db.repositories.product.admin_repository import (create_product, get_product_by_id, create_department,
+                                                          get_department_by_id,
+                                                          get_all_products, delete_product, get_products_by_type,
+                                                          get_all_departments, create_package, get_all_packages)
 from app.pydantic_models.admin_models import ProductIn, ProductOut, DepartmentIn, DepartmentOut, ProductListOut, PackageIn, PackageOut
 
 
