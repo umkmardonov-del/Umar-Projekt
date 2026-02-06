@@ -42,4 +42,17 @@ class Settings(BaseSettings):
     REDIS_URL: str = Field(default="redis://user:password@host:port/database",
                            description="Redis URL.")
 
+
+    # --- Sessions ---
+    SESSION_MAX_AGE_SEC: int = 3600
+    SESSION_ROLLING: bool = True
+    SESSION_COOKIE_NAME: str = "session-cookie"
+
+    # --- Cookies ---
+    COOKIE_DOMAIN: str = ""
+    COOKIE_SECURE: bool = False
+    COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
+    COOKIE_PATH: str = ""
+
+
 settings = Settings()
