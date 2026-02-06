@@ -16,3 +16,7 @@ async def postgres_dep() -> AsyncGenerator[AsyncSession]:
         except Exception:
             await session.rollback()
             raise
+
+async def redis_dep() -> Redis:
+
+    return get_redis_engine()
