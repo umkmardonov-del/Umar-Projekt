@@ -1,5 +1,5 @@
 # --- Wrapper um Redis-Methoden und Pipelines ---
-# --- path: /app/db/session_store.py ---
+# --- path: /app/db/session_data.py ---
 
 from logging import getLogger
 from json import loads, dumps
