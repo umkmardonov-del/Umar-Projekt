@@ -54,3 +54,24 @@ class SessionStore:
             pipeline.delete(session_key)
             pipeline.srem(set_key, session_id)
             await pipeline.execute()
+
+    async def get(self, session_id: str) -> Optional[SessionData]:
+        if not session_id:
+            logger.error("Variable 'session_id' hat einen ungültigen Wert.")
+            raise CorruptSessionError()
+
+        session_key = f"{self._KEY_PREFIX}{session_id}"
+
+        raw_data: str = await self.client.get(session_key)
+        if raw_data is None:
+            return None
+
+        try:
+            session_data = loads(raw_data)
+            if isinstance(session_data, dict):
+                return session_data
+            else:
+                raise JSONDecodeError
+
+        except JSONDecodeError as e:
+            raise JSONDeserializationError() from e
