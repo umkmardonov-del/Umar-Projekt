@@ -52,7 +52,7 @@ class Settings(BaseSettings):
     COOKIE_DOMAIN: str = ""
     COOKIE_SECURE: bool = False
     COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
-    COOKIE_PATH: str = ""
+    COOKIE_PATH: str = "/"
 
     # --- Docker-spezifische Variablen ---
     POSTGRES_USER: str = Field(default="POSTGRES_USER")
