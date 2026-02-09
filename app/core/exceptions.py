@@ -40,3 +40,11 @@ class NotPermittedError(DomainError):
 
 class NotAuthorizedError(DomainError):
     pass
+
+
+class EmailAlreadyRegisteredError(DomainError):
+    pass
+
+
+class InvalidCredentialsError(DomainError):
+    pass
