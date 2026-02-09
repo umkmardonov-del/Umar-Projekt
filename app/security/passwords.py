@@ -4,6 +4,7 @@
 from logging import getLogger
 from passlib.context import CryptContext
 from passlib.exc import UnknownHashError, InvalidHashError
+from secrets import token_urlsafe
 from typing import Final
 
 from app.core.exceptions import HashError
@@ -48,5 +49,5 @@ def needs_rehash(hashed: str) -> bool:
     return PWD_CONTEXT.needs_update(hashed)
 
 def generate_secret_token():
-    token = secrets.token_urlsafe(32)
+    token = token_urlsafe(32)
     return token
