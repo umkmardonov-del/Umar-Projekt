@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from uvicorn import run
 
+from app.api.auth_api import user_router as auth_user_router
 from app.api.products_api import admin_router as product_admin_router, user_router as product_user_router
 from app.core.lifespan import lifespan
 from app.core.logging_config import configure_logging
@@ -30,8 +31,12 @@ app = FastAPI(
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
+# --- Product Routers ---
 app.include_router(product_user_router)
 app.include_router(product_admin_router)
+
+# --- Auth Routers ---
+app.include_router(auth_user_router)
 
 
 if __name__ == "__main__":
