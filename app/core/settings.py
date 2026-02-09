@@ -54,5 +54,10 @@ class Settings(BaseSettings):
     COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
     COOKIE_PATH: str = ""
 
+    # --- Docker-spezifische Variablen ---
+    POSTGRES_USER: str = Field(default="POSTGRES_USER")
+    POSTGRES_PASSWORD: str = Field(default="POSTGRES_PASSWORD")
+    POSTGRES_DB: str = Field(default="POSTGRES_DB")
+    REDIS_PASSWORD: str = Field(default="REDIS_PASSWORD")
 
 settings = Settings()
