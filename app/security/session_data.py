@@ -8,7 +8,7 @@ from typing import TypedDict
 class SessionData(TypedDict):
     user_id: str
     issued_at: int
-    roles: str
+    permissions: list
 
 
 def is_session_data(store_data: SessionData) -> bool:
@@ -18,7 +18,7 @@ def is_session_data(store_data: SessionData) -> bool:
     if not type(store_data["issued_at"]) is int:
         return False
 
-    if not isinstance(store_data["roles"], str):
+    if not isinstance(store_data["permissions"], list):
         return False
 
     return True
