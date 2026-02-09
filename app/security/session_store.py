@@ -6,7 +6,8 @@ from json import loads, dumps, JSONDecodeError
 from redis.asyncio import Redis
 from typing import Any, Final, Optional
 
-from app.core.exceptions import JSONSerializationError, CorruptSessionError, JSONDeserializationError
+from app.core.exceptions import (JSONSerializationError, CorruptSessionError, JSONDeserializationError,
+                                 SessionTimeoutError)
 from app.core.settings import settings
 from app.security.session_data import SessionData
 
@@ -70,17 +71,18 @@ class SessionStore:
 
         raw_data: str = await self.client.get(session_key)
         if raw_data is None:
-            return None
+            raise SessionTimeoutError()
 
         try:
             session_data = loads(raw_data)
-            if isinstance(session_data, dict):
-                return session_data
-            else:
-                raise JSONDecodeError
 
-        except JSONDecodeError as e:
+        except Exception as e:
             raise JSONDeserializationError() from e
+
+        if isinstance(session_data, dict):
+            return session_data
+        else:
+            raise ValueError("Falscher type(session_data)")
 
     async def expire(self,
                      session_id: str,
