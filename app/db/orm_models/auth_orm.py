@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.orm_models.products_orm import Base
+from app.db.orm_models.base import Base
 
 
 class User(Base):

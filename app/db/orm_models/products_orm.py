@@ -7,15 +7,12 @@ from decimal import Decimal
 from enum import Enum
 from sqlalchemy import String, Integer, ForeignKey, UniqueConstraint, CheckConstraint, Numeric, Boolean
 from sqlalchemy.dialects.postgresql import UUID as PGUUID, ENUM as PGENUM
-from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 from uuid import UUID, uuid4
 
-
-class Base(DeclarativeBase, AsyncAttrs):
-    pass
+from app.db.orm_models.base import Base
 
 
 # --- Basis-Tabelle für Produkte ---
