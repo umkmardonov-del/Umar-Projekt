@@ -11,9 +11,12 @@ from uvicorn import run
 from app.api.products.admin_api import router as admin_router
 from app.api.products.user_api import router as user_router
 from app.core.lifespan import lifespan
+from app.core.logging_config import configure_logging
 from app.core.settings import settings
 
 BASE_DIR = Path(__file__).resolve().parent
+
+configure_logging()
 
 app = FastAPI(
     debug=True,
