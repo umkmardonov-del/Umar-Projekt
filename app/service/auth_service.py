@@ -94,7 +94,7 @@ async def create_auth_session_service(session: AsyncSession,
                         httponly=True,
                         samesite=settings.COOKIE_SAMESITE)
 
-    user_dto = UserOut.model_validate(user)
+    user_dto = UserOut(id=user.id, email=user.email, name=user.name, surname=user.surname)
 
     return user_dto
 
