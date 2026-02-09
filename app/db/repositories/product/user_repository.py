@@ -1,4 +1,4 @@
-# --- DB-Aufrufe für user Schicht ---
+# --- DB-Aufrufe für product/user Schicht ---
 # --- path: /app/db/repositories/user_repository.py ---
 
 from __future__ import annotations
@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.orm_models.products import Department, PackageItem, Package
+from app.db.orm_models.products_orm import Department, PackageItem, Package
 
 
 async def get_department_by_name(session: AsyncSession, department_name: str) -> Department | None:

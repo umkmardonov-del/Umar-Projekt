@@ -1,5 +1,5 @@
 # --- ORM-Models für SQLAlchemy bzw. Alembic ---
-# --- path: /app/db/products.py ---
+# --- path: /app/db/products_orm.py ---
 
 from __future__ import annotations
 

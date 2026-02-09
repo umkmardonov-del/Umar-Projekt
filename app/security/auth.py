@@ -9,7 +9,7 @@ from typing import Optional
 
 from .session_data import SessionData, is_session_data
 from .session_store import SessionStore
-from app.db.orm_models.users import User
+from app.db.orm_models.auth_orm import User
 from app.core.exceptions import SessionTimeoutError, CorruptSessionError, NotPermittedError, NotAuthorizedError
 from ..core.settings import settings
 

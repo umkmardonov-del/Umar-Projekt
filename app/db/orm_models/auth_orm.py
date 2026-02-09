@@ -1,5 +1,5 @@
 # --- ORM-Models für Auth (User/Rollen/Permissions) ---
-# --- path: /app/db/orm_models/users.py ---
+# --- path: /app/db/orm_models/auth_orm.py ---
 
 from datetime import datetime
 from typing import List
@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.orm_models.products import Base
+from app.db.orm_models.products_orm import Base
 
 
 class User(Base):
