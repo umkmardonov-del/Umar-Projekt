@@ -1,5 +1,5 @@
 # --- Auth-Repository für User ---
-# --- path: /app/db/repositories/user_repository.py ---
+# --- path: /app/db/repositories/auth_repository.py ---
 
 from typing import Optional
 from uuid import UUID

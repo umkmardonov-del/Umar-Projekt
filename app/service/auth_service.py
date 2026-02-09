@@ -1,5 +1,5 @@
 # --- Service Funktionen für User-Auth ---
-# --- path: /app/service/auth/user_auth_service.py ---
+# --- path: /app/service/auth/auth_service.py ---
 
 from datetime import datetime
 from fastapi import Response
@@ -9,9 +9,9 @@ from zoneinfo import ZoneInfo
 
 from app.core.settings import settings
 from app.db.orm_models.auth_orm import User
-from app.db.repositories.auth.user_repository import get_user_by_email, register_user, get_permission_codes_by_id
+from app.db.repositories.auth_repository import get_user_by_email, register_user, get_permission_codes_by_id
 from app.core.exceptions import EmailAlreadyRegisteredError, InvalidCredentialsError
-from app.pydantic_models.auth.user_models import RegisterIn, UserOut, LoginIn
+from app.pydantic_models.auth_models import RegisterIn, UserOut, LoginIn
 from app.security.passwords import hash_password, needs_rehash, verify_password, generate_secret_token
 from app.security.session_data import SessionData
 from app.security.session_store import SessionStore

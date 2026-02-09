@@ -1,13 +1,13 @@
 # --- Endpunkte für User-Authentifizierung ---
 # --- path: app/api/auth_api.py ---
 
-from fastapi import Request, Response, APIRouter, Depends
+from fastapi import Response, APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import postgres_dep, session_store_dep
-from app.pydantic_models.auth.user_models import RegisterIn, UserOut, LoginIn
+from app.pydantic_models.auth_models import RegisterIn, UserOut, LoginIn
 from app.security.session_store import SessionStore
-from app.service.auth.user_auth_service import register_user_service, create_auth_session_service, login_user_service
+from app.service.auth_service import register_user_service, create_auth_session_service, login_user_service
 
 
 user_router = APIRouter(prefix="auth", tags=["auth", "user"])
