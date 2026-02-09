@@ -6,7 +6,7 @@ from typing import Annotated
 from uuid import UUID
 
 
-PasswordString = Annotated[SecretStr, StringConstraints(min_length=8, max_length=24, strip_whitespace=True)]
+PasswordString = Annotated[SecretStr, StringConstraints(min_length=8, max_length=24)] #TODO Strip whitespace Field Validator
 EmailString = Annotated[EmailStr, StringConstraints(max_length=256, strip_whitespace=True)]
 NameString = Annotated[str, StringConstraints(min_length=2, max_length=100, strip_whitespace=True)]
 
