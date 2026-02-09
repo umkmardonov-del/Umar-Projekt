@@ -20,7 +20,10 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from app.db.orm_models.products_orm import Base
+from app.db.orm_models.base import Base
+# Ensure all models are imported so they are registered on Base.metadata for autogenerate.
+from app.db.orm_models import auth_orm  # noqa: F401
+from app.db.orm_models import products_orm  # noqa: F401
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
