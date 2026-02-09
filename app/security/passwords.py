@@ -46,3 +46,7 @@ def needs_rehash(hashed: str) -> bool:
         raise TypeError("'hashed' muss ein String sein.")
 
     return PWD_CONTEXT.needs_update(hashed)
+
+def generate_secret_token():
+    token = secrets.token_urlsafe(32)
+    return token
