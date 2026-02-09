@@ -2,7 +2,7 @@
 # --- path: /app/service/auth/auth_service.py ---
 
 from datetime import datetime
-from fastapi import Response
+from fastapi import Request, Response
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from zoneinfo import ZoneInfo
@@ -97,3 +97,31 @@ async def create_auth_session_service(session: AsyncSession,
     user_dto = UserOut.model_validate(user)
 
     return user_dto
+
+
+async def logout_user_service(store: SessionStore,
+                              data: SessionData,
+                              *,
+                              request: Request,
+                              response: Response) -> None:
+
+    session_id = request.cookies.get(settings.SESSION_COOKIE_NAME)
+    user_id = data["user_id"]
+
+    await store.logout_user(session_id, user_id)
+
+    invalidate_cookies(response, session_id)
+
+
+# --- Helper ---
+def invalidate_cookies(response: Response, session_id: str) -> None:
+
+    response.set_cookie(key=settings.SESSION_COOKIE_NAME,
+                        value=session_id,
+                        max_age=0,
+                        expires=None,
+                        path=settings.COOKIE_PATH,
+                        domain=settings.COOKIE_DOMAIN,
+                        secure=settings.COOKIE_SECURE,
+                        httponly=True,
+                        samesite=settings.COOKIE_SAMESITE)
