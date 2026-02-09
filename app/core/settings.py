@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     API_PREFIX: str = ""
     HOST_OPEN: str = "0.0.0.0"
     HOST_LOCAL: str = "127.0.0.1"
-    PORT: int = 8000
+    PORT: int = 5000
     RELOAD: bool = True
 
     # --- Logging ---
