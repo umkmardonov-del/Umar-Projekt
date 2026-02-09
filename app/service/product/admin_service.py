@@ -1,4 +1,4 @@
-# --- Service-Funktionen für admin_api.py ---
+# --- Service-Funktionen für products_api.py ---
 # --- path: /app/service/admin_service.py ---
 
 from __future__ import annotations

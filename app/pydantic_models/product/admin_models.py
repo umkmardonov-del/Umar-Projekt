@@ -1,4 +1,4 @@
-# --- Pydantic-Models für admin_api.py ---
+# --- Pydantic-Models für products_api.py ---
 # --- path: /app/models/admin_models ---
 
 from __future__ import annotations
