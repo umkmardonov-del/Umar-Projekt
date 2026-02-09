@@ -15,6 +15,23 @@ services:
       timeout: 3s
       retries: 3
 
+  redis:
+    image: redis:8.2
+    container_name: bs14_redis
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    env_file:
+      - .env.docker
+    ports:
+      - "127.0.0.1:6378:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+
   server:
     env_file: ".env.docker"
     develop:
@@ -42,6 +59,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   pg_data:
+  redis_data:
