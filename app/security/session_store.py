@@ -21,7 +21,7 @@ class SessionStore:
 
     async def login_user(self,
                          session_id: str,
-                         session_data: dict[str, Any],
+                         session_data: SessionData,
                          ttl_sec: int = settings.SESSION_MAX_AGE_SEC) -> None:
 
         user_id: str = session_data["user_id"]
