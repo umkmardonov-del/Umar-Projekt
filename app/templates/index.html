@@ -1,110 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Atec Systems</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Particles -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <meta charset="UTF-8" />
+  <title>ATEC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div id="particles-js"></div>
+<!-- FX -->
+<div class="fx fx-noise"></div>
+<div class="fx fx-vignette"></div>
+<div class="fx fx-stars"></div>
+<div class="fx fx-glow" id="cursorGlow"></div>
 
-<div class="wrapper">
+<!-- ===== SCENE ===== -->
+<div class="scene" id="scene">
 
-<header class="header">
+  <div class="mesh mesh-a"></div>
+  <div class="mesh mesh-b"></div>
+  <div class="mesh mesh-c"></div>
 
-  <div class="header__top">
-    <div class="container header__top-inner">
-
-      <div class="header__logo logo">
-        <img src="images/logo.svg" alt="Logo">
-      </div>
-
-      <nav class="header__nav">
-        <a class="header__nav-link" href="#">Home</a>
-        <a class="header__nav-link" href="#">About</a>
-        <a class="header__nav-link" href="#">Services</a>
-        <a class="header__nav-link" href="#">Contact</a>
-      </nav>
-
+  <!-- HERO -->
+  <section class="hero">
+    <h1>IT costs<br><span>reimagined</span></h1>
+    <p>Cinematic. Fast. Serious.<br>Built like a real product.</p>
+    <div class="hero-actions">
+      <button id="loginBtn">Log in</button>
+      <button id="signupBtn" class="ghost">Sign up</button>
     </div>
-  </div>
+  </section>
 
-  <!-- HEADER CARD -->
-  <div class="header__body">
-    <div class="container header__body-inner">
+  <!-- AUTH -->
+  <section class="auth">
+    <div class="auth-shell">
 
-      <div class="header__content header__card" id="headerCard">
+      <h2 id="authTitle">Log in</h2>
 
-        <!-- FRONT -->
-        <div class="header__face header__face--front">
+      <form id="authForm" method="POST" action="/auth/login">
 
-          <div class="header__text">
-            <h1 class="header__title">
-              Smart IT Cost <br> Management Tool
-            </h1>
-
-            <div class="header__button-wrapper">
-              <button class="header__button" id="loginBtn">Log in</button>
-              <button class="header__button" id="signupBtn">Sign up</button>
-            </div>
-          </div>
-
-          <div class="header__image">
-            <img src="images/main.svg" alt="">
-          </div>
-
+        <div class="name-row" id="nameRow">
+          <input name="first_name" placeholder="First name">
+          <input name="last_name" placeholder="Last name">
         </div>
 
-        <!-- BACK -->
-        <div class="header__face header__face--back">
+        <input name="email" type="email" placeholder="Email" required>
+        <input name="password" type="password" placeholder="Password" required>
 
-          <form class="auth" id="authForm">
-            <h2 id="authTitle">Log in</h2>
-            <input required placeholder="Email">
-            <input required type="password" placeholder="Password">
-            <button class="header__button">Continue</button>
-          </form>
+        <button class="primary" type="submit">Continue</button>
+      </form>
 
-        </div>
-
+      <div class="auth-switch">
+        <span id="authText">No account?</span>
+        <a href="#" id="authToggle">Sign up</a>
       </div>
 
     </div>
-  </div>
-
-</header>
-
-<!-- CONFIG -->
-<section id="configSection">
-  <div class="container config-section__inner">
-    <h2 class="config-section__title">System Configuration</h2>
-    <p class="config-section__subtitle">How does it work?</p>
-    <p class="config-section__text">
-      Enter system details to calculate IT costs.
-    </p>
-  </div>
-</section>
-
-<!-- CALCULATOR -->
-<section id="calculator">
-  <div class="container calculator__inner">
-    <h2 class="calculator__title">System Configurator</h2>
-  </div>
-</section>
-
+  </section>
 </div>
 
-<script src="js/main.js"></script>
+<!-- ===== APP ===== -->
+<div class="app" id="app">
+
+  <aside class="sidebar">
+    <h1>ATEC</h1>
+
+    <div class="role-badge" id="roleBadge">ROLE</div>
+
+    <div class="nav">
+      <button class="nav-btn active" data-section="home">Home</button>
+      <button class="nav-btn" data-section="calculator">Calculator</button>
+      <button class="nav-btn technician-only" data-section="security">Security</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- HOME -->
+    <section id="home" class="content active-section">
+      <h2>Dashboard</h2>
+      <p>Welcome to ATEC.</p>
+    </section>
+
+    <!-- CALCULATOR (INHALT NICHT VERÄNDERT) -->
+    <section id="calculator" class="content">
+      <h2>System Configurator</h2>
+
+      <form>
+        <label>Department</label>
+        <select>
+          <option>IT</option>
+          <option>HR</option>
+          <option>Finance</option>
+        </select>
+
+        <label>Team Members</label>
+        <input type="number" value="10">
+
+        <button class="primary">Calculate →</button>
+      </form>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security" class="content">
+      <h2>Account Security</h2>
+
+      <div class="card">
+        <label>Confidentiality</label>
+        <select id="c">
+          <option value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
+        </select>
+
+        <label>Integrity</label>
+        <select id="i">
+          <option value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
+        </select>
+
+        <label>Availability</label>
+        <select id="a">
+          <option value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
+        </select>
+
+        <p>Risk Level: <strong id="risk">Low</strong></p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="main.js"></script>
 </body>
 </html>
+

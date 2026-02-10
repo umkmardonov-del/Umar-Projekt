@@ -1,0 +1,30 @@
+.auth {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-shell {
+    width: 440px;
+    padding: 44px;
+    @include card;
+    opacity: 0;
+    transform: scale(.6);
+
+    h2 {
+      margin-bottom: 24px;
+    }
+
+    input {
+      @include input;
+      margin-bottom: 14px;
+    }
+
+    .primary {
+      @include primary-btn;
+      width: 100%;
+      padding: 14px;
+    }
+  }
+}

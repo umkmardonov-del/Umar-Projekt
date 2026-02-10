@@ -1,0 +1,46 @@
+.hero {
+  position: absolute;
+  inset: 0;
+  padding: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: .9s cubic-bezier(.2,.8,.2,1);
+
+  h1 {
+    font-size: 96px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.05em;
+
+    span {
+      color: $accent;
+    }
+  }
+
+  p {
+    margin-top: 32px;
+    color: $muted;
+  }
+
+  &-actions {
+    margin-top: 56px;
+    display: flex;
+    gap: 20px;
+
+    button {
+      padding: 18px 42px;
+      border-radius: $radius;
+
+      &.ghost {
+        background: transparent;
+        border: 1px solid $border;
+        color: $text;
+      }
+
+      &:not(.ghost) {
+        @include primary-btn;
+      }
+    }
+  }
+}

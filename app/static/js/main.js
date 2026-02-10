@@ -1,98 +1,81 @@
-const views = document.querySelectorAll(".view");
-const sections = document.querySelectorAll(".section");
-const sidebarLinks = document.querySelectorAll(".sidebar a");
+const scene = document.getElementById("scene");
+const app = document.getElementById("app");
+const glow = document.getElementById("cursorGlow");
 
+document.addEventListener("mousemove", e=>{
+  glow.style.left=e.clientX+"px";
+  glow.style.top=e.clientY+"px";
+});
+
+// AUTH
 const loginBtn = document.getElementById("loginBtn");
 const signupBtn = document.getElementById("signupBtn");
 const authForm = document.getElementById("authForm");
-const authTitle = document.getElementById("authTitle");
-const themeToggle = document.getElementById("themeToggle");
+const nameRow = document.getElementById("nameRow");
+const title = document.getElementById("authTitle");
+const toggle = document.getElementById("authToggle");
 
-/* ---------- VIEW SWITCH (GSAP) ---------- */
-function showView(id) {
-  views.forEach(v => v.classList.remove("is-active"));
-  const view = document.getElementById(id);
-  view.classList.add("is-active");
+loginBtn.onclick=()=>{scene.classList.add("auth-open");setMode("login")}
+signupBtn.onclick=()=>{scene.classList.add("auth-open");setMode("signup")}
 
-  gsap.fromTo(view, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6 });
-}
-
-/* Landing → Auth */
-loginBtn.onclick = () => {
-  authTitle.textContent = "Log in";
-  showView("auth");
-};
-
-signupBtn.onclick = () => {
-  authTitle.textContent = "Sign up";
-  showView("auth");
-};
-
-/* Auth → Dashboard */
-authForm.onsubmit = e => {
+toggle.onclick=e=>{
   e.preventDefault();
-  showView("dashboard");
-  activateSection("config");
-};
-
-/* ---------- SECTION NAV ---------- */
-sidebarLinks.forEach(link => {
-  link.onclick = () => activateSection(link.dataset.target);
-});
-
-function activateSection(id) {
-  sections.forEach(s => s.classList.remove("is-active"));
-  document.getElementById(id).classList.add("is-active");
+  setMode(title.textContent==="Log in"?"signup":"login");
 }
 
-/* ---------- CALCULATOR ---------- */
-const teamSize = document.getElementById("teamSize");
-const deviceCost = document.getElementById("deviceCost");
-const softwareCost = document.getElementById("softwareCost");
-const totalCostEl = document.getElementById("totalCost");
-
-function calculate() {
-  const total =
-    teamSize.value * (deviceCost.value / 36 + Number(softwareCost.value));
-  totalCostEl.textContent = `€${total.toFixed(2)}`;
-  updateChart(total);
+function setMode(mode){
+  if(mode==="signup"){
+    authForm.action="/auth/signup";
+    title.textContent="Sign up";
+    nameRow.classList.add("active");
+  }else{
+    authForm.action="/auth/login";
+    title.textContent="Log in";
+    nameRow.classList.remove("active");
+  }
 }
 
-[teamSize, deviceCost, softwareCost].forEach(i =>
-  i.addEventListener("input", calculate)
-);
+// UMAR BYPASS
+authForm.addEventListener("submit",e=>{
+  const fn = authForm.first_name?.value;
+  const ln = authForm.last_name?.value;
 
-/* ---------- CHART ---------- */
-const ctx = document.getElementById("costChart");
-const chart = new Chart(ctx, {
-  type: "bar",
-  data: {
-    labels: ["Monthly Cost"],
-    datasets: [{
-      label: "€",
-      data: [0],
-      backgroundColor: "#35d1d1"
-    }]
+  if(fn==="UMAR" && ln==="UMAR"){
+    e.preventDefault();
+    enterApp("admin");
   }
 });
 
-function updateChart(val) {
-  chart.data.datasets[0].data[0] = val;
-  chart.update();
+// ENTER APP
+function enterApp(role){
+  scene.style.display="none";
+  app.classList.add("active");
+  applyRole(role);
 }
 
-/* ---------- THEME ---------- */
-themeToggle.onclick = () => {
-  document.body.classList.toggle("light");
-};
+// ROLES
+function applyRole(role){
+  document.getElementById("roleBadge").textContent=role.toUpperCase();
+  document.querySelectorAll(".technician-only").forEach(el=>{
+    el.style.display = (role==="technician"||role==="admin")?"block":"none";
+  });
+}
 
-/* ---------- PARTICLES ---------- */
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 70 },
-    color: { value: "#35d1d1" },
-    size: { value: 3, random: true },
-    line_linked: { enable: true, color: "#35d1d1", opacity: 0.3 },
-    move: { speed: 1.3 }
+// NAV
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".content").forEach(c=>c.classList.remove("active-section"));
+    document.getElementById(btn.dataset.section).classList.add("active-section");
   }
 });
+
+// SECURITY LOGIC
+["c","i","a"].forEach(id=>{
+  document.getElementById(id)?.addEventListener("change",calcRisk);
+});
+function calcRisk(){
+  const max = Math.max(+c.value,+i.value,+a.value);
+  risk.textContent = max===3?"High":max===2?"Medium":"Low";
+}
