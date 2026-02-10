@@ -8,7 +8,7 @@ from typing import TypedDict
 class SessionData(TypedDict):
     user_id: str
     issued_at: int
-    permissions: list
+    permissions: list[str]
 
 
 def is_session_data(store_data: SessionData) -> bool:
