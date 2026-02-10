@@ -113,6 +113,39 @@ async def logout_user_service(store: SessionStore,
     invalidate_cookies(response, session_id)
 
 
+# --- Admin Funktionen ---
+async def create_role_service(session: AsyncSession, payload: RoleIn) -> RoleOut:
+
+    name = payload.name.strip()
+    description = payload.description.strip()
+
+    exists = await get_role_by_name(session, name)
+    if exists:
+        raise RoleAlreadyExistsError()
+
+    new_role_orm = await create_role(session, name=name, description=description)
+
+    role_dto = RoleOut.model_validate(new_role_orm)
+
+    return role_dto
+
+
+async def create_permission_service(session: AsyncSession, payload: PermissionIn) -> PermissionOut:
+
+    code = payload.code.strip()
+    description = payload.description.strip()
+
+    exists = await get_permission_by_code(session, code)
+    if exists:
+        raise PermissionAlreadyExistsError()
+
+    new_permission_orm = await create_permission(session, code=code, description=description)
+
+    permission_dto = PermissionOut.model_validate(new_permission_orm)
+
+    return permission_dto
+
+
 # --- Helper ---
 def invalidate_cookies(response: Response, session_id: str) -> None:
 
