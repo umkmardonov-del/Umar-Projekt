@@ -51,3 +51,46 @@ async def get_permission_codes_by_id(session: AsyncSession, *, ident: UUID) -> l
     result = await session.execute(stmt)
 
     return list(result.scalars().all())
+
+
+# --- Admin Funktionen --
+async def create_role(session: AsyncSession, *, name: str, description: str) -> Role:
+
+    new_role_orm = Role(name=name, description=description)
+
+    session.add(new_role_orm)
+
+    await session.flush()
+    await session.refresh(new_role_orm)
+
+    return new_role_orm
+
+
+async def create_permission(session: AsyncSession, *, code: str, description: str) -> Permission:
+
+    new_permission_orm = Permission(code=code, description=description)
+
+    session.add(new_permission_orm)
+
+    await session.flush()
+    await session.refresh(new_permission_orm)
+
+    return new_permission_orm
+
+
+async def get_role_by_name(session: AsyncSession, name: str) -> Optional[Role]:
+
+    stmt = select(Role).where(Role.name == name)
+
+    result = (await session.execute(stmt)).scalar_one_or_none()
+
+    return result
+
+
+async def get_permission_by_code(session: AsyncSession, code: str) -> Optional[Permission]:
+
+    stmt = select(Permission.code).where(Permission.code == code)
+
+    result = (await session.execute(stmt)).scalar_one_or_none()
+
+    return result
