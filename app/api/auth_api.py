@@ -45,3 +45,22 @@ async def logout_user_endpoint(request: Request,
                                data: SessionData = Depends(auth_session_dep)) -> None:
 
     await logout_user_service(store, data, request=request, response=response)
+
+
+# ------- Admin Routen -------
+@admin_router.post("/create_role", dependencies=[Depends(auth_session_dep)])
+async def create_role_endpoint(payload: RoleIn,
+                               session: AsyncSession = Depends(postgres_dep)) -> RoleOut:
+
+    role_dto = await create_role_service(session, payload)
+
+    return role_dto
+
+
+@admin_router.post("/create_permission", dependencies=[Depends(auth_session_dep)])
+async def create_permission_endpoint(payload: PermissionIn,
+                                     session: AsyncSession = Depends(postgres_dep)) -> PermissionOut:
+
+    permission_dto = await create_permission_service(session, payload)
+
+    return permission_dto
