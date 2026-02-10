@@ -7,7 +7,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.orm_models.auth_orm import User, Permission, RolePermission, UserRole
+from app.db.orm_models.auth_orm import User, Role, Permission, RolePermission, UserRole
 
 
 async def register_user(session: AsyncSession, *,
@@ -15,6 +15,7 @@ async def register_user(session: AsyncSession, *,
                         surname: str,
                         email: str,
                         pw_hash: str) -> User:
+
     new_user_orm = User(name=name,
                         surname=surname,
                         email=email,
