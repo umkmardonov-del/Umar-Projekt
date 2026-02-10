@@ -67,6 +67,24 @@ class PermissionIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class UserRoleIn(BaseModel):
+    user_name: str = Field(...,)
+
+    user_surname: str = Field(...,)
+
+    role_names: list[str] = Field(...,)
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RolePermissionIn(BaseModel):
+    role_name: str = Field(...,)
+
+    permission_codes: list[str] = Field(...,)
+
+    model_config = ConfigDict(extra="forbid")
+
+
 # --- Ausgabeschemata ---
 
 class UserOut(BaseModel):
