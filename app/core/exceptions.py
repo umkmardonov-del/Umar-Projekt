@@ -48,3 +48,11 @@ class EmailAlreadyRegisteredError(DomainError):
 
 class InvalidCredentialsError(DomainError):
     pass
+
+
+class RoleAlreadyExistsError(DomainError):
+    pass
+
+
+class PermissionAlreadyExistsError(DomainError):
+    pass
