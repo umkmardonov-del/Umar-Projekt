@@ -5,23 +5,26 @@ from fastapi import Request, Response, APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import postgres_dep, session_store_dep, auth_session_dep
-from app.pydantic_models.auth_models import RegisterIn, UserOut, LoginIn
+from app.pydantic_models.auth_models import RegisterIn, UserOut, LoginIn, RoleIn, RoleOut, PermissionIn, PermissionOut
 from app.security.session_store import SessionStore
 from app.security.session_data import SessionData
-from app.service.auth_service import register_user_service, create_auth_session_service, login_user_service, \
-    logout_user_service
+from app.service.auth_service import (register_user_service, create_auth_session_service, login_user_service,
+                                      logout_user_service, create_role_service, create_permission_service)
 
-user_router = APIRouter(prefix="auth", tags=["auth", "user"])
+user_router = APIRouter(prefix="/auth", tags=["auth", "user"])
+admin_router = APIRouter(prefix="/auth", tags=["auth", "admin"])
 
 
-@user_router.post("/register", response_model=UserOut)
+# ------- User Routen -------
+@user_router.post("/register", status_code=201, response_model=UserOut)
 async def register_user_endpoint(payload: RegisterIn,
                                  response: Response,
                                  session: AsyncSession = Depends(postgres_dep),
                                  store: SessionStore = Depends(session_store_dep)) -> UserOut:
+
     user = await register_user_service(session, payload=payload)
 
-    user_dto = await create_auth_session_service(session, store, response=response, user=user)
+    user_dto = await create_auth_session_service(session, store, response=response, user_orm=user)
 
     return user_dto
 
@@ -31,14 +34,15 @@ async def login_user_endpoint(payload: LoginIn,
                               response: Response,
                               session: AsyncSession = Depends(postgres_dep),
                               store: SessionStore = Depends(session_store_dep)) -> UserOut:
+
     user = await login_user_service(session, payload=payload)
 
-    user_dto = await create_auth_session_service(session, store, response=response, user=user)
+    user_dto = await create_auth_session_service(session, store, response=response, user_orm=user)
 
     return user_dto
 
 
-@user_router.post("logout", status_code=204)
+@user_router.post("/logout", status_code=204, dependencies=[Depends(auth_session_dep)])
 async def logout_user_endpoint(request: Request,
                                response: Response,
                                store: SessionStore = Depends(session_store_dep),
@@ -48,7 +52,7 @@ async def logout_user_endpoint(request: Request,
 
 
 # ------- Admin Routen -------
-@admin_router.post("/create_role", dependencies=[Depends(auth_session_dep)])
+@admin_router.post("/create_role", status_code=201, dependencies=[Depends(auth_session_dep)])
 async def create_role_endpoint(payload: RoleIn,
                                session: AsyncSession = Depends(postgres_dep)) -> RoleOut:
 
@@ -57,7 +61,7 @@ async def create_role_endpoint(payload: RoleIn,
     return role_dto
 
 
-@admin_router.post("/create_permission", dependencies=[Depends(auth_session_dep)])
+@admin_router.post("/create_permission", status_code=201, dependencies=[Depends(auth_session_dep)])
 async def create_permission_endpoint(payload: PermissionIn,
                                      session: AsyncSession = Depends(postgres_dep)) -> PermissionOut:
 
