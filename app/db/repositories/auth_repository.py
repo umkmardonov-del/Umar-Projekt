@@ -84,7 +84,7 @@ async def get_role_by_name(session: AsyncSession, name: str) -> Optional[Role]:
 
 async def get_permission_by_code(session: AsyncSession, code: str) -> Optional[Permission]:
 
-    stmt = select(Permission.code).where(Permission.code == code)
+    stmt = select(Permission).where(Permission.code == code)
 
     result = (await session.execute(stmt)).scalar_one_or_none()
 
