@@ -56,7 +56,7 @@ async def logout_user_endpoint(request: Request,
 
 # ------- Admin Routen -------
 @admin_router.post("/create_role", status_code=201,
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin"],["write"]))])
 async def create_role_endpoint(payload: RoleIn,
                                session: AsyncSession = Depends(postgres_dep)) -> RoleOut:
 
@@ -66,7 +66,7 @@ async def create_role_endpoint(payload: RoleIn,
 
 
 @admin_router.post("/create_permission", status_code=201,
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin"],["write"]))])
 async def create_permission_endpoint(payload: PermissionIn,
                                      session: AsyncSession = Depends(postgres_dep)) -> PermissionOut:
 
@@ -76,7 +76,7 @@ async def create_permission_endpoint(payload: PermissionIn,
 
 
 @admin_router.post("/create_ur", status_code=201,
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin"],["write"]))])
 async def create_user_role_endpoint(payload: UserRoleIn,
                                     session: AsyncSession = Depends(postgres_dep)) -> UserRoleOut:
 
@@ -86,7 +86,7 @@ async def create_user_role_endpoint(payload: UserRoleIn,
 
 
 @admin_router.post("/create_rp", status_code=201,
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin"],["write"]))])
 async def create_role_permission_endpoint(payload: RolePermissionIn,
                                           session: AsyncSession = Depends(postgres_dep)) -> RolePermissionOut:
 
