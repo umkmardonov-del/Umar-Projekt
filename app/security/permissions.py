@@ -9,7 +9,7 @@ from app.security.session_data import SessionData
 
 
 class PermissionHandler:
-    def __init__(self, *, scopes: list[str], permissions: list[str]) -> None:
+    def __init__(self, scopes: list[str], permissions: list[str]) -> None:
 
         if not permissions or not scopes:
             raise AssertionError("Scopes/Permissions dürfen nicht leer sein.")
