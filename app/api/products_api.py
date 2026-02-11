@@ -8,9 +8,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 
-from app.core.deps import postgres_dep
+from app.core.deps import postgres_dep, auth_session_dep
 from app.pydantic_models.product.admin_models import ProductIn, ProductOut, DepartmentOut, DepartmentIn, ProductListOut, \
     PackageOut, PackageIn
+from app.security.permissions import PermissionHandler
 from app.service.product.admin_service import (create_product_service, get_product_by_id_service,
                                                create_department_service,
                                                get_department_by_id_service, get_all_products_service,
@@ -181,7 +182,7 @@ async def get_all_packages_api(session: AsyncSession = Depends(postgres_dep)
 
 # --- Tests ---
 
-@admin_router.get("/test")
+@admin_router.get("/test", dependencies=[Depends(PermissionHandler(["user"], ["read"]))])
 async def test_endpoint():
     return "erfolgreich"
 
@@ -205,7 +206,8 @@ user_router = APIRouter(prefix="/product/user", tags=["user", "product"])
 
 
 @user_router.post("/calculator", response_class=HTMLResponse, response_model=list[CalculatorOut],
-                  response_model_exclude_none=True, summary="Anforderungen von Website erhalten.")
+                  response_model_exclude_none=True, summary="Anforderungen von Website erhalten.",
+                  dependencies=[Depends(auth_session_dep)])
 async def get_user_specifications(request: Request,
                                   department: str = Form(...),
                                   team_members: int = Form(...),
