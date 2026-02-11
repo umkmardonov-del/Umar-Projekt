@@ -16,11 +16,8 @@ from app.core.settings import settings
 logger = getLogger(__name__)
 
 
-async def get_auth_session(session: AsyncSession,
-                           store: SessionStore,
-                           *,
-                           request: Request,
-                           response: Response) -> SessionData:
+async def get_auth_session(session: AsyncSession, store: SessionStore,
+                           *, request: Request, response: Response) -> SessionData:
 
     session_id = request.cookies.get(settings.SESSION_COOKIE_NAME)
 
