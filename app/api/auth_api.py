@@ -14,7 +14,7 @@ from app.service.auth_service import (register_user_service, create_auth_session
                                       logout_user_service, create_role_service, create_permission_service,
                                       create_user_role_service, create_role_permission_service)
 
-user_router = APIRouter(prefix="/auth", tags=["auth", "user"])
+user_router = APIRouter(tags=["auth", "user"])
 admin_router = APIRouter(prefix="/auth", tags=["auth", "admin"])
 
 
