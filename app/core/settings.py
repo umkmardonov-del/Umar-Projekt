@@ -42,6 +42,8 @@ class Settings(BaseSettings):
     REDIS_URL: str = Field(default="redis://user:password@host:port/database",
                            description="Redis URL.")
 
+    # --- User & Rollen ---
+    DEFAULT_ROLE: str = "Guest"
 
     # --- Sessions ---
     SESSION_MAX_AGE_SEC: int = 3600
