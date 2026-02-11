@@ -1,0 +1,21 @@
+@mixin card {
+  background: $panel;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+}
+
+@mixin input {
+  width: 100%;
+  padding: 12px;
+  background: $panel-2;
+  border: 1px solid $border;
+  color: $text;
+}
+
+@mixin primary-btn {
+  background: linear-gradient(135deg, $accent, $accent-2);
+  color: #041313;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+}
