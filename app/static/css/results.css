@@ -224,10 +224,12 @@ body {
   padding: 22px 24px 30px;
   border-top: 1px solid #202634;
   background: rgba(12, 15, 20, 0.75);
+  text-align: center;
 }
 
 .footer__icons {
   display: flex;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -239,6 +241,7 @@ body {
 .footer__links {
   margin-top: 12px;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 14px;
 }
