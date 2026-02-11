@@ -8,12 +8,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.orm_models.auth_orm import User, Role, Permission, RolePermission, UserRole
+from app.pydantic_models.auth_models import RegisterIn
 
 
-async def register_user(session: AsyncSession, *, name: str,
-                        surname: str, email: str, pw_hash: str) -> User:
+async def register_user(session: AsyncSession, *, payload: RegisterIn, email: str, pw_hash: str) -> User:
 
-    new_user_orm = User(name=name, surname=surname, email=email, pw_hash=pw_hash)
+    new_user_orm = User(name=payload.name, surname=payload.surname, email=email, pw_hash=pw_hash)
 
     session.add(new_user_orm)
 
