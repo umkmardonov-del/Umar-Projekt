@@ -1,3 +1,6 @@
+@use "variables" as *;
+@use "mixins" as *;
+
 .hero {
   position: absolute;
   inset: 0;
@@ -19,18 +22,23 @@
   }
 
   p {
-    margin-top: 32px;
+    margin-top: 36px;
+    font-size: 18px;
     color: $muted;
   }
 
   &-actions {
-    margin-top: 56px;
+    margin-top: 64px;
     display: flex;
     gap: 20px;
 
     button {
-      padding: 18px 42px;
+      padding: 18px 40px;
+      font-weight: 900;
       border-radius: $radius;
+      border: none;
+      cursor: pointer;
+      transition: .25s ease;
 
       &.ghost {
         background: transparent;
@@ -40,6 +48,10 @@
 
       &:not(.ghost) {
         @include primary-btn;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
       }
     }
   }

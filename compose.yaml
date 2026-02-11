@@ -64,6 +64,20 @@ services:
       redis:
         condition: service_healthy
 
+  sass:
+    image: node:22-alpine
+    container_name: bs14_sass
+    working_dir: /app
+    volumes:
+      - .:/app
+    command:
+      - sh
+      - -c
+      - >
+        npx -y sass --watch
+        app/static/css/main.scss:app/static/css/style.css
+        app/static/css/results.scss:app/static/css/results.css
+
 volumes:
   pg_data:
   redis_data:

@@ -7,6 +7,17 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG PYTHON_VERSION=3.13.5
+ARG NODE_VERSION=22
+
+FROM node:${NODE_VERSION}-alpine AS assets
+
+WORKDIR /src
+
+COPY app/static/css ./app/static/css
+
+RUN npx -y sass app/static/css/main.scss:app/static/css/style.css \
+    && npx -y sass app/static/css/results.scss:app/static/css/results.css
+
 FROM python:${PYTHON_VERSION}-slim AS base
 
 # Prevents Python from writing pyc files.
@@ -43,6 +54,8 @@ USER appuser
 
 # Copy the source code into the container.
 COPY . .
+COPY --from=assets /src/app/static/css/style.css /app/app/static/css/style.css
+COPY --from=assets /src/app/static/css/results.css /app/app/static/css/results.css
 
 # Expose the port that the application listens on.
 EXPOSE 8000

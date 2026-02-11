@@ -1,16 +1,23 @@
+@use "variables" as *;
+@use "mixins" as *;
+
 .auth {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 
   &-shell {
     width: 440px;
     padding: 44px;
-    @include card;
+    background: rgba(18, 21, 27, .9);
+    border: 1px solid $border;
+    border-radius: $radius-lg;
     opacity: 0;
-    transform: scale(.6);
+    transform: translateZ(-300px) scale(.5);
+    transition: .9s cubic-bezier(.2, .8, .2, 1);
 
     h2 {
       margin-bottom: 24px;
@@ -18,7 +25,9 @@
 
     input {
       @include input;
-      margin-bottom: 14px;
+      margin-top: 16px;
+      margin-bottom: 16px;
+      padding: 14px;
     }
 
     .primary {
@@ -26,5 +35,16 @@
       width: 100%;
       padding: 14px;
     }
+  }
+}
+
+.auth-switch {
+  margin-top: 18px;
+  font-size: 13px;
+  color: $muted;
+
+  a {
+    color: $accent;
+    margin-left: 6px;
   }
 }

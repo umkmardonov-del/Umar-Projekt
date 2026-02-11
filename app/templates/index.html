@@ -27,8 +27,8 @@
     <h1>IT costs<br><span>reimagined</span></h1>
     <p>Cinematic. Fast. Serious.<br>Built like a real product.</p>
     <div class="hero-actions">
-      <button id="loginBtn">Log in</button>
-      <button id="signupBtn" class="ghost">Sign up</button>
+      <button type="button" id="loginBtn">Log in</button>
+      <button type="button" id="signupBtn" class="ghost">Sign up</button>
     </div>
   </section>
 
@@ -45,8 +45,8 @@
           <input name="last_name" placeholder="Last name">
         </div>
 
-        <input name="email" type="email" placeholder="Email" required>
-        <input name="password" type="password" placeholder="Password" required>
+        <input id="email" name="email" type="email" placeholder="Email" required>
+        <input id="password" name="password" type="password" placeholder="Password" required>
 
         <button class="primary" type="submit">Continue</button>
       </form>
@@ -87,18 +87,44 @@
     <section id="calculator" class="content">
       <h2>System Configurator</h2>
 
-      <form>
-        <label>Department</label>
-        <select>
+      <form id="calculatorForm" method="POST" action="/product/user/calculator">
+        <label for="department">Department</label>
+        <select id="department" name="department" required>
           <option>IT</option>
           <option>HR</option>
           <option>Finance</option>
         </select>
 
-        <label>Team Members</label>
-        <input type="number" value="10">
+        <label for="team_members">Team Members</label>
+        <input id="team_members" name="team_members" type="number" min="1" value="10" required>
 
-        <button class="primary">Calculate →</button>
+        <label for="device_type">Device Type</label>
+        <select id="device_type" name="device_type" required>
+          <option value="Desktop">Desktop</option>
+          <option value="Laptop">Laptop</option>
+        </select>
+
+        <label for="operating_system">Operating System</label>
+        <select id="operating_system" name="operating_system" required>
+          <option value="Windows 11 Pro">Windows 11 Pro</option>
+          <option value="Ubuntu 24.04 LTS">Ubuntu 24.04 LTS</option>
+          <option value="macOS">macOS</option>
+        </select>
+
+        <label for="included_software">Included Software</label>
+        <select id="included_software" name="included_software" required>
+          <option value="Office 365">Office 365</option>
+          <option value="Developer Tools">Developer Tools</option>
+          <option value="None">None</option>
+        </select>
+
+        <div class="presets">
+          <button type="button" class="nav-btn" data-preset="it">IT Preset</button>
+          <button type="button" class="nav-btn" data-preset="hr">HR Preset</button>
+          <button type="button" class="nav-btn" data-preset="dev">Dev Preset</button>
+        </div>
+
+        <button class="primary">Calculate</button>
       </form>
     </section>
 
