@@ -2,7 +2,7 @@
 # --- path: /app/pydantic_models/auth/auth_orm.py ---
 
 from datetime import datetime
-from pydantic import Field, EmailStr, SecretStr, BaseModel, StringConstraints, ConfigDict
+from pydantic import Field, EmailStr, SecretStr, BaseModel, StringConstraints, ConfigDict, field_validator
 from typing import Annotated, Optional
 from uuid import UUID
 
@@ -31,6 +31,11 @@ class RegisterIn(BaseModel):
     surname: NameString = Field(...,
                                 description="Nachname, max. 100 Zeichen.")
 
+    @field_validator("password", mode="before")
+    @classmethod
+    def _strip_whitespace(cls, pw: str):
+        return pw.strip() if isinstance(pw, str) else pw
+
     model_config = ConfigDict(extra="forbid")
 
 
@@ -42,6 +47,11 @@ class LoginIn(BaseModel):
     password: PasswordString = Field(...,
                                      description="Passwort mit mindestens 8 und höchstens 24 Zeichen.",
                                      examples=["password", "59iubF!8"])
+
+    @field_validator("password", mode="before")
+    @classmethod
+    def _strip_whitespace(cls, pw: str):
+        return pw.strip() if isinstance(pw, str) else pw
 
     model_config = ConfigDict(extra="forbid")
 
