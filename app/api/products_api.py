@@ -234,13 +234,7 @@ async def get_user_specifications(request: Request,
         raise HTTPException(status_code=503, detail="Service Unavailable")
 
 
-@user_router.get("/home", summary="Landing Page")
-async def home_api(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
 # ------- Helper -------
-
 def trim_zeros(value, decimals: int | None = None) -> str:
     if value is None:
         return ""
