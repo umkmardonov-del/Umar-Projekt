@@ -11,7 +11,7 @@ PasswordString = Annotated[SecretStr, StringConstraints(min_length=8, max_length
 EmailString = Annotated[EmailStr, StringConstraints(max_length=256, strip_whitespace=True, to_lower=True)]
 NameString = Annotated[str, StringConstraints(min_length=2, max_length=100, strip_whitespace=True)]
 CodeString = Annotated[str, StringConstraints(min_length=5, max_length=100, strip_whitespace=True, to_lower=True)]
-DescriptionString = Annotated[str, StringConstraints(max_length=256, strip_whitespace=True)]
+DescriptionString = Annotated[str | None, StringConstraints(max_length=256, strip_whitespace=True)]
 
 
 # --- Eingabeschemata ---
@@ -61,7 +61,7 @@ class RoleIn(BaseModel):
                              description="Name der Rolle.",
                              examples=["Admin", "Maintainer"])
 
-    description: DescriptionString = Field(description="Rollenbeschreibung.")
+    description: DescriptionString | None = Field(description="Rollenbeschreibung.")
 
     model_config = ConfigDict(extra="forbid")
 
