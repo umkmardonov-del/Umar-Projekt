@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.deps import postgres_dep, session_store_dep, auth_session_dep
 from app.pydantic_models.auth_models import (RegisterIn, UserOut, LoginIn, RoleIn, RoleOut, PermissionIn, PermissionOut,
                                              UserRoleIn, UserRoleOut, RolePermissionIn, RolePermissionOut)
+from app.security.permissions import PermissionHandler
 from app.security.session_store import SessionStore
 from app.security.session_data import SessionData
 from app.service.auth_service import (register_user_service, create_auth_session_service, login_user_service,
@@ -54,7 +55,8 @@ async def logout_user_endpoint(request: Request,
 
 
 # ------- Admin Routen -------
-@admin_router.post("/create_role", status_code=201, dependencies=[Depends(auth_session_dep)])
+@admin_router.post("/create_role", status_code=201,
+                   dependencies=[Depends(auth_session_dep), Depends(PermissionHandler(["admin"],["write"]))])
 async def create_role_endpoint(payload: RoleIn,
                                session: AsyncSession = Depends(postgres_dep)) -> RoleOut:
 
@@ -63,7 +65,8 @@ async def create_role_endpoint(payload: RoleIn,
     return role_dto
 
 
-@admin_router.post("/create_permission", status_code=201, dependencies=[Depends(auth_session_dep)])
+@admin_router.post("/create_permission", status_code=201,
+                   dependencies=[Depends(auth_session_dep), Depends(PermissionHandler(["admin"],["write"]))])
 async def create_permission_endpoint(payload: PermissionIn,
                                      session: AsyncSession = Depends(postgres_dep)) -> PermissionOut:
 
@@ -72,7 +75,8 @@ async def create_permission_endpoint(payload: PermissionIn,
     return permission_dto
 
 
-@admin_router.post("/create_ur", status_code=201, dependencies=[Depends(auth_session_dep)])
+@admin_router.post("/create_ur", status_code=201,
+                   dependencies=[Depends(auth_session_dep), Depends(PermissionHandler(["admin"],["write"]))])
 async def create_user_role_endpoint(payload: UserRoleIn,
                                     session: AsyncSession = Depends(postgres_dep)) -> UserRoleOut:
 
@@ -81,7 +85,8 @@ async def create_user_role_endpoint(payload: UserRoleIn,
     return user_role_dto
 
 
-@admin_router.post("/create_rp", status_code=201, dependencies=Depends(auth_session_dep))
+@admin_router.post("/create_rp", status_code=201,
+                   dependencies=[Depends(auth_session_dep), Depends(PermissionHandler(["admin"],["write"]))])
 async def create_role_permission_endpoint(payload: RolePermissionIn,
                                           session: AsyncSession = Depends(postgres_dep)) -> RolePermissionOut:
 
