@@ -1,0 +1,18 @@
+# --- Home Endpunkt ---
+# --- path: app/api/home_api.py ---
+
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+
+router = APIRouter(tags=["home"])
+
+
+@router.get("/", summary="Landing Page")
+async def home_api(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse("index.html", {"request": request})
