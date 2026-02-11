@@ -34,6 +34,7 @@ app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="stat
 
 # --- Home Router ---
 app.include_router(home_router)
+
 # --- Product Routers ---
 app.include_router(product_user_router)
 app.include_router(product_admin_router)
