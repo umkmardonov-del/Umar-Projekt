@@ -1,81 +1,101 @@
 const scene = document.getElementById("scene");
 const app = document.getElementById("app");
 const glow = document.getElementById("cursorGlow");
-
-document.addEventListener("mousemove", e=>{
-  glow.style.left=e.clientX+"px";
-  glow.style.top=e.clientY+"px";
-});
-
-// AUTH
-const loginBtn = document.getElementById("loginBtn");
-const signupBtn = document.getElementById("signupBtn");
-const authForm = document.getElementById("authForm");
-const nameRow = document.getElementById("nameRow");
 const title = document.getElementById("authTitle");
+const text = document.getElementById("authText");
 const toggle = document.getElementById("authToggle");
+const nameRow = document.getElementById("nameRow");
 
-loginBtn.onclick=()=>{scene.classList.add("auth-open");setMode("login")}
-signupBtn.onclick=()=>{scene.classList.add("auth-open");setMode("signup")}
+document.addEventListener("mousemove", e => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
 
-toggle.onclick=e=>{
+document.getElementById("loginBtn").onclick = () => {
+  scene.classList.add("auth-open");
+  setMode("login");
+};
+
+document.getElementById("signupBtn").onclick = () => {
+  scene.classList.add("auth-open");
+  setMode("signup");
+};
+
+toggle.onclick = e => {
   e.preventDefault();
-  setMode(title.textContent==="Log in"?"signup":"login");
-}
+  setMode(title.textContent === "Log in" ? "signup" : "login");
+};
 
-function setMode(mode){
-  if(mode==="signup"){
-    authForm.action="/auth/signup";
-    title.textContent="Sign up";
-    nameRow.classList.add("active");
-  }else{
-    authForm.action="/auth/login";
-    title.textContent="Log in";
-    nameRow.classList.remove("active");
+document.getElementById("enterApp").onclick = async () => {
+
+  const isSignup = title.textContent === "Sign up";
+
+  const data = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    email: document.querySelector('input[type="email"]').value,
+    password: document.querySelector('input[type="password"]').value
+  };
+
+  const endpoint = isSignup ? "/api/signup" : "/api/login";
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include", // wichtig falls Backend Sessions nutzt
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+
+      // Nur bei erfolgreichem Login App öffnen
+      scene.style.opacity = "0";
+      setTimeout(()=>{
+        scene.style.display = "none";
+        app.classList.add("active");
+      },500);
+
+    } else {
+      alert(result.message || "Authentication failed");
+    }
+
+  } catch (err) {
+    alert("Server not reachable");
   }
-}
+};
 
-// UMAR BYPASS
-authForm.addEventListener("submit",e=>{
-  const fn = authForm.first_name?.value;
-  const ln = authForm.last_name?.value;
 
-  if(fn==="UMAR" && ln==="UMAR"){
-    e.preventDefault();
-    enterApp("admin");
-  }
-});
+/* SIDEBAR SWITCH */
+const navButtons = document.querySelectorAll(".nav-btn");
+const sections = document.querySelectorAll(".content-section");
 
-// ENTER APP
-function enterApp(role){
-  scene.style.display="none";
-  app.classList.add("active");
-  applyRole(role);
-}
-
-// ROLES
-function applyRole(role){
-  document.getElementById("roleBadge").textContent=role.toUpperCase();
-  document.querySelectorAll(".technician-only").forEach(el=>{
-    el.style.display = (role==="technician"||role==="admin")?"block":"none";
-  });
-}
-
-// NAV
-document.querySelectorAll(".nav-btn").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+navButtons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    navButtons.forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
-    document.querySelectorAll(".content").forEach(c=>c.classList.remove("active-section"));
-    document.getElementById(btn.dataset.section).classList.add("active-section");
-  }
+
+    sections.forEach(sec=>sec.classList.remove("active-section"));
+    document.getElementById(btn.dataset.section)
+      .classList.add("active-section");
+  });
 });
 
-// SECURITY LOGIC
-["c","i","a"].forEach(id=>{
-  document.getElementById(id)?.addEventListener("change",calcRisk);
+/* PRESETS */
+const presets={
+  it:{dept:"IT",software:"Office 365"},
+  hr:{dept:"HR",software:"Office 365"},
+  dev:{dept:"IT",software:"Developer Tools"}
+};
+
+document.querySelectorAll("[data-preset]").forEach(b=>{
+  b.onclick=()=>{
+    department.value=presets[b.dataset.preset].dept;
+    included_software.value=presets[b.dataset.preset].software;
+  };
 });
-function calcRisk(){
-  const max = Math.max(+c.value,+i.value,+a.value);
-  risk.textContent = max===3?"High":max===2?"Medium":"Low";
-}
+
