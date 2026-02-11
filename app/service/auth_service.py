@@ -127,6 +127,8 @@ async def create_role_service(session: AsyncSession, payload: RoleIn) -> RoleOut
 
     new_role_orm = await create_role(session, name=name, description=description)
 
+    await session.commit()
+
     role_dto = RoleOut.model_validate(new_role_orm)
 
     return role_dto
@@ -142,6 +144,8 @@ async def create_permission_service(session: AsyncSession, payload: PermissionIn
         raise PermissionAlreadyExistsError()
 
     new_permission_orm = await create_permission(session, code=code, description=description)
+
+    await session.commit()
 
     permission_dto = PermissionOut.model_validate(new_permission_orm)
 
@@ -162,6 +166,8 @@ async def create_user_role_service(session: AsyncSession, payload: UserRoleIn) -
 
     new_user_role_orm = await create_user_role(session, user=user, role=role)
 
+    await session.commit()
+
     user_role_dto = UserRoleOut.model_validate(new_user_role_orm)
 
     return user_role_dto
@@ -176,6 +182,8 @@ async def create_role_permission_service(session: AsyncSession, payload: RolePer
     permission = await get_permission_by_code(session, code)
 
     new_role_permission_orm = await create_role_permission(session, role=role, permission=permission)
+
+    await session.commit()
 
     role_permission_dto = RolePermissionOut.model_validate(new_role_permission_orm)
 
