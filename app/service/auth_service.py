@@ -11,10 +11,11 @@ from app.core.settings import settings
 from app.db.orm_models.auth_orm import User
 from app.db.repositories.auth_repository import (get_user_by_email, register_user, get_permission_codes_by_id,
                                                  create_role, get_role_by_name, get_permission_by_code,
-                                                 create_permission)
+                                                 create_permission, create_user_role, create_role_permission)
 from app.core.exceptions import (EmailAlreadyRegisteredError, InvalidCredentialsError, RoleAlreadyExistsError,
                                  PermissionAlreadyExistsError)
-from app.pydantic_models.auth_models import RegisterIn, UserOut, LoginIn, RoleIn, RoleOut, PermissionIn, PermissionOut
+from app.pydantic_models.auth_models import (RegisterIn, UserOut, LoginIn, RoleIn, RoleOut, PermissionIn, PermissionOut,
+                                             RolePermissionIn, UserRoleIn, UserRoleOut, RolePermissionOut)
 from app.security.passwords import hash_password, needs_rehash, verify_password, generate_secret_token
 from app.security.session_data import SessionData
 from app.security.session_store import SessionStore
@@ -146,6 +147,36 @@ async def create_permission_service(session: AsyncSession, payload: PermissionIn
     permission_dto = PermissionOut.model_validate(new_permission_orm)
 
     return permission_dto
+
+
+async def create_user_role_service(session: AsyncSession, payload: UserRoleIn) -> UserRoleOut:
+
+    email = payload.email.strip()
+    name = payload.role_name.strip()
+
+    user = await get_user_by_email(session, email)
+    role = await get_role_by_name(session, name)
+
+    new_user_role_orm = await create_user_role(session, user=user, role=role)
+
+    user_role_dto = UserRoleOut.model_validate(new_user_role_orm)
+
+    return user_role_dto
+
+
+async def create_role_permission_service(session: AsyncSession, payload: RolePermissionIn) -> RolePermissionOut:
+
+    name = payload.role_name.strip()
+    code = payload.permission_code.strip()
+
+    role = await get_role_by_name(session, name)
+    permission = await get_permission_by_code(session, code)
+
+    new_role_permission_orm = await create_role_permission(session, role=role, permission=permission)
+
+    role_permission_dto = RolePermissionOut.model_validate(new_role_permission_orm)
+
+    return role_permission_dto
 
 
 # --- Helper ---

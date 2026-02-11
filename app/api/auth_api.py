@@ -5,11 +5,13 @@ from fastapi import Request, Response, APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import postgres_dep, session_store_dep, auth_session_dep
-from app.pydantic_models.auth_models import RegisterIn, UserOut, LoginIn, RoleIn, RoleOut, PermissionIn, PermissionOut
+from app.pydantic_models.auth_models import (RegisterIn, UserOut, LoginIn, RoleIn, RoleOut, PermissionIn, PermissionOut,
+                                             UserRoleIn, UserRoleOut, RolePermissionIn, RolePermissionOut)
 from app.security.session_store import SessionStore
 from app.security.session_data import SessionData
 from app.service.auth_service import (register_user_service, create_auth_session_service, login_user_service,
-                                      logout_user_service, create_role_service, create_permission_service)
+                                      logout_user_service, create_role_service, create_permission_service,
+                                      create_user_role_service, create_role_permission_service)
 
 user_router = APIRouter(prefix="/auth", tags=["auth", "user"])
 admin_router = APIRouter(prefix="/auth", tags=["auth", "admin"])
@@ -68,3 +70,21 @@ async def create_permission_endpoint(payload: PermissionIn,
     permission_dto = await create_permission_service(session, payload)
 
     return permission_dto
+
+
+@admin_router.post("/create_ur", status_code=201, dependencies=[Depends(auth_session_dep)])
+async def create_user_role_endpoint(payload: UserRoleIn,
+                                    session: AsyncSession = Depends(postgres_dep)) -> UserRoleOut:
+
+    user_role_dto = await create_user_role_service(session, payload)
+
+    return user_role_dto
+
+
+@admin_router.post("/create_rp", status_code=201, dependencies=Depends(auth_session_dep))
+async def create_role_permission_endpoint(payload: RolePermissionIn,
+                                          session: AsyncSession = Depends(postgres_dep)) -> RolePermissionOut:
+
+    role_permission_dto = await create_role_permission_service(session, payload)
+
+    return role_permission_dto

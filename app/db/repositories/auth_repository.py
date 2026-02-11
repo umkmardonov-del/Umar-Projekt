@@ -10,16 +10,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.orm_models.auth_orm import User, Role, Permission, RolePermission, UserRole
 
 
-async def register_user(session: AsyncSession, *,
-                        name: str,
-                        surname: str,
-                        email: str,
-                        pw_hash: str) -> User:
+async def register_user(session: AsyncSession, *, name: str,
+                        surname: str, email: str, pw_hash: str) -> User:
 
-    new_user_orm = User(name=name,
-                        surname=surname,
-                        email=email,
-                        pw_hash=pw_hash)
+    new_user_orm = User(name=name, surname=surname, email=email, pw_hash=pw_hash)
 
     session.add(new_user_orm)
 
@@ -29,7 +23,7 @@ async def register_user(session: AsyncSession, *,
     return new_user_orm
 
 
-async def get_user_by_email(session: AsyncSession, *, email: str) -> Optional[User]:
+async def get_user_by_email(session: AsyncSession, email: str) -> Optional[User]:
     email = email.strip().lower()
 
     stmt = select(User).where(User.email == email)
@@ -41,7 +35,7 @@ async def get_user_by_email(session: AsyncSession, *, email: str) -> Optional[Us
     return user
 
 
-async def get_permission_codes_by_id(session: AsyncSession, *, ident: UUID) -> list[str]:
+async def get_permission_codes_by_id(session: AsyncSession, ident: UUID) -> list[str]:
     stmt = (select(Permission.code)
             .join(RolePermission, RolePermission.permission_id == Permission.id)
             .join(UserRole, UserRole.role_id == RolePermission.role_id)
@@ -95,3 +89,28 @@ async def get_permission_by_code(session: AsyncSession, code: str) -> Optional[P
     result = (await session.execute(stmt)).scalar_one_or_none()
 
     return result
+
+
+async def create_user_role(session: AsyncSession, *, user: User, role: Role) -> UserRole:
+
+    new_user_role_orm = UserRole(user=user, role=role) # Ids werden automatisch verknüpft
+
+    session.add(new_user_role_orm)
+
+    await session.flush()
+    await session.refresh(new_user_role_orm)
+
+    return new_user_role_orm
+
+
+async def create_role_permission(session: AsyncSession, *, role: Role,
+                                 permission: Permission) -> RolePermission:
+
+    new_role_permission_orm = RolePermission(role=role, permission=permission)
+
+    session.add(new_role_permission_orm)
+
+    await session.flush()
+    await session.refresh(new_role_permission_orm)
+
+    return new_role_permission_orm
