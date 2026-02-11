@@ -16,6 +16,6 @@ router = APIRouter(tags=["home"])
 
 
 @router.get("/", summary="Landing Page",
-            dependencies=[Depends(PermissionHandler(["guest"],["read"]))])
+            dependencies=[])
 async def home_api(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("index.html", {"request": request})

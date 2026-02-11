@@ -26,7 +26,7 @@ admin_router = APIRouter(prefix="/product/admin", tags=["admin", "product"])
 # --- Produktspezifische Endpunkte ---
 
 @admin_router.post("/product", status_code=201, response_model=ProductOut, summary="Produkte anlegen.",
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["write"]))])
 async def create_product_api(payload: ProductIn,
                              request: Request,
                              response: Response,
@@ -46,7 +46,7 @@ async def create_product_api(payload: ProductIn,
 
 @admin_router.get("/products/{product_type}", response_model=list[ProductOut],
                   summary="Alle Produkte eines bestimmten Typs abfragen.",
-                  dependencies=[Depends(PermissionHandler([],[]))])
+                  dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["read"]))])
 async def get_products_by_type_api(product_type: str,
                                    session: AsyncSession = Depends(postgres_dep)
                                    ) -> list[ProductOut]:
@@ -61,7 +61,7 @@ async def get_products_by_type_api(product_type: str,
 
 @admin_router.get("/product/{ident}", response_model=ProductOut, name="get_product_by_id",
                   summary="Einzelnes Produkt anhand seiner ID abrufen.",
-                  dependencies=[Depends(PermissionHandler([],[]))])
+                  dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["read"]))])
 async def get_product_by_id_api(ident: UUID,
                                 session: AsyncSession = Depends(postgres_dep),
                                 ) -> ProductOut | None:
@@ -77,7 +77,7 @@ async def get_product_by_id_api(ident: UUID,
 
 
 @admin_router.get("", response_model=list[ProductListOut],
-                  dependencies=[Depends(PermissionHandler([],[]))])
+                  dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["read"]))])
 async def get_all_products_api(session: AsyncSession = Depends(postgres_dep)) -> list[ProductListOut]:
     try:
         dto = await get_all_products_service(session)
@@ -89,7 +89,7 @@ async def get_all_products_api(session: AsyncSession = Depends(postgres_dep)) ->
 
 
 @admin_router.delete("/product/{ident}", status_code=204,
-                     dependencies=[Depends(PermissionHandler([],[]))])
+                     dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["delete"]))])
 async def delete_product_api(ident: UUID,
                              session: AsyncSession = Depends(postgres_dep),
                              ):
@@ -107,7 +107,7 @@ async def delete_product_api(ident: UUID,
 # --- Abteilungsspezifische Endpunkte ---
 
 @admin_router.post("/department", status_code=201, response_model=DepartmentOut,
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin"], ["write"]))])
 async def create_department_api(payload: DepartmentIn,
                                 request: Request,
                                 response: Response,
@@ -127,7 +127,7 @@ async def create_department_api(payload: DepartmentIn,
 
 
 @admin_router.get("/departments", response_model=list[DepartmentOut],
-                  dependencies=[Depends(PermissionHandler([],[]))])
+                  dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["read"]))])
 async def get_all_departments_api(session: AsyncSession = Depends(postgres_dep)):
     try:
         dto = await get_all_departments_service(session)
@@ -140,7 +140,7 @@ async def get_all_departments_api(session: AsyncSession = Depends(postgres_dep))
 
 @admin_router.get("/department/{ident}", response_model=DepartmentOut, name="get_department_by_id",
                   summary="Einzelne Abteilung anhand seiner ID abrufen.",
-                  dependencies=[Depends(PermissionHandler([],[]))])
+                  dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["read"]))])
 async def get_department_by_id_api(ident: UUID,
                                    session: AsyncSession = Depends(postgres_dep),
                                    ) -> DepartmentOut | None:
@@ -158,7 +158,7 @@ async def get_department_by_id_api(ident: UUID,
 # --- Paketspezifische Endpunkte ---
 
 @admin_router.post("/package", status_code=201, response_model=PackageOut,
-                   dependencies=[Depends(PermissionHandler([],[]))])
+                   dependencies=[Depends(PermissionHandler(["admin"], ["write"]))])
 async def create_package_api(payload: PackageIn,
                              request: Request,
                              response: Response,
@@ -178,7 +178,7 @@ async def create_package_api(payload: PackageIn,
 
 
 @admin_router.get("/packages", response_model=list[PackageOut],
-                  dependencies=[Depends(PermissionHandler([],[]))])
+                  dependencies=[Depends(PermissionHandler(["admin", "maintainer"], ["read"]))])
 async def get_all_packages_api(session: AsyncSession = Depends(postgres_dep)
                                ) -> list[PackageOut]:
     try:
@@ -217,7 +217,7 @@ user_router = APIRouter(prefix="/product/user", tags=["user", "product"])
 
 @user_router.post("/calculator", response_class=HTMLResponse, response_model=list[CalculatorOut],
                   response_model_exclude_none=True, summary="Anforderungen von Website erhalten.",
-                  dependencies=[Depends(PermissionHandler(["user", "admin", "maintainer"],["read"]))])
+                  dependencies=[Depends(PermissionHandler(["user", "admin", "maintainer"], ["read"]))])
 async def get_user_specifications(request: Request,
                                   department: str = Form(...),
                                   team_members: int = Form(...),
