@@ -6,10 +6,12 @@ from pydantic import Field, EmailStr, SecretStr, BaseModel, StringConstraints, C
 from typing import Annotated, Optional
 from uuid import UUID
 
-PasswordString = Annotated[
-    SecretStr, StringConstraints(min_length=8, max_length=24)]  #TODO Strip whitespace Field Validator
-EmailString = Annotated[EmailStr, StringConstraints(max_length=256, strip_whitespace=True)]
+#TODO Strip whitespace Field Validator
+PasswordString = Annotated[SecretStr, StringConstraints(min_length=8, max_length=24)]
+EmailString = Annotated[EmailStr, StringConstraints(max_length=256, strip_whitespace=True, to_lower=True)]
 NameString = Annotated[str, StringConstraints(min_length=2, max_length=100, strip_whitespace=True)]
+CodeString = Annotated[str, StringConstraints(min_length=5, max_length=100, strip_whitespace=True, to_lower=True)]
+DescriptionString = Annotated[str, StringConstraints(max_length=256, strip_whitespace=True)]
 
 
 # --- Eingabeschemata ---
@@ -45,41 +47,41 @@ class LoginIn(BaseModel):
 
 
 class RoleIn(BaseModel):
-    name: str = Field(...,
-                      max_length=20,
-                      description="Name der Rolle.",
-                      examples=["Admin", "Maintainer"])
+    name: NameString = Field(...,
+                             description="Name der Rolle.",
+                             examples=["Admin", "Maintainer"])
 
-    description: str = Field(max_length=256,
-                             description="Rollenbeschreibung.")
+    description: DescriptionString = Field(description="Rollenbeschreibung.")
 
     model_config = ConfigDict(extra="forbid")
 
 
 class PermissionIn(BaseModel):
-    code: str = Field(...,
-                      max_length=100,
-                      description="Permission Code.",
-                      examples=["user:read", "admin:read"])
+    code: CodeString = Field(...,
+                             description="Permission Code, max 100 Zeichen.",
+                             examples=["user:read", "admin:read"])
 
-    description: str = Field(max_length=256,
-                             description="Berechtigungsbeschreibung.")
+    description: DescriptionString = Field(description="Berechtigungsbeschreibung.")
 
     model_config = ConfigDict(extra="forbid")
 
 
 class UserRoleIn(BaseModel):
-    email: str = Field(...,)
+    email: EmailString = Field(...,
+                               description="Email Adresse.")
 
-    role_name: str = Field(...,)
+    role_name: NameString = Field(...,
+                                  description="Rollenname.")
 
     model_config = ConfigDict(extra="forbid")
 
 
 class RolePermissionIn(BaseModel):
-    role_name: str = Field(...,)
+    role_name: NameString = Field(...,
+                                  description="Rollenname.")
 
-    permission_code: str = Field(...,)
+    permission_code: CodeString = Field(...,
+                                        description="Permission Code, max 100 Zeichen.")
 
     model_config = ConfigDict(extra="forbid")
 
@@ -110,10 +112,11 @@ class RoleOut(BaseModel):
     id: int = Field(...,
                     description="Automatisch generierte Role ID.")
 
-    name: str = Field(...,
+    name: NameString = Field(...,
                       description="Rollenname.")
 
-    description: Optional[str] = Field(description="Rollenbeschreibung.")
+    description: Optional[str] = Field(max_length=256,
+                                       description="Rollenbeschreibung.")
 
     created_at: datetime = Field(...,
                                  description="Erstellungsdatum der Rolle.")
@@ -125,10 +128,11 @@ class PermissionOut(BaseModel):
     id: int = Field(...,
                     description="Automatisch generierte Permission ID.")
 
-    code: str = Field(...,
+    code: NameString = Field(...,
                       description="Permission code.")
 
-    description: Optional[str] = Field(description="Berechtigungsbeschreibung.")
+    description: Optional[str] = Field(max_length=256,
+                                       description="Berechtigungsbeschreibung.")
 
     created_at: datetime = Field(...,
                                  description="Erstellungsdatum der Berechtigung.")
@@ -163,5 +167,4 @@ class RolePermissionOut(BaseModel):
 
 
 class Me(BaseModel):
-
     model_config = ConfigDict(extra="forbid", from_attributes=True)
