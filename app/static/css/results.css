@@ -6,11 +6,40 @@
 
 body {
   font-family: Inter, system-ui, sans-serif;
-  background: #050608;
+  background: radial-gradient(circle at 18% 14%, rgba(79, 209, 197, 0.16), transparent 30%), radial-gradient(circle at 84% 84%, rgba(34, 211, 238, 0.12), transparent 34%), #050608;
   color: #f5f7fa;
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: -14% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 10% 14%, rgba(79, 209, 197, 0.16), transparent 38%), radial-gradient(circle at 92% 8%, rgba(59, 130, 246, 0.11), transparent 34%), radial-gradient(circle at 54% 108%, rgba(51, 234, 97, 0.1), transparent 36%);
+  filter: blur(36px);
+  animation: ambience-shift 24s ease-in-out infinite alternate;
+}
+
+@keyframes ambience-shift {
+  to {
+    transform: translate3d(-2%, -1%, 0) scale(1.06);
+  }
+}
 body {
   overflow: auto;
 }

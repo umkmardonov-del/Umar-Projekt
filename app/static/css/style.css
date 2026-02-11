@@ -6,9 +6,39 @@
 
 body {
   font-family: Inter, system-ui, sans-serif;
-  background: #050608;
+  background: radial-gradient(circle at 18% 14%, rgba(79, 209, 197, 0.16), transparent 30%), radial-gradient(circle at 84% 84%, rgba(34, 211, 238, 0.12), transparent 34%), #050608;
   color: #f5f7fa;
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: -14% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 10% 14%, rgba(79, 209, 197, 0.16), transparent 38%), radial-gradient(circle at 92% 8%, rgba(59, 130, 246, 0.11), transparent 34%), radial-gradient(circle at 54% 108%, rgba(51, 234, 97, 0.1), transparent 36%);
+  filter: blur(36px);
+  animation: ambience-shift 24s ease-in-out infinite alternate;
+}
+
+@keyframes ambience-shift {
+  to {
+    transform: translate3d(-2%, -1%, 0) scale(1.06);
+  }
 }
 
 .hero {
@@ -161,7 +191,9 @@ body {
 
 .fx-noise {
   mix-blend-mode: overlay;
-  opacity: 0.04;
+  opacity: 0.08;
+  background-image: repeating-radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 4px);
+  background-size: 180px 180px;
 }
 
 .fx-vignette {
@@ -169,7 +201,20 @@ body {
 }
 
 .fx-stars {
-  opacity: 0.08;
+  opacity: 0.2;
+  background-image: radial-gradient(circle at 14% 24%, rgba(255, 255, 255, 0.42) 0 1px, transparent 2px), radial-gradient(circle at 70% 12%, rgba(79, 209, 197, 0.38) 0 1px, transparent 2px), radial-gradient(circle at 38% 76%, rgba(255, 255, 255, 0.34) 0 1px, transparent 2px), radial-gradient(circle at 86% 64%, rgba(34, 211, 238, 0.34) 0 1px, transparent 2px);
+  background-size: 420px 420px, 510px 510px, 620px 620px, 700px 700px;
+  animation: stars-drift 65s linear infinite;
+}
+
+.fx-stars::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 22% 66%, rgba(255, 255, 255, 0.6) 0 1px, transparent 2px), radial-gradient(circle at 62% 38%, rgba(255, 255, 255, 0.45) 0 1px, transparent 2px), radial-gradient(circle at 84% 22%, rgba(79, 209, 197, 0.5) 0 1px, transparent 2px);
+  background-size: 560px 560px, 640px 640px, 760px 760px;
+  opacity: 0.5;
+  animation: stars-twinkle 7s ease-in-out infinite alternate;
 }
 
 .fx-glow {
@@ -186,6 +231,15 @@ body {
   perspective: 1400px;
   z-index: 2;
   transition: opacity 0.5s ease;
+}
+
+.scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.36;
+  background: linear-gradient(120deg, rgba(79, 209, 197, 0.1), transparent 40%), linear-gradient(300deg, rgba(34, 211, 238, 0.06), transparent 42%), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 48px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 48px);
 }
 
 .mesh {
@@ -213,6 +267,16 @@ body {
 @keyframes drift {
   50% {
     transform: translate(120px, -90px) scale(1.1);
+  }
+}
+@keyframes stars-drift {
+  to {
+    transform: translateY(-60px);
+  }
+}
+@keyframes stars-twinkle {
+  50% {
+    opacity: 0.75;
   }
 }
 .scene.auth-open .hero {
@@ -265,6 +329,18 @@ body {
 
 .main {
   padding: 56px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(18, 21, 27, 0.72), rgba(12, 14, 19, 0.72)), radial-gradient(circle at 86% -10%, rgba(79, 209, 197, 0.12), transparent 42%);
+}
+
+.main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 35%), repeating-linear-gradient(110deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 30px);
+  opacity: 0.35;
 }
 
 .content {
@@ -277,6 +353,57 @@ body {
 
 .active-section {
   display: block;
+}
+
+#home.active-section {
+  display: grid;
+  gap: 24px;
+  max-width: 980px;
+}
+
+#home h2 {
+  font-size: 40px;
+  letter-spacing: -0.02em;
+}
+
+#home .home-intro {
+  color: #9aa3ad;
+  max-width: 760px;
+  line-height: 1.6;
+}
+
+#home .home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+#home .home-card {
+  padding: 22px;
+  background: linear-gradient(165deg, rgba(22, 26, 34, 0.95), rgba(18, 21, 27, 0.9));
+  border: 1px solid #202634;
+  border-radius: 14px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.24);
+}
+
+#home .home-card h3 {
+  margin-bottom: 10px;
+  color: #4fd1c5;
+  font-size: 20px;
+}
+
+#home .home-card p {
+  color: #9aa3ad;
+  line-height: 1.55;
+}
+
+#home .home-tip {
+  padding: 16px 18px;
+  border: 1px solid rgba(79, 209, 197, 0.32);
+  border-radius: 12px;
+  background: rgba(79, 209, 197, 0.08);
+  color: #f5f7fa;
+  line-height: 1.5;
 }
 
 #calculator,
@@ -321,7 +448,7 @@ body {
 
 #calculator .presets {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 22px;
@@ -351,10 +478,12 @@ body {
   border: none;
   cursor: pointer;
   width: min(100%, 380px);
+  display: block;
   padding: 14px;
-  margin: 20px 0 0;
+  margin: 20px auto 0;
   border-radius: 12px;
   font-size: 17px;
+  font-family: Inter, system-ui, sans-serif;
   transition: 0.25s ease;
 }
 
@@ -384,6 +513,15 @@ select {
   background: #161a22;
   border: 1px solid #202634;
   color: #f5f7fa;
+}
+
+@media (max-width: 1000px) {
+  .main {
+    padding: 36px 24px;
+  }
+  #home h2 {
+    font-size: 34px;
+  }
 }
 
 #security p {
