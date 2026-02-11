@@ -25,7 +25,7 @@ async def get_auth_session(session: AsyncSession,
     session_id = request.cookies.get(settings.SESSION_COOKIE_NAME)
 
     if session_id is None or session_id.strip() == "":
-        raise SessionTimeoutError()
+        raise NotAuthorizedError()
 
     store_data = await store.get(session_id)
 
