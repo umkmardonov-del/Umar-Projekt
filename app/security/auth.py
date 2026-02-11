@@ -1,7 +1,7 @@
 # --- Authentifizierungslogik ---
 # --- path: app/security/auth.py ---
 
-from fastapi import Request, Response, Depends
+from fastapi import Request, Response
 from logging import getLogger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
