@@ -44,6 +44,9 @@ async def register_user_service(session: AsyncSession, *, payload: RegisterIn) -
     except IntegrityError:
         raise EmailAlreadyRegisteredError()
 
+    # --- Default-Rolle an neue User geben ---
+    await create_user_role(session, user=user, role=settings.DEFAULT_ROLE)
+
     return user
 
 
