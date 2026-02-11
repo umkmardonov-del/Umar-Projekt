@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Request, Response, HTTPException
+from fastapi import APIRouter, Depends, Request, Response
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
@@ -25,7 +25,8 @@ admin_router = APIRouter(prefix="/product/admin", tags=["admin", "product"])
 # ------- Admin-Routen -------
 # --- Produktspezifische Endpunkte ---
 
-@admin_router.post("/product", status_code=201, response_model=ProductOut, summary="Produkte anlegen.")
+@admin_router.post("/product", status_code=201, response_model=ProductOut, summary="Produkte anlegen.",
+                   dependencies=[Depends(PermissionHandler([],[]))])
 async def create_product_api(payload: ProductIn,
                              request: Request,
                              response: Response,
@@ -44,7 +45,8 @@ async def create_product_api(payload: ProductIn,
 
 
 @admin_router.get("/products/{product_type}", response_model=list[ProductOut],
-                  summary="Alle Produkte eines bestimmten Typs abfragen.")
+                  summary="Alle Produkte eines bestimmten Typs abfragen.",
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_products_by_type_api(product_type: str,
                                    session: AsyncSession = Depends(postgres_dep)
                                    ) -> list[ProductOut]:
@@ -58,7 +60,8 @@ async def get_products_by_type_api(product_type: str,
 
 
 @admin_router.get("/product/{ident}", response_model=ProductOut, name="get_product_by_id",
-                  summary="Einzelnes Produkt anhand seiner ID abrufen.")
+                  summary="Einzelnes Produkt anhand seiner ID abrufen.",
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_product_by_id_api(ident: UUID,
                                 session: AsyncSession = Depends(postgres_dep),
                                 ) -> ProductOut | None:
@@ -70,10 +73,11 @@ async def get_product_by_id_api(ident: UUID,
     except ValueError:
         raise HTTPException(status_code=404, detail="Not Found")
     except Exception:
-        HTTPException(status_code=500, detail="Internal Error")
+        raise HTTPException(status_code=500, detail="Internal Error")
 
 
-@admin_router.get("", response_model=list[ProductListOut])
+@admin_router.get("", response_model=list[ProductListOut],
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_all_products_api(session: AsyncSession = Depends(postgres_dep)) -> list[ProductListOut]:
     try:
         dto = await get_all_products_service(session)
@@ -84,7 +88,8 @@ async def get_all_products_api(session: AsyncSession = Depends(postgres_dep)) ->
         raise HTTPException(status_code=500, detail="Internal Error")
 
 
-@admin_router.delete("/product/{ident}", status_code=204)
+@admin_router.delete("/product/{ident}", status_code=204,
+                     dependencies=[Depends(PermissionHandler([],[]))])
 async def delete_product_api(ident: UUID,
                              session: AsyncSession = Depends(postgres_dep),
                              ):
@@ -101,7 +106,8 @@ async def delete_product_api(ident: UUID,
 
 # --- Abteilungsspezifische Endpunkte ---
 
-@admin_router.post("/department", status_code=201, response_model=DepartmentOut)
+@admin_router.post("/department", status_code=201, response_model=DepartmentOut,
+                   dependencies=[Depends(PermissionHandler([],[]))])
 async def create_department_api(payload: DepartmentIn,
                                 request: Request,
                                 response: Response,
@@ -120,7 +126,8 @@ async def create_department_api(payload: DepartmentIn,
         raise HTTPException(status_code=500, detail="Internal Error")
 
 
-@admin_router.get("/departments", response_model=list[DepartmentOut])
+@admin_router.get("/departments", response_model=list[DepartmentOut],
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_all_departments_api(session: AsyncSession = Depends(postgres_dep)):
     try:
         dto = await get_all_departments_service(session)
@@ -132,7 +139,8 @@ async def get_all_departments_api(session: AsyncSession = Depends(postgres_dep))
 
 
 @admin_router.get("/department/{ident}", response_model=DepartmentOut, name="get_department_by_id",
-                  summary="Einzelne Abteilung anhand seiner ID abrufen.")
+                  summary="Einzelne Abteilung anhand seiner ID abrufen.",
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_department_by_id_api(ident: UUID,
                                    session: AsyncSession = Depends(postgres_dep),
                                    ) -> DepartmentOut | None:
@@ -143,13 +151,14 @@ async def get_department_by_id_api(ident: UUID,
 
     except ValueError:
         raise HTTPException(status_code=404, detail="Not Found")
-    except Exception:
-        HTTPException(status_code=500, detail="Internal Error")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Error") from e
 
 
 # --- Paketspezifische Endpunkte ---
 
-@admin_router.post("/package", status_code=201, response_model=PackageOut)
+@admin_router.post("/package", status_code=201, response_model=PackageOut,
+                   dependencies=[Depends(PermissionHandler([],[]))])
 async def create_package_api(payload: PackageIn,
                              request: Request,
                              response: Response,
@@ -168,7 +177,8 @@ async def create_package_api(payload: PackageIn,
         raise HTTPException(status_code=503, detail="Service Unavailable")
 
 
-@admin_router.get("/packages", response_model=list[PackageOut])
+@admin_router.get("/packages", response_model=list[PackageOut],
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_all_packages_api(session: AsyncSession = Depends(postgres_dep)
                                ) -> list[PackageOut]:
     try:
@@ -207,7 +217,7 @@ user_router = APIRouter(prefix="/product/user", tags=["user", "product"])
 
 @user_router.post("/calculator", response_class=HTMLResponse, response_model=list[CalculatorOut],
                   response_model_exclude_none=True, summary="Anforderungen von Website erhalten.",
-                  dependencies=[Depends(auth_session_dep)])
+                  dependencies=[Depends(PermissionHandler([],[]))])
 async def get_user_specifications(request: Request,
                                   department: str = Form(...),
                                   team_members: int = Form(...),
