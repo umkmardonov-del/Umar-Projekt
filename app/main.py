@@ -7,6 +7,7 @@ from pathlib import Path
 from uvicorn import run
 
 from app.api.auth_api import user_router as auth_user_router, admin_router as auth_admin_router
+from app.api.home_api import router as home_router
 from app.api.products_api import admin_router as product_admin_router, user_router as product_user_router
 from app.core.logging_config import configure_logging
 from app.core.settings import settings
@@ -30,6 +31,9 @@ app = FastAPI(
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
+
+# --- Home Router ---
+app.include_router(home_router)
 # --- Product Routers ---
 app.include_router(product_user_router)
 app.include_router(product_admin_router)
