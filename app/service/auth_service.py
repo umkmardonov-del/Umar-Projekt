@@ -38,14 +38,13 @@ async def register_user_service(session: AsyncSession, *, payload: RegisterIn) -
 
     pw_hash = hash_password(password)
 
-    try:
-        user = await register_user(session, payload=payload, email=email, pw_hash=pw_hash)
+    user = await register_user(session, payload=payload, email=email, pw_hash=pw_hash)
 
-    except IntegrityError:
-        raise EmailAlreadyRegisteredError()
+    # --- Role mit Role.name == settings.DEFAULT_ROLE holen ---
+    default_role = await get_role_by_name(session, settings.DEFAULT_ROLE)
 
     # --- Default-Rolle an neue User geben ---
-    await create_user_role(session, user=user, role=settings.DEFAULT_ROLE)
+    await create_user_role(session, user=user, role=default_role)
 
     return user
 
