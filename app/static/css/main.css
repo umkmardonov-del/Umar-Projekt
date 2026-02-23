@@ -1,0 +1,534 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: radial-gradient(circle at 18% 14%, rgba(79, 209, 197, 0.16), transparent 30%), radial-gradient(circle at 84% 84%, rgba(34, 211, 238, 0.12), transparent 34%), #050608;
+  color: #f5f7fa;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: -14% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 10% 14%, rgba(79, 209, 197, 0.16), transparent 38%), radial-gradient(circle at 92% 8%, rgba(59, 130, 246, 0.11), transparent 34%), radial-gradient(circle at 54% 108%, rgba(51, 234, 97, 0.1), transparent 36%);
+  filter: blur(36px);
+  animation: ambience-shift 24s ease-in-out infinite alternate;
+}
+
+@keyframes ambience-shift {
+  to {
+    transform: translate3d(-2%, -1%, 0) scale(1.06);
+  }
+}
+.hero {
+  position: absolute;
+  inset: 0;
+  padding: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hero h1 {
+  font-size: 96px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.hero h1 span {
+  color: #4fd1c5;
+}
+.hero p {
+  margin-top: 36px;
+  font-size: 18px;
+  color: #9aa3ad;
+}
+.hero-actions {
+  margin-top: 64px;
+  display: flex;
+  gap: 20px;
+}
+.hero-actions button {
+  padding: 18px 40px;
+  font-weight: 900;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+.hero-actions button.ghost {
+  background: transparent;
+  border: 1px solid #202634;
+  color: #f5f7fa;
+}
+.hero-actions button:not(.ghost) {
+  background: linear-gradient(135deg, #4fd1c5, #22d3ee);
+  color: #041313;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+}
+.hero-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.auth {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.auth-shell {
+  width: 440px;
+  padding: 44px;
+  background: rgba(18, 21, 27, 0.9);
+  border: 1px solid #202634;
+  border-radius: 18px;
+  opacity: 0;
+  transform: translateZ(-300px) scale(0.5);
+  transition: 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.auth-shell h2 {
+  margin-bottom: 24px;
+}
+.auth-shell input {
+  width: 100%;
+  padding: 12px;
+  background: #161a22;
+  border: 1px solid #202634;
+  color: #f5f7fa;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  padding: 14px;
+}
+.auth-shell .primary {
+  background: linear-gradient(135deg, #4fd1c5, #22d3ee);
+  color: #041313;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 14px;
+}
+
+.auth-switch {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #9aa3ad;
+}
+.auth-switch a {
+  color: #4fd1c5;
+  margin-left: 6px;
+}
+
+.sidebar {
+  background: #12151b;
+  border-right: 1px solid #202634;
+  padding: 32px;
+}
+.sidebar h1 {
+  font-size: 22px;
+}
+.sidebar .role-badge {
+  margin: 20px 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  border: 1px solid #202634;
+  border-radius: 14px;
+  color: #4fd1c5;
+}
+.sidebar .nav-btn {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid #202634;
+  border-radius: 14px;
+  color: #f5f7fa;
+  cursor: pointer;
+}
+.sidebar .nav-btn.active {
+  color: #4fd1c5;
+  border-color: #4fd1c5;
+}
+
+.nav {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fx {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fx-noise {
+  mix-blend-mode: overlay;
+  opacity: 0.08;
+  background-image: repeating-radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 4px);
+  background-size: 180px 180px;
+}
+
+.fx-vignette {
+  box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.7);
+}
+
+.fx-stars {
+  opacity: 0.2;
+  background-image: radial-gradient(circle at 14% 24%, rgba(255, 255, 255, 0.42) 0 1px, transparent 2px), radial-gradient(circle at 70% 12%, rgba(79, 209, 197, 0.38) 0 1px, transparent 2px), radial-gradient(circle at 38% 76%, rgba(255, 255, 255, 0.34) 0 1px, transparent 2px), radial-gradient(circle at 86% 64%, rgba(34, 211, 238, 0.34) 0 1px, transparent 2px);
+  background-size: 420px 420px, 510px 510px, 620px 620px, 700px 700px;
+  animation: stars-drift 65s linear infinite;
+}
+
+.fx-stars::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 22% 66%, rgba(255, 255, 255, 0.6) 0 1px, transparent 2px), radial-gradient(circle at 62% 38%, rgba(255, 255, 255, 0.45) 0 1px, transparent 2px), radial-gradient(circle at 84% 22%, rgba(79, 209, 197, 0.5) 0 1px, transparent 2px);
+  background-size: 560px 560px, 640px 640px, 760px 760px;
+  opacity: 0.5;
+  animation: stars-twinkle 7s ease-in-out infinite alternate;
+}
+
+.fx-glow {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(4, 172, 214, 0.25), transparent 60%);
+  transform: translate(-50%, -50%);
+}
+
+.scene {
+  position: fixed;
+  inset: 0;
+  perspective: 1400px;
+  z-index: 2;
+  transition: opacity 0.5s ease;
+}
+
+.scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.36;
+  background: linear-gradient(120deg, rgba(79, 209, 197, 0.1), transparent 40%), linear-gradient(300deg, rgba(34, 211, 238, 0.06), transparent 42%), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 48px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 48px);
+}
+
+.mesh {
+  position: absolute;
+  inset: -30%;
+  filter: blur(140px);
+  opacity: 0.55;
+  animation: drift 30s ease-in-out infinite;
+}
+
+.mesh-a {
+  background: radial-gradient(circle, #4fd1c5, transparent 35%);
+}
+
+.mesh-b {
+  background: radial-gradient(circle, #3b82f6, transparent 35%);
+  animation-duration: 40s;
+}
+
+.mesh-c {
+  background: radial-gradient(circle, #33ea61, transparent 35%);
+  animation-duration: 50s;
+}
+
+@keyframes drift {
+  50% {
+    transform: translate(120px, -90px) scale(1.1);
+  }
+}
+@keyframes stars-drift {
+  to {
+    transform: translateY(-60px);
+  }
+}
+@keyframes stars-twinkle {
+  50% {
+    opacity: 0.75;
+  }
+}
+.scene.auth-open .hero {
+  transform: scale(1.2) translateZ(200px);
+  filter: blur(14px);
+  opacity: 0.2;
+}
+
+.scene.auth-open .auth-shell {
+  opacity: 1;
+  transform: translateZ(0) scale(1);
+  pointer-events: auto;
+}
+
+.name-row {
+  display: flex;
+  gap: 16px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: 0.4s ease;
+}
+
+.name-row.active {
+  max-height: 80px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.name-row input {
+  flex: 1;
+}
+
+.app {
+  display: none;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  position: relative;
+  z-index: 5;
+}
+
+.app.active {
+  display: grid;
+}
+
+.presets {
+  margin-top: 40px;
+}
+
+.main {
+  padding: 56px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(18, 21, 27, 0.72), rgba(12, 14, 19, 0.72)), radial-gradient(circle at 86% -10%, rgba(79, 209, 197, 0.12), transparent 42%);
+}
+
+.main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 35%), repeating-linear-gradient(110deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 30px);
+  opacity: 0.35;
+}
+
+.content {
+  display: none;
+}
+
+.content-section {
+  display: none;
+}
+
+.active-section {
+  display: block;
+}
+
+#home.active-section {
+  display: grid;
+  gap: 24px;
+  max-width: 980px;
+}
+
+#home h2 {
+  font-size: 40px;
+  letter-spacing: -0.02em;
+}
+
+#home .home-intro {
+  color: #9aa3ad;
+  max-width: 760px;
+  line-height: 1.6;
+}
+
+#home .home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+#home .home-card {
+  padding: 22px;
+  background: linear-gradient(165deg, rgba(22, 26, 34, 0.95), rgba(18, 21, 27, 0.9));
+  border: 1px solid #202634;
+  border-radius: 14px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.24);
+}
+
+#home .home-card h3 {
+  margin-bottom: 10px;
+  color: #4fd1c5;
+  font-size: 20px;
+}
+
+#home .home-card p {
+  color: #9aa3ad;
+  line-height: 1.55;
+}
+
+#home .home-tip {
+  padding: 16px 18px;
+  border: 1px solid rgba(79, 209, 197, 0.32);
+  border-radius: 12px;
+  background: rgba(79, 209, 197, 0.08);
+  color: #f5f7fa;
+  line-height: 1.5;
+}
+
+#calculator,
+#security {
+  font-size: 17px;
+  text-align: left;
+}
+
+#calculator h2,
+#security h2 {
+  font-size: 32px;
+  max-width: 760px;
+  margin: 0 0 18px;
+  text-align: center;
+}
+
+#calculator form {
+  margin: 14px 0 0;
+  max-width: 760px;
+  padding: 34px;
+  background: #12151b;
+  border: 1px solid #202634;
+  border-radius: 18px;
+}
+
+#calculator label,
+#security label {
+  display: block;
+  margin: 14px 0 8px;
+  font-size: 15px;
+  color: #9aa3ad;
+  text-align: left;
+}
+
+#calculator input,
+#calculator select,
+#security select {
+  padding: 14px 16px;
+  border-radius: 12px;
+  text-align: left;
+}
+
+#calculator .presets {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+#calculator .presets .nav-btn {
+  width: auto;
+  margin-bottom: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  background: #161a22;
+  border: 1px solid #202634;
+  color: #4fd1c5;
+  font-weight: 700;
+}
+
+#calculator .presets .nav-btn:hover {
+  border-color: #22d3ee;
+  color: #f5f7fa;
+}
+
+#calculator .primary {
+  background: linear-gradient(135deg, #4fd1c5, #22d3ee);
+  color: #041313;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+  width: min(100%, 380px);
+  display: block;
+  padding: 14px;
+  margin: 20px auto 0;
+  border-radius: 12px;
+  font-size: 17px;
+  font-family: Inter, system-ui, sans-serif;
+  transition: 0.25s ease;
+}
+
+#calculator .primary:hover {
+  transform: translateY(-2px);
+}
+
+.card {
+  margin-top: 30px;
+  padding: 30px;
+  background: #12151b;
+  border-radius: 14px;
+  border: 1px solid #202634;
+}
+
+#security .card {
+  margin: 16px 0 0;
+  max-width: 760px;
+  padding: 34px;
+  border-radius: 18px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  background: #161a22;
+  border: 1px solid #202634;
+  color: #f5f7fa;
+}
+
+@media (max-width: 1000px) {
+  .main {
+    padding: 36px 24px;
+  }
+  #home h2 {
+    font-size: 34px;
+  }
+}
+#security p {
+  margin-top: 24px;
+  font-size: 18px;
+  font-weight: 700;
+}
+#security #risk {
+  color: #4fd1c5;
+}
+
+/*# sourceMappingURL=main.css.map */

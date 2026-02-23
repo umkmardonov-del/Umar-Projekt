@@ -1,0 +1,26 @@
+{
+  "name": "bs14_lernfeld2",
+  "version": "1.0.0",
+  "description": "Start everything with:\r `docker compose up --build`",
+  "main": "index.js",
+  "scripts": {
+  "sass": "sass app/static/css/main.scss app/static/css/style.css --watch"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicoBWH/BS14_Lernfeld2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NicoBWH/BS14_Lernfeld2/issues"
+  },
+  "homepage": "https://github.com/NicoBWH/BS14_Lernfeld2#readme",
+  "devDependencies": {
+    "sass": "^1.97.3"
+  }
+  
+}
+
