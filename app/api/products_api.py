@@ -217,7 +217,7 @@ user_router = APIRouter(prefix="/product/user", tags=["user", "product"])
 
 @user_router.post("/calculator", response_class=HTMLResponse, response_model=list[CalculatorOut],
                   response_model_exclude_none=True, summary="Anforderungen von Website erhalten.",
-                  dependencies=[Depends(PermissionHandler(["user", "admin", "maintainer"], ["read"]))])
+                  dependencies=[Depends(PermissionHandler(["guest", "user", "admin", "maintainer"], ["read"]))])
 async def get_user_specifications(request: Request,
                                   department: str = Form(...),
                                   team_members: int = Form(...),

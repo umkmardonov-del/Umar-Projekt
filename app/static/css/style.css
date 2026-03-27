@@ -40,7 +40,6 @@ body::after {
     transform: translate3d(-2%, -1%, 0) scale(1.06);
   }
 }
-
 .hero {
   position: absolute;
   inset: 0;
@@ -412,6 +411,21 @@ body::after {
   text-align: left;
 }
 
+.o-split-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.o-split-layout > :first-child {
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+.o-split-layout > :last-child {
+  flex: 1 1 320px;
+}
+
 #calculator h2,
 #security h2 {
   font-size: 32px;
@@ -422,7 +436,7 @@ body::after {
 
 #calculator form {
   margin: 14px 0 0;
-  max-width: 760px;
+  max-width: none;
   padding: 34px;
   background: #12151b;
   border: 1px solid #202634;
@@ -499,11 +513,32 @@ body::after {
   border: 1px solid #202634;
 }
 
-#security .card {
+#security .card:not(.c-how-it-works) {
   margin: 16px 0 0;
-  max-width: 760px;
+  max-width: none;
   padding: 34px;
   border-radius: 18px;
+}
+
+.c-how-it-works {
+  margin: 14px 0 0;
+  min-height: calc(100% - 14px);
+}
+
+.c-how-it-works h3 {
+  margin: 0 0 12px;
+  color: #4fd1c5;
+  font-size: 22px;
+}
+
+.c-how-it-works p {
+  margin: 0 0 12px;
+  color: #9aa3ad;
+  line-height: 1.6;
+}
+
+.c-how-it-works p:last-child {
+  margin-bottom: 0;
 }
 
 input,
@@ -515,15 +550,17 @@ select {
   color: #f5f7fa;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
   .main {
     padding: 36px 24px;
   }
   #home h2 {
     font-size: 34px;
   }
+  .o-split-layout {
+    flex-direction: column;
+  }
 }
-
 #security p {
   margin-top: 24px;
   font-size: 18px;

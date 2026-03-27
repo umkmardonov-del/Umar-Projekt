@@ -108,78 +108,110 @@
       </div>
     </section>
 
-    <!-- CALCULATOR (INHALT NICHT VERÄNDERT) -->
+    <!-- CALCULATOR -->
     <section id="calculator" class="content">
       <h2>System Configurator</h2>
 
-      <form id="calculatorForm" method="POST" action="/product/user/calculator">
-        <label for="department">Department</label>
-        <select id="department" name="department" required>
-          <option>IT</option>
-          <option>HR</option>
-          <option>Finance</option>
-        </select>
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:24px; align-items:start;">
+        <form id="calculatorForm" method="POST" action="/product/user/calculator">
+          <label for="department">Department</label>
+          <select id="department" name="department" required>
+            <option>IT</option>
+            <option>HR</option>
+            <option>Finance</option>
+          </select>
 
-        <label for="team_members">Team Members</label>
-        <input id="team_members" name="team_members" type="number" min="1" value="10" required>
+          <label for="team_members">Team Members</label>
+          <input id="team_members" name="team_members" type="number" min="1" value="10" required>
 
-        <label for="device_type">Device Type</label>
-        <select id="device_type" name="device_type" required>
-          <option value="Desktop">Desktop</option>
-          <option value="Laptop">Laptop</option>
-        </select>
+          <label for="device_type">Device Type</label>
+          <select id="device_type" name="device_type" required>
+            <option value="Desktop">Desktop</option>
+            <option value="Laptop">Laptop</option>
+          </select>
 
-        <label for="operating_system">Operating System</label>
-        <select id="operating_system" name="operating_system" required>
-          <option value="Windows 11 Pro">Windows 11 Pro</option>
-          <option value="Ubuntu 24.04 LTS">Ubuntu 24.04 LTS</option>
-          <option value="macOS">macOS</option>
-        </select>
+          <label for="operating_system">Operating System</label>
+          <select id="operating_system" name="operating_system" required>
+            <option value="Windows 11 Pro">Windows 11 Pro</option>
+            <option value="Ubuntu 24.04 LTS">Ubuntu 24.04 LTS</option>
+            <option value="macOS">macOS</option>
+          </select>
 
-        <label for="included_software">Included Software</label>
-        <select id="included_software" name="included_software" required>
-          <option value="Office 365">Office 365</option>
-          <option value="Developer Tools">Developer Tools</option>
-          <option value="None">None</option>
-        </select>
+          <label for="included_software">Included Software</label>
+          <select id="included_software" name="included_software" required>
+            <option value="Office 365">Office 365</option>
+            <option value="Developer Tools">Developer Tools</option>
+            <option value="None">None</option>
+          </select>
 
-        <div class="presets">
-          <button type="button" class="nav-btn" data-preset="it">IT Preset</button>
-          <button type="button" class="nav-btn" data-preset="hr">HR Preset</button>
-          <button type="button" class="nav-btn" data-preset="dev">Dev Preset</button>
-        </div>
+          <div class="presets">
+            <button type="button" class="nav-btn" data-preset="it">IT Preset</button>
+            <button type="button" class="nav-btn" data-preset="hr">HR Preset</button>
+            <button type="button" class="nav-btn" data-preset="dev">Dev Preset</button>
+          </div>
 
-        <button class="primary">Calculate</button>
-      </form>
+          <button class="primary">Calculate</button>
+        </form>
+
+        <aside class="card">
+          <h3>How it works</h3>
+          <p>
+            Select department, team size and your preferred setup. The tool calculates a practical
+            workstation recommendation including hardware, operating system and software package.
+          </p>
+          <p>
+            It helps you compare scenarios quickly (for example Desktop vs. Laptop or Office vs. Developer Tools)
+            and gives you a transparent result basis for planning decisions.
+          </p>
+          <p>
+            Use presets for a quick start, then fine-tune values to match your real team situation
+            before running the calculation.
+          </p>
+        </aside>
+      </div>
     </section>
 
     <!-- SECURITY -->
     <section id="security" class="content">
       <h2>Account Security</h2>
 
-      <div class="card">
-        <label>Confidentiality</label>
-        <select id="c">
-          <option value="1">Low</option>
-          <option value="2">Medium</option>
-          <option value="3">High</option>
-        </select>
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:24px; align-items:start;">
+        <div class="card">
+          <label>Confidentiality</label>
+          <select id="c">
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+          </select>
 
-        <label>Integrity</label>
-        <select id="i">
-          <option value="1">Low</option>
-          <option value="2">Medium</option>
-          <option value="3">High</option>
-        </select>
+          <label>Integrity</label>
+          <select id="i">
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+          </select>
 
-        <label>Availability</label>
-        <select id="a">
-          <option value="1">Low</option>
-          <option value="2">Medium</option>
-          <option value="3">High</option>
-        </select>
+          <label>Availability</label>
+          <select id="a">
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+          </select>
 
-        <p>Risk Level: <strong id="risk">Low</strong></p>
+          <p>Risk Level: <strong id="risk">Low</strong></p>
+        </div>
+
+        <aside class="card">
+          <h3>How it works</h3>
+          <p>
+            This score uses Confidentiality, Integrity and Availability (CIA). Each selection contributes
+            to the total risk score and updates the risk level immediately.
+          </p>
+          <p>
+            Low values mean lower protection needs, while high values indicate stronger security controls
+            should be planned for the account or system.
+          </p>
+        </aside>
       </div>
     </section>
 
@@ -189,4 +221,3 @@
 <script src="{{ url_for('static', path='js/main.js') }}"></script>
 </body>
 </html>
-
